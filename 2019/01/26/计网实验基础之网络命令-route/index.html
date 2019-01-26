@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="计算机网络实验,网络命令,route,">
 
 
 
@@ -81,13 +81,21 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Six&#39;s Blog">
-<meta property="og:url" content="https://sy-yunyi.github.io/tags/netstat/index.html">
+<meta name="description" content="route命令 Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。 win 与linux下相同，用法有细微差别。 Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。">
+<meta name="keywords" content="计算机网络实验,网络命令,route">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网实验基础之网络命令-route">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/index.html">
 <meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="route命令 Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。 win 与linux下相同，用法有细微差别。 Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2019/01/26/5c4c258e83a51.png">
+<meta property="og:image" content="https://i.loli.net/2019/01/26/5c4c25e84b267.png">
+<meta property="og:updated_time" content="2019-01-26T09:32:22.532Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Six&#39;s Blog">
+<meta name="twitter:title" content="计网实验基础之网络命令-route">
+<meta name="twitter:description" content="route命令 Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。 win 与linux下相同，用法有细微差别。 Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。">
+<meta name="twitter:image" content="https://i.loli.net/2019/01/26/5c4c258e83a51.png">
 
 
 
@@ -117,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="https://sy-yunyi.github.io/tags/netstat/">
+  <link rel="canonical" href="https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/">
 
 
 
 
 
-  <title>标签: netstat | Six's Blog</title>
+  <title>计网实验基础之网络命令-route | Six's Blog</title>
   
 
 
@@ -142,7 +150,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -308,52 +316,267 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>netstat<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Six">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Six's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/01/26/计网实验基础之网络命令-ipconfigifconfig和netstat/" itemprop="url">
-              
-                <span itemprop="name">计网实验基础之网络命令-ipconfig/ifconfig和netstat</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">计网实验基础之网络命令-route</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-26T00:00:00+08:00" content="2019-01-26">
-          01-26
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-26T00:00:00+08:00">
+                2019-01-26
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络实验/" itemprop="url" rel="index">
+                    <span itemprop="name">网络实验</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/26/计网实验基础之网络命令-route/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/26/计网实验基础之网络命令-route/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  821
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="route命令"><a href="#route命令" class="headerlink" title="route命令"></a>route命令</h3><p> Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。</p>
+<p><code>win</code> 与<code>linux</code>下相同，用法有细微差别。</p>
+<p>Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。</p>
+<a id="more"></a>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 命令格式</span></span><br><span class="line">route [-f] [-p] [Command [Destination] [mask Netmask] [Gateway] [metric Metric]] [if Interface]] </span><br><span class="line"><span class="comment"># 具体格式请按照使用的机器的提示进行，不同机器或许不同</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 命令参数</span></span><br><span class="line">-c 显示更多信息</span><br><span class="line">-n 不解析名字</span><br><span class="line">-v 显示详细的处理信息</span><br><span class="line">-F 显示发送信息</span><br><span class="line">-C 显示路由缓存</span><br><span class="line">-f 清除所有网关入口的路由表。 </span><br><span class="line">-p 与 add 命令一起使用时使路由具有永久性。</span><br><span class="line">add:添加一条新路由。</span><br><span class="line">del:删除一条路由。</span><br><span class="line">-net:目标地址是一个网络。</span><br><span class="line">-host:目标地址是一个主机。</span><br><span class="line">netmask:当添加一个网络路由时，需要使用网络掩码。</span><br><span class="line">gw:路由数据包通过网关。注意，你指定的网关必须能够达到。</span><br><span class="line">metric：设置路由跳数。</span><br><span class="line">Command 指定您想运行的命令 (Add/Change/Delete/Print)。 </span><br><span class="line">Destination 指定该路由的网络目标。 </span><br><span class="line">mask Netmask 指定与网络目标相关的网络掩码（也被称作子网掩码）。 </span><br><span class="line">Gateway 指定网络目标定义的地址集和子网掩码可以到达的前进或下一跃点 IP 地址。 </span><br><span class="line">metric Metric 为路由指定一个整数成本值标（从 <span class="number">1</span> 至 <span class="number">9999</span>），当在路由表(与转发的数据包目标地址最匹配)的多个路由中进行选择时可以使用。 </span><br><span class="line"><span class="keyword">if</span> Interface 为可以访问目标的接口指定接口索引。若要获得一个接口列表和它们相应的接口索引，使用 route print 命令的显示功能。可以使用十进制或十六进制值进行接口索引。</span><br></pre></td></tr></table></figure>
+<h4 id="使用详解"><a href="#使用详解" class="headerlink" title="使用详解"></a>使用详解</h4><ol>
+<li><p>显示当前路由</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">route print <span class="comment"># win</span></span><br><span class="line">route print <span class="number">157</span>* <span class="comment"># win 打印匹配的项</span></span><br><span class="line">route       <span class="comment"># ubuntu</span></span><br></pre></td></tr></table></figure>
+<center><img src="https://i.loli.net/2019/01/26/5c4c258e83a51.png" alt="route.png"></center>
+
+<center><img src="https://i.loli.net/2019/01/26/5c4c25e84b267.png" alt="route_linux.png"></center>
+
+<p>上面是win和linux下显示的不同的路由表。</p>
+<blockquote>
+<p>Flags标志说明：</p>
+<p>U Up表示此路由当前为启动状态</p>
+<p>H Host，表示此网关为一主机</p>
+<p>G Gateway，表示此网关为一路由器</p>
+<p>R Reinstate Route，使用动态路由重新初始化的路由</p>
+<p>D Dynamically,此路由是动态性地写入</p>
+<p>M Modified，此路由是由路由守护程序或导向器动态修改</p>
+<p>! 表示此路由当前为关闭状态</p>
+</blockquote>
+</li>
+<li><p>添加网关/设置网关</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">route ADD <span class="number">3</span>ffe::/<span class="number">32</span> <span class="number">3</span>ffe::<span class="number">1</span></span><br><span class="line">route ADD <span class="number">157.0</span>.<span class="number">0.0</span> MASK <span class="number">255.0</span>.<span class="number">0.0</span>  <span class="number">157.55</span>.<span class="number">80.1</span> METRIC <span class="number">3</span> <span class="keyword">IF</span> <span class="number">2</span></span><br><span class="line">       destination^      ^mask      ^gateway     metric^    ^</span><br><span class="line">                                                        Interface</span><br><span class="line">     <span class="comment"># 如果未给出 IF，它将尝试查找给定网关的最佳接口。</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改网关</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">route CHANGE <span class="number">157.0</span>.<span class="number">0.0</span> MASK <span class="number">255.0</span>.<span class="number">0.0</span> <span class="number">157.55</span>.<span class="number">80.5</span> METRIC <span class="number">2</span> <span class="keyword">IF</span> <span class="number">2</span></span><br><span class="line">      <span class="comment"># CHANGE 只用于修改网关和/或跃点数。</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>屏蔽路由</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add -net <span class="number">224.0</span>.<span class="number">0.0</span> netmask <span class="number">240.0</span>.<span class="number">0.0</span> reject</span><br></pre></td></tr></table></figure>
+<p>增加一条屏蔽的路由，目的地址为 224.x.x.x 将被拒绝</p>
+</li>
+<li><p>删除路由记录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">route DELETE 157.0.0.0</span><br><span class="line">route del -net 224.0.0.0 netmask 240.0.0.0  # linux</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>清除路由表</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route -f</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加永久性路由</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add addr -p</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机网络实验/" rel="tag"><i class="fa fa-tag"></i> 计算机网络实验</a>
+          
+            <a href="/tags/网络命令/" rel="tag"><i class="fa fa-tag"></i> 网络命令</a>
+          
+            <a href="/tags/route/" rel="tag"><i class="fa fa-tag"></i> route</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/25/计网实验基础之网络命令-tracert与traceroute/" rel="next" title="计网实验基础之网络命令-tracert与traceroute">
+                <i class="fa fa-chevron-left"></i> 计网实验基础之网络命令-tracert与traceroute
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/26/计网实验基础之网络命令-arp/" rel="prev" title="计网实验基础之网络命令-arp">
+                计网实验基础之网络命令-arp <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -361,6 +584,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -381,8 +611,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -465,6 +704,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#route命令"><span class="nav-number">1.</span> <span class="nav-text">route命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用详解"><span class="nav-number">1.1.</span> <span class="nav-text">使用详解</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -626,6 +881,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="计算机网络实验,网络命令,arp,">
 
 
 
@@ -81,13 +81,22 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Six&#39;s Blog">
-<meta property="og:url" content="https://sy-yunyi.github.io/tags/netstat/index.html">
+<meta name="description" content="arp命令arp命令用于操作主机的arp缓冲区，它可以显示arp缓冲区中的所有条目、删除指定的条目或者添加静态的ip地址与MAC地址对应关系。 arp 缓存中包含一个或多个表，它们用于存储 IP 地址及其经过解析的以太网或令牌环物理地址。计算机上安装的每一个以太网或令牌环网络适配器都有自己单独的表。 按照缺省设置，arp高速缓存中的项目是动态的，每当发送一个指定地点的数据报且高速缓存中不存在当前项">
+<meta name="keywords" content="计算机网络实验,网络命令,arp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网实验基础之网络命令-arp">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-arp/index.html">
 <meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="arp命令arp命令用于操作主机的arp缓冲区，它可以显示arp缓冲区中的所有条目、删除指定的条目或者添加静态的ip地址与MAC地址对应关系。 arp 缓存中包含一个或多个表，它们用于存储 IP 地址及其经过解析的以太网或令牌环物理地址。计算机上安装的每一个以太网或令牌环网络适配器都有自己单独的表。 按照缺省设置，arp高速缓存中的项目是动态的，每当发送一个指定地点的数据报且高速缓存中不存在当前项">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2019/01/26/5c4c1cc5d6476.gif">
+<meta property="og:image" content="https://i.loli.net/2019/01/26/5c4c1d5277d10.gif">
+<meta property="og:image" content="https://i.loli.net/2019/01/26/5c4c20cfd6474.png">
+<meta property="og:updated_time" content="2019-01-26T09:03:09.812Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Six&#39;s Blog">
+<meta name="twitter:title" content="计网实验基础之网络命令-arp">
+<meta name="twitter:description" content="arp命令arp命令用于操作主机的arp缓冲区，它可以显示arp缓冲区中的所有条目、删除指定的条目或者添加静态的ip地址与MAC地址对应关系。 arp 缓存中包含一个或多个表，它们用于存储 IP 地址及其经过解析的以太网或令牌环物理地址。计算机上安装的每一个以太网或令牌环网络适配器都有自己单独的表。 按照缺省设置，arp高速缓存中的项目是动态的，每当发送一个指定地点的数据报且高速缓存中不存在当前项">
+<meta name="twitter:image" content="https://i.loli.net/2019/01/26/5c4c1cc5d6476.gif">
 
 
 
@@ -117,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="https://sy-yunyi.github.io/tags/netstat/">
+  <link rel="canonical" href="https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-arp/">
 
 
 
 
 
-  <title>标签: netstat | Six's Blog</title>
+  <title>计网实验基础之网络命令-arp | Six's Blog</title>
   
 
 
@@ -142,7 +151,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -308,52 +317,297 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>netstat<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-arp/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Six">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Six's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/01/26/计网实验基础之网络命令-ipconfigifconfig和netstat/" itemprop="url">
-              
-                <span itemprop="name">计网实验基础之网络命令-ipconfig/ifconfig和netstat</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">计网实验基础之网络命令-arp</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-26T00:00:00+08:00" content="2019-01-26">
-          01-26
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-26T00:00:00+08:00">
+                2019-01-26
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络实验/" itemprop="url" rel="index">
+                    <span itemprop="name">网络实验</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/26/计网实验基础之网络命令-arp/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/26/计网实验基础之网络命令-arp/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.6k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="arp命令"><a href="#arp命令" class="headerlink" title="arp命令"></a>arp命令</h3><p>arp命令用于操作主机的arp缓冲区，它可以显示arp缓冲区中的所有条目、删除指定的条目或者添加静态的ip地址与MAC地址对应关系。</p>
+<p>arp 缓存中包含一个或多个表，它们用于存储 IP 地址及其经过解析的以太网或令牌环物理地址。计算机上安装的每一个以太网或令牌环网络适配器都有自己单独的表。</p>
+<p>按照缺省设置，arp高速缓存中的项目是动态的，每当发送一个指定地点的数据报且高速缓存中不存在当前项目时，arp便会自动添加该项目。一旦高速缓存的项目被输入，它们就已经开始走向失效状态。</p>
+<a id="more"></a>
+<h4 id="arp协议"><a href="#arp协议" class="headerlink" title="arp协议"></a>arp协议</h4><p>ARP (Address Resolution Protocol) 是个地址解析协议，将IP地址解析成硬件地址。。</p>
+<blockquote>
+<p>OSI 模式把网络工作分为七层，彼此不直接打交道，只通过接口(layre interface). IP地址在第三层, MAC地址在第二层。协议在发生数据包时，首先要封装第三层 （IP地址）和第二层 （MAC地址）的报头, 但协议只知道目的节点的IP地址，不知道其物理地址，又不能跨第二、三层，所以得用ARP的服务。</p>
+</blockquote>
+<h5 id="arp报文"><a href="#arp报文" class="headerlink" title="arp报文"></a>arp报文</h5><p>arp报文字段总共有28个字节</p>
+<center><img src="https://i.loli.net/2019/01/26/5c4c1cc5d6476.gif" alt="arp_报文.gif"></center>
+
+<p>1.硬件类型：占2个字节，表明arp实现在何种类型的网络上。</p>
+<p>值为1：表示以太网。</p>
+<p>2.协议类型：占2个字节表示要映射的协议地址类型。IP:0800</p>
+<p>3.硬件地址长度：占1个字节，表示 MAC地址长度，其值为6个字节。</p>
+<p>4.协议地址长度：占1个字节，表示IP地址长度，此处值4个字节</p>
+<p>5.操作类型 ：占2个字节，表示ARP数据包类型。</p>
+<p>值为1表示ARP请求；值2表示ARP应答。</p>
+<p>6.源MAC地址：占6个字节，表示发送端MAC地址</p>
+<p>7.源IP地址:占4个字节，表示发送端IP地址</p>
+<p>8.目的以太网地址：占6个字节，表示目标设备的MAC物理地址</p>
+<p>9.目的IP地址：占4个字节，表示目标设备的IP地址.</p>
+<blockquote>
+<p>在arp操作中，有效数据的长度为28个字节，不足以太网的最小长度46字节长度，需要填充字节，填充字节最小长度为18个字</p>
+</blockquote>
+<h5 id="arp请求分组或应答分组"><a href="#arp请求分组或应答分组" class="headerlink" title="arp请求分组或应答分组"></a>arp请求分组或应答分组</h5><center><img src="https://i.loli.net/2019/01/26/5c4c1d5277d10.gif" alt="arp_分组.gif"></center>
+
+<p>以太网首部总共有14字节数据，arp请求报文总共有28字节。所以一个arp请求分组或应答分组总共有46字节数据。而以太网数据包的最小数据为60字节。所以，要对其进行填充。</p>
+<blockquote>
+<ul>
+<li><p>在以太网的数据帧报头中和arp请求数据帧中都有发送端的MAC物理地址。</p>
+</li>
+<li><p>在发送arp请求时，以太网帧头中的目的MAC物理地址为FF-FF-FF-FF-FF-FF,而在arp帧中的目的MAC处此时为空。</p>
+</li>
+<li><p>对一个arp请求来说，除arp中目的端MAC硬件地址外的所有其他的字段都有填充值。当系统收到一份目的端为本地的arp请求报文后，它就把硬件地址填进去，然后用两个目的端地址分别替换两个发送端地址，并把操作字段置为2，最后发送出去。</p>
+</li>
+</ul>
+</blockquote>
+<h5 id="arp协议工作过程"><a href="#arp协议工作过程" class="headerlink" title="arp协议工作过程"></a>arp协议工作过程</h5><ol>
+<li><p>当主机A向本局域网上的某个主机B发送IP数据报时，就先在自己的arp缓冲表中查看有无主机B的IP地址。</p>
+</li>
+<li><p>如果有，就可以查出其对应的硬件地址，再将此硬件地址写入MAC帧，然后通过以太网将数据包发送到目的主机中。如果没有则运行arp协议。</p>
+</li>
+<li><p>arp进程在本局域网上广播一个arp请求分组。</p>
+<blockquote>
+<p>arp请求分组的主要内容是表明：</p>
+<p>我的IP地址是192.168.0.2，我的硬件地址是00-00-C0-15-AD-18.</p>
+<p>我想知道IP地址为192.168.0.4的主机的硬件地址。</p>
+</blockquote>
+</li>
+<li><p>在本局域网上的所有主机上运行的arp进行都收到此arp请求分组。验证自己的IP地址是否与请求中的一致。</p>
+</li>
+<li><p>主机B在arp请求分组中见到自己的IP地址，就向主机A发送arp响应分组，并写入自己的硬件地址。其余的所有主机都不理睬这个arp请求分组。</p>
+<blockquote>
+<p>arp响应分组的主要内容是表明：</p>
+<p>“我的IP地址是192.168.0.4,我的硬件地址是08-00-2B-00-EE-AA”,</p>
+<p>注意：虽然arp请求分组是广播发送的，但arp响应分组是普通的单播，即从一个源地址发送到一个目的地址。</p>
+</blockquote>
+</li>
+<li><p>主机A收到主机B的arp响应分组后，就在其arp高速缓冲表中写入主机B的IP地址到硬件地址的映射。</p>
+</li>
+</ol>
+<h4 id="arp命令语法"><a href="#arp命令语法" class="headerlink" title="arp命令语法"></a>arp命令语法</h4><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ARP -s inet_addr eth_addr [if_addr]</span><br><span class="line">ARP -d inet_addr [if_addr]</span><br><span class="line">ARP -a [inet_addr] [-N if_addr] [-v]</span><br><span class="line">  -a            通过询问当前协议数据，显示当前 ARP 项。如果指定 inet_addr，则只显示指定计算机</span><br><span class="line">                的 IP 地址和物理地址。如果不止一个网络接口使用 ARP，则显示每个 ARP 表的项。</span><br><span class="line">  -g            与 -a 相同。</span><br><span class="line">  -v            在详细模式下显示当前 ARP 项。所有无效项和环回接口上的项都将显示。</span><br><span class="line">  inet_addr     指定 Internet 地址。</span><br><span class="line">  -N if_addr    显示 if_addr 指定的网络接口的 ARP 项。</span><br><span class="line">  -d            删除 inet_addr 指定的主机。inet_addr 可以是通配符 *，以删除所有主机。</span><br><span class="line">  -s            添加主机并且将 Internet 地址 inet_addr与物理地址 eth_addr 相关联。物理地址是用</span><br><span class="line">                连字符分隔的 <span class="number">6</span> 个十六进制字节。该项是永久的。</span><br><span class="line">  eth_addr      指定物理地址。</span><br><span class="line">  if_addr       如果存在，此项指定地址转换表应修改的接口的 Internet 地址。如果不存在，则使用第一</span><br><span class="line">                个适用的接口。</span><br></pre></td></tr></table></figure>
+<h5 id="使用详解"><a href="#使用详解" class="headerlink" title="使用详解"></a>使用详解</h5><ol>
+<li><p>显示ARP表</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arp -a</span><br></pre></td></tr></table></figure>
+<center><img src="https://i.loli.net/2019/01/26/5c4c20cfd6474.png" alt="arp_a.png"></center>
+</li>
+<li><p>添加arp表项</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arp -s <span class="number">157.55</span>.<span class="number">85.212</span>   <span class="number">00</span>-aa-<span class="number">00</span>-<span class="number">62</span>-c6-<span class="number">09</span>  <span class="comment"># 添加静态项。</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除表项</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arp -d <span class="number">157.55</span>.<span class="number">85.212</span>  <span class="comment"># *为通配符，删除所有的主机</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机网络实验/" rel="tag"><i class="fa fa-tag"></i> 计算机网络实验</a>
+          
+            <a href="/tags/网络命令/" rel="tag"><i class="fa fa-tag"></i> 网络命令</a>
+          
+            <a href="/tags/arp/" rel="tag"><i class="fa fa-tag"></i> arp</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/26/计网实验基础之网络命令-route/" rel="next" title="计网实验基础之网络命令-route">
+                <i class="fa fa-chevron-left"></i> 计网实验基础之网络命令-route
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/26/计网实验基础之网络命令-ipconfigifconfig和netstat/" rel="prev" title="计网实验基础之网络命令-ipconfig/ifconfig和netstat">
+                计网实验基础之网络命令-ipconfig/ifconfig和netstat <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -361,6 +615,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -381,8 +642,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -465,6 +735,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#arp命令"><span class="nav-number">1.</span> <span class="nav-text">arp命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#arp协议"><span class="nav-number">1.1.</span> <span class="nav-text">arp协议</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#arp报文"><span class="nav-number">1.1.1.</span> <span class="nav-text">arp报文</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#arp请求分组或应答分组"><span class="nav-number">1.1.2.</span> <span class="nav-text">arp请求分组或应答分组</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#arp协议工作过程"><span class="nav-number">1.1.3.</span> <span class="nav-text">arp协议工作过程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#arp命令语法"><span class="nav-number">1.2.</span> <span class="nav-text">arp命令语法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#使用详解"><span class="nav-number">1.2.1.</span> <span class="nav-text">使用详解</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -626,6 +912,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
