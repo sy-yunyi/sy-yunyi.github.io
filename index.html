@@ -209,32 +209,22 @@
         </li>
       
         
-        <li class="menu-item menu-item-影评">
-          <a href="/categories/影评/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-quote-right"></i> <br>
-            
-            影评
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-随笔">
-          <a href="/categories/随笔/" rel="section">
+        <li class="menu-item menu-item-安全笔记">
+          <a href="/categories/安全笔记/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-sticky-note"></i> <br>
             
-            随笔
+            安全笔记
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
+        <li class="menu-item menu-item-six不言">
+          <a href="/categories/SIX不言/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-quote-right"></i> <br>
             
-            分类
+            SIX不言
           </a>
         </li>
       
@@ -333,7 +323,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-arp/">
+    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Six">
@@ -352,7 +342,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/01/26/计网实验基础之网络命令-arp/" itemprop="url">计网实验基础之网络命令-arp</a></h1>
+                <a class="post-title-link" href="/2019/03/03/Vulnhub实战之IMF/" itemprop="url">Vulnhub实战之IMF</a></h1>
         
 
         <div class="post-meta">
@@ -364,8 +354,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-26T00:00:00+08:00">
-                2019-01-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-03T00:00:00+08:00">
+                2019-03-03
               </time>
             
 
@@ -387,8 +377,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/网络实验/" itemprop="url" rel="index">
-                    <span itemprop="name">网络实验</span>
+                  <a href="/categories/安全笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">安全笔记</span>
                   </a>
                 </span>
 
@@ -405,8 +395,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/01/26/计网实验基础之网络命令-arp/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/26/计网实验基础之网络命令-arp/" itemprop="commentCount"></span>
+                <a href="/2019/03/03/Vulnhub实战之IMF/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/03/03/Vulnhub实战之IMF/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -428,7 +418,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.6k
+                  876
                 </span>
               
 
@@ -444,7 +434,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  5
+                  3
                 </span>
               
             </div>
@@ -466,12 +456,15 @@
 
       
         
-          <h3 id="arp命令"><a href="#arp命令" class="headerlink" title="arp命令"></a>arp命令</h3><p>arp命令用于操作主机的arp缓冲区，它可以显示arp缓冲区中的所有条目、删除指定的条目或者添加静态的ip地址与MAC地址对应关系。</p>
-<p>arp 缓存中包含一个或多个表，它们用于存储 IP 地址及其经过解析的以太网或令牌环物理地址。计算机上安装的每一个以太网或令牌环网络适配器都有自己单独的表。</p>
-<p>按照缺省设置，arp高速缓存中的项目是动态的，每当发送一个指定地点的数据报且高速缓存中不存在当前项目时，arp便会自动添加该项目。一旦高速缓存的项目被输入，它们就已经开始走向失效状态。</p>
+          <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。</p>
+<p>网址：<a href="https://www.vulnhub.com/" target="_blank" rel="noopener">https://www.vulnhub.com/</a></p>
+<p>本文靶机镜像下载地址：</p>
+<p><a href="https://download.vulnhub.com/imf/IMF.ova" target="_blank" rel="noopener">https://download.vulnhub.com/imf/IMF.ova</a></p>
+<p>IMF是一个初级难度的boot 2 root（查看flag，获得root权限）靶机，每个flag都包含获取下一个flag的提示。</p>
+<p>作者邮箱：<a href="mailto:geckom@redteamr.com" target="_blank" rel="noopener">geckom@redteamr.com</a></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019/01/26/计网实验基础之网络命令-arp/#more" rel="contents">
+            <a class="btn" href="/2019/03/03/Vulnhub实战之IMF/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -660,6 +653,195 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/01/26/计网实验基础之网络命令-ipconfigifconfig和netstat/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-arp/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Six">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Six's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/26/计网实验基础之网络命令-arp/" itemprop="url">计网实验基础之网络命令-arp</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-26T00:00:00+08:00">
+                2019-01-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络实验/" itemprop="url" rel="index">
+                    <span itemprop="name">网络实验</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/26/计网实验基础之网络命令-arp/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/26/计网实验基础之网络命令-arp/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.6k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="arp命令"><a href="#arp命令" class="headerlink" title="arp命令"></a>arp命令</h3><p>arp命令用于操作主机的arp缓冲区，它可以显示arp缓冲区中的所有条目、删除指定的条目或者添加静态的ip地址与MAC地址对应关系。</p>
+<p>arp 缓存中包含一个或多个表，它们用于存储 IP 地址及其经过解析的以太网或令牌环物理地址。计算机上安装的每一个以太网或令牌环网络适配器都有自己单独的表。</p>
+<p>按照缺省设置，arp高速缓存中的项目是动态的，每当发送一个指定地点的数据报且高速缓存中不存在当前项目时，arp便会自动添加该项目。一旦高速缓存的项目被输入，它们就已经开始走向失效状态。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/01/26/计网实验基础之网络命令-arp/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1704,8 +1886,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/随笔/" itemprop="url" rel="index">
-                    <span itemprop="name">随笔</span>
+                  <a href="/categories/SIX不言/" itemprop="url" rel="index">
+                    <span itemprop="name">SIX不言</span>
                   </a>
                 </span>
 
@@ -2013,193 +2195,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2018/12/20/Building-a-Dynamic-Reputation-System-for-DNS/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Six">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Six's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/20/Building-a-Dynamic-Reputation-System-for-DNS/" itemprop="url">《Building a Dynamic Reputation System for DNS》笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-20T00:00:00+08:00">
-                2018-12-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/论文选读/" itemprop="url" rel="index">
-                    <span itemprop="name">论文选读</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/20/Building-a-Dynamic-Reputation-System-for-DNS/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/20/Building-a-Dynamic-Reputation-System-for-DNS/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  783
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h4 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h4><p><em>Antonakakis M, Perdisci R, Dagon D, et al. Building a Dynamic Reputation System for DNS[C]//USENIX security symposium. 2010: 273-290.</em></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/12/20/Building-a-Dynamic-Reputation-System-for-DNS/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2250,7 +2245,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2272,7 +2267,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
