@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://sy-yunyi.github.io/"/>
-  <updated>2019-03-03T09:13:55.563Z</updated>
+  <updated>2019-03-20T07:36:39.015Z</updated>
   <id>https://sy-yunyi.github.io/</id>
   
   <author>
@@ -15,6 +15,59 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>计网实验之FTP协议分析</title>
+    <link href="https://sy-yunyi.github.io/2019/03/20/%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E4%B9%8BFTP%E5%8D%8F%E8%AE%AE%E5%88%86%E6%9E%90/"/>
+    <id>https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/</id>
+    <published>2019-03-19T16:00:00.000Z</published>
+    <updated>2019-03-20T07:36:39.015Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="FTP协议介绍"><a href="#FTP协议介绍" class="headerlink" title="FTP协议介绍"></a>FTP协议介绍</h3><p>文件传输协议FTP(File Transfer Protocol)是TCP/IP协议组种的应用层协议之一，是因特网中使用最广泛的文件传输协议。该协议旨在提高文件的共享性，透明、可靠的和高效的传送远程用户数据。其没有针对某种具体的操作系统或文件类型而设计，通过一些规程，利用网络低层的服务，屏蔽了计算机系统的细节，所以可以在异构网中传送文件。</p><p>主要功能用于实现用户间文件分发共享，以及网络管理者在进行设备版本升级、日志下载和配置保存等业务操作时，均会使用到FTP功能。</p><a id="more"></a><h4 id="TCP连接"><a href="#TCP连接" class="headerlink" title="TCP连接"></a>TCP连接</h4><p>FTP的有两种TCP连接控制连接和数据连接。</p><p>在TCP/IP协议中，FTP协议标准命令TCP端口为21，port方式数据端口为20。</p><p>控制连接（TCP 21端口）主要用于实现FTP协议控制信令传送，服务器端打开TCP 21端口被动等待客户端发起连接命令；客户端则以主动方式打开随机端口，发起连接的建立请求。</p><blockquote><p>在控制连接种使用的是ftp命令，其并不真正与FTP服务器交互，而是通过用户协议解释器翻译成真正的FTP命令，再与服务器交互。</p></blockquote><p>数据连接（TCP 20端口）主要用于实现应用数据传送，服务器的数据连接端使用端口20。服务器执行主动打开数据连接，通常也执行主动关闭数据连接 。</p><blockquote><p>数据连接只在传输文件时存在。</p></blockquote><p>控制连接再整个会话期间一直保持连接状态数据连接则时临时建立，在文件传输结束后被关闭。</p><h4 id="FTP客户-服务器"><a href="#FTP客户-服务器" class="headerlink" title="FTP客户/服务器"></a>FTP客户/服务器</h4><p>FTP是一个客户/服务器系统。客户端和服务器端通过数据连接和控制连接进行通信。</p><p><img src="https://i.loli.net/2019/03/06/5c7fb1c79bfa7.png" alt="FTP.png"></p><h4 id="数据连接的两种模式"><a href="#数据连接的两种模式" class="headerlink" title="数据连接的两种模式"></a>数据连接的两种模式</h4><p>FTP的数据连接支持两种模式：主动模式和被动模式。两者的主要区别在于数据连接是由谁发起的。</p><h5 id="主动模式"><a href="#主动模式" class="headerlink" title="主动模式"></a>主动模式</h5><p>即Port方式，FTP协议最初定义的数据传输连接方式。收到数据传送请求后，服务器主动与客户端建立连接。</p><p>FTP客户端通过向FTP服务器发送PORT命令<code>PORT n1,n2,n3,n4,n5,n6</code>，其中前四位表示客户端的IP地址<code>n1,n2,n3,n4</code>,后两位确定临时端口号为<code>n5 × 256 + n6</code>。当需要传送数据时，服务器通过TCP端口号20与客户端的临时端口建立数据传输通道，完成数据传输。在建立数据连接的过程中，由服务器主动发起连接，因此被称为主动方式。</p><h5 id="被动模式"><a href="#被动模式" class="headerlink" title="被动模式"></a>被动模式</h5><p>即Pasv模式。</p><p>FTP客户端通过向FTP服务器发送<code>PASV</code>命令。服务器收到<code>PASV</code>命令后，随机打开一个高端端口，并告知客户端。当需要传送数据时，客户端主动与服务器的临时端口号建立数据传输通道，完成数据传输。在整个过程中，由于服务器总是被动接收客户端的数据连接，因此被称为被动方式。</p><h5 id="两种模式优缺点"><a href="#两种模式优缺点" class="headerlink" title="两种模式优缺点"></a>两种模式优缺点</h5><p>主动FTP对FTP服务器的管理有利，但对客户端的管理不利。因为FTP服务器企图与客户端的高位随机端口建立连接，而这个端口很有可能被客户端的防火墙阻塞掉。</p><p>被动FTP对FTP客户端的管理有利，但对服务器端的管理不利。因为客户端要与服务器端建立两个连接，其中一个连到一个高位随机端口，而这个端口很有可能被服务器端的防火墙阻塞掉。</p><h5 id="FTP模式的选择"><a href="#FTP模式的选择" class="headerlink" title="FTP模式的选择"></a>FTP模式的选择</h5><p>当FTP服务器与FTP客户端均处于同一局域网内，即两者之间互访不存在防火墙或其他安全设备时，主动方式、被动方式均可实现FTP文件分发共享。</p><p>如果FTP服务器处于路由器，防火墙或其他NAT设备之后，建议使用被动模式（passive mode）。因为在主动模式下传输数据时，由FTP发起的数据传输一般会被客户端网关的防火墙阻断。</p><h4 id="FTP传输"><a href="#FTP传输" class="headerlink" title="FTP传输"></a>FTP传输</h4><p>FTP的一个突出的问题是它以明文的方式发送用户名和口令。所以导致任何人通过对网络进行嗅探就可以捕获用户名和密码。FTP发送的数据也是明文的，通过对FTP连接的监控和数据收集就可以收集和重现FTP的数据传输并实现协议连接回放。目前可以将FTP与SSL相结合，对数据包进行加密，来保护数据不被攻击者轻易得到。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;FTP协议介绍&quot;&gt;&lt;a href=&quot;#FTP协议介绍&quot; class=&quot;headerlink&quot; title=&quot;FTP协议介绍&quot;&gt;&lt;/a&gt;FTP协议介绍&lt;/h3&gt;&lt;p&gt;文件传输协议FTP(File Transfer Protocol)是TCP/IP协议组种的应用层协议之一，是因特网中使用最广泛的文件传输协议。该协议旨在提高文件的共享性，透明、可靠的和高效的传送远程用户数据。其没有针对某种具体的操作系统或文件类型而设计，通过一些规程，利用网络低层的服务，屏蔽了计算机系统的细节，所以可以在异构网中传送文件。&lt;/p&gt;
+&lt;p&gt;主要功能用于实现用户间文件分发共享，以及网络管理者在进行设备版本升级、日志下载和配置保存等业务操作时，均会使用到FTP功能。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="网络实验" scheme="https://sy-yunyi.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+    
+      <category term="计算机网络实验" scheme="https://sy-yunyi.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+      <category term="FTP协议" scheme="https://sy-yunyi.github.io/tags/FTP%E5%8D%8F%E8%AE%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>计网实验之网络包分析工具-Wireshark</title>
+    <link href="https://sy-yunyi.github.io/2019/03/20/%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%8C%85%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7-Wireshark/"/>
+    <id>https://sy-yunyi.github.io/2019/03/20/计网实验之网络包分析工具-Wireshark/</id>
+    <published>2019-03-19T16:00:00.000Z</published>
+    <updated>2019-03-20T03:43:42.990Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="Wireshark介绍"><a href="#Wireshark介绍" class="headerlink" title="Wireshark介绍"></a>Wireshark介绍</h4><p>Wireshark是一款常用的网络包分析工具，主要作用是尝试捕获网络报，并尽可能全面的显示包的内容。</p><p>Wireshark是Etheral的升级版本，由于商标问题而改名为Wireshark，具有简单易用的图形化界面和强大的过滤分类功能，是一款非常优秀的开源软件。</p><p>最新版本可以在官方网站：<a href="https://www.wireshark.org/download.html" target="_blank" rel="noopener">https://www.wireshark.org/download.html</a>下载。</p><a id="more"></a><p>Wrieshark的作用仅仅是捕获数据包并且展示，并不具有侦测入侵行为的能力。同其没有数据包生成器，所以只能查看数据包而不能修改数据包。Wireshark可以捕获https的数据包，但是无法解密数据包的内容，所以处理https推荐使用Fiddler。</p><p>Wireshark优点;</p><ul><li>支持Win和Linux多平台</li><li>在端口实时抓包</li><li>详细显示包的协议信息</li><li>多种方式进行包过滤</li><li>可以创建多种统计分析</li></ul><h4 id="抓包原理"><a href="#抓包原理" class="headerlink" title="抓包原理"></a>抓包原理</h4><p>在以太网或者其他共享网络介质中，以太网网卡先接收到所有的数据帧，然后与自身的MAC地址进行对比，再将目的的MAC地址与自身一致或者为广播地址的数据帧提取并传送至上层。而物理层有一种混杂模式（Priomiscuous Mode），可以把所有数据帧都接收并传送至上层。</p><blockquote><p>需要注意的一点是，目前的设备升级后，就算是再混杂模式下也不会将所有的数据帧上传。</p></blockquote><p>之前，Wireshark可以通过混杂模式获得所有共享网络中的数据帧，现在也只能获得向本网卡发送的数据。</p><p>Wireshark使用tcpdum和Linux下的libpcap库直接同硬件驱动接触，不经过操纵系统，保证了抓包速率和准确性。</p><h4 id="Wireshark过滤规则"><a href="#Wireshark过滤规则" class="headerlink" title="Wireshark过滤规则"></a>Wireshark过滤规则</h4><p>Wireshark的过滤功能是非常强大的。配置过滤器有两种方式</p><ul><li>捕捉过滤，用于筛选需要的捕捉结果，仅捕捉指定要求的数据包</li><li>显示过滤，再捕捉完成后显示指定要求的数据包</li></ul><blockquote><p>可以使用的过滤条件包括：协议、预设字段、字段值、字段值比较等</p></blockquote><p>常用的过滤规则：</p><ol><li><p>按协议类型过滤。</p><p>支持的协议包括TCP,UDP,ARP,ICMP,HTTP,SMTP,FTP,DNS,MSN,IP,SSL,OICQ, BOOTP 等。只需要在过滤器位置输入协议名即可。</p></li><li><p>按IP地址过滤。</p><p>若仅显示与指定IP地址通信的记录，则可以输入ip.addr == x.x.x.x。还可以指定源地址或者目的地址，ip.src == x.x.x.x或ip.dst == x.x.x.x。</p></li><li><p>按协议模式过滤。</p><p>如HTTP协议可以针对HTTP的请求方式进行过滤，只显示发送GET或者POST请求：http.request.method == “GET”或http.request.method == “POST”</p></li><li><p>按端口过滤。</p><p>如tcp.port eq 80</p></li><li><p>按MAC地址过滤。</p><p>如以太网头过滤：过滤目的MAC，eth.dst == x.x.x.x.x.x 。过滤源MAC，eth.src eq x.x.x.x.x.x。</p></li><li><p>按包的长度过滤。</p><p>如udp.length == 26,这个长度指udp本身固定长度8加上udp下面的数据包之和。而tcp.len &gt;= 7指的是IP数据包（tcp的数据部分），不包括tcp本身。</p></li><li><p>按参数过滤。</p><p>如TCP的参数过滤，tcp.flags;  tcp.flags.syn == 0x20</p></li><li><p>按内容过滤。</p><p>如tcp[20]- 从20开始，取一个字符。tcp[20:] - 从20开始，取一个字符以上。tcp[20:8]，从20开始，取8个字符。</p></li><li><p>采用逻辑运算过滤。可利用<code>&amp;&amp;</code>,<code>||</code>,<code>!</code>组合使用多个限制规则。</p><p>如，（http &amp;&amp; ip.dst==x.x.x.x）||dns</p></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;Wireshark介绍&quot;&gt;&lt;a href=&quot;#Wireshark介绍&quot; class=&quot;headerlink&quot; title=&quot;Wireshark介绍&quot;&gt;&lt;/a&gt;Wireshark介绍&lt;/h4&gt;&lt;p&gt;Wireshark是一款常用的网络包分析工具，主要作用是尝试捕获网络报，并尽可能全面的显示包的内容。&lt;/p&gt;
+&lt;p&gt;Wireshark是Etheral的升级版本，由于商标问题而改名为Wireshark，具有简单易用的图形化界面和强大的过滤分类功能，是一款非常优秀的开源软件。&lt;/p&gt;
+&lt;p&gt;最新版本可以在官方网站：&lt;a href=&quot;https://www.wireshark.org/download.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.wireshark.org/download.html&lt;/a&gt;下载。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="网络实验" scheme="https://sy-yunyi.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+    
+      <category term="计算机网络实验" scheme="https://sy-yunyi.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+      <category term="网络包分析工具" scheme="https://sy-yunyi.github.io/tags/%E7%BD%91%E7%BB%9C%E5%8C%85%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/"/>
+    
+      <category term="Wrieshark" scheme="https://sy-yunyi.github.io/tags/Wrieshark/"/>
+    
+  </entry>
   
   <entry>
     <title>Vulnhub实战之IMF</title>
@@ -42,6 +95,34 @@
       <category term="Vulnhub" scheme="https://sy-yunyi.github.io/tags/Vulnhub/"/>
     
       <category term="IMF" scheme="https://sy-yunyi.github.io/tags/IMF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>计网实验基础之网络命令-route</title>
+    <link href="https://sy-yunyi.github.io/2019/01/26/%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E5%9F%BA%E7%A1%80%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4-route/"/>
+    <id>https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/</id>
+    <published>2019-01-25T16:00:00.000Z</published>
+    <updated>2019-01-26T09:32:22.532Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="route命令"><a href="#route命令" class="headerlink" title="route命令"></a>route命令</h3><p> Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。</p><p><code>win</code> 与<code>linux</code>下相同，用法有细微差别。</p><p>Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。</p><a id="more"></a><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 命令格式</span></span><br><span class="line">route [-f] [-p] [Command [Destination] [mask Netmask] [Gateway] [metric Metric]] [if Interface]] </span><br><span class="line"><span class="comment"># 具体格式请按照使用的机器的提示进行，不同机器或许不同</span></span><br></pre></td></tr></table></figure><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 命令参数</span></span><br><span class="line">-c 显示更多信息</span><br><span class="line">-n 不解析名字</span><br><span class="line">-v 显示详细的处理信息</span><br><span class="line">-F 显示发送信息</span><br><span class="line">-C 显示路由缓存</span><br><span class="line">-f 清除所有网关入口的路由表。 </span><br><span class="line">-p 与 add 命令一起使用时使路由具有永久性。</span><br><span class="line">add:添加一条新路由。</span><br><span class="line">del:删除一条路由。</span><br><span class="line">-net:目标地址是一个网络。</span><br><span class="line">-host:目标地址是一个主机。</span><br><span class="line">netmask:当添加一个网络路由时，需要使用网络掩码。</span><br><span class="line">gw:路由数据包通过网关。注意，你指定的网关必须能够达到。</span><br><span class="line">metric：设置路由跳数。</span><br><span class="line">Command 指定您想运行的命令 (Add/Change/Delete/Print)。 </span><br><span class="line">Destination 指定该路由的网络目标。 </span><br><span class="line">mask Netmask 指定与网络目标相关的网络掩码（也被称作子网掩码）。 </span><br><span class="line">Gateway 指定网络目标定义的地址集和子网掩码可以到达的前进或下一跃点 IP 地址。 </span><br><span class="line">metric Metric 为路由指定一个整数成本值标（从 <span class="number">1</span> 至 <span class="number">9999</span>），当在路由表(与转发的数据包目标地址最匹配)的多个路由中进行选择时可以使用。 </span><br><span class="line"><span class="keyword">if</span> Interface 为可以访问目标的接口指定接口索引。若要获得一个接口列表和它们相应的接口索引，使用 route print 命令的显示功能。可以使用十进制或十六进制值进行接口索引。</span><br></pre></td></tr></table></figure><h4 id="使用详解"><a href="#使用详解" class="headerlink" title="使用详解"></a>使用详解</h4><ol><li><p>显示当前路由</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">route print <span class="comment"># win</span></span><br><span class="line">route print <span class="number">157</span>* <span class="comment"># win 打印匹配的项</span></span><br><span class="line">route       <span class="comment"># ubuntu</span></span><br></pre></td></tr></table></figure><center><img src="https://i.loli.net/2019/01/26/5c4c258e83a51.png" alt="route.png"></center><center><img src="https://i.loli.net/2019/01/26/5c4c25e84b267.png" alt="route_linux.png"></center><p>上面是win和linux下显示的不同的路由表。</p><blockquote><p>Flags标志说明：</p><p>U Up表示此路由当前为启动状态</p><p>H Host，表示此网关为一主机</p><p>G Gateway，表示此网关为一路由器</p><p>R Reinstate Route，使用动态路由重新初始化的路由</p><p>D Dynamically,此路由是动态性地写入</p><p>M Modified，此路由是由路由守护程序或导向器动态修改</p><p>! 表示此路由当前为关闭状态</p></blockquote></li><li><p>添加网关/设置网关</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">route ADD <span class="number">3</span>ffe::/<span class="number">32</span> <span class="number">3</span>ffe::<span class="number">1</span></span><br><span class="line">route ADD <span class="number">157.0</span>.<span class="number">0.0</span> MASK <span class="number">255.0</span>.<span class="number">0.0</span>  <span class="number">157.55</span>.<span class="number">80.1</span> METRIC <span class="number">3</span> <span class="keyword">IF</span> <span class="number">2</span></span><br><span class="line">       destination^      ^mask      ^gateway     metric^    ^</span><br><span class="line">                                                        Interface</span><br><span class="line">     <span class="comment"># 如果未给出 IF，它将尝试查找给定网关的最佳接口。</span></span><br></pre></td></tr></table></figure></li><li><p>修改网关</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">route CHANGE <span class="number">157.0</span>.<span class="number">0.0</span> MASK <span class="number">255.0</span>.<span class="number">0.0</span> <span class="number">157.55</span>.<span class="number">80.5</span> METRIC <span class="number">2</span> <span class="keyword">IF</span> <span class="number">2</span></span><br><span class="line">      <span class="comment"># CHANGE 只用于修改网关和/或跃点数。</span></span><br></pre></td></tr></table></figure></li><li><p>屏蔽路由</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add -net <span class="number">224.0</span>.<span class="number">0.0</span> netmask <span class="number">240.0</span>.<span class="number">0.0</span> reject</span><br></pre></td></tr></table></figure><p>增加一条屏蔽的路由，目的地址为 224.x.x.x 将被拒绝</p></li><li><p>删除路由记录</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">route DELETE 157.0.0.0</span><br><span class="line">route del -net 224.0.0.0 netmask 240.0.0.0  # linux</span><br></pre></td></tr></table></figure></li><li><p>清除路由表</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route -f</span><br></pre></td></tr></table></figure></li><li><p>添加永久性路由</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add addr -p</span><br></pre></td></tr></table></figure></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;route命令&quot;&gt;&lt;a href=&quot;#route命令&quot; class=&quot;headerlink&quot; title=&quot;route命令&quot;&gt;&lt;/a&gt;route命令&lt;/h3&gt;&lt;p&gt; Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;win&lt;/code&gt; 与&lt;code&gt;linux&lt;/code&gt;下相同，用法有细微差别。&lt;/p&gt;
+&lt;p&gt;Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="网络实验" scheme="https://sy-yunyi.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+    
+      <category term="计算机网络实验" scheme="https://sy-yunyi.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+      <category term="网络命令" scheme="https://sy-yunyi.github.io/tags/%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4/"/>
+    
+      <category term="route" scheme="https://sy-yunyi.github.io/tags/route/"/>
     
   </entry>
   
@@ -101,34 +182,6 @@
       <category term="网络命令" scheme="https://sy-yunyi.github.io/tags/%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4/"/>
     
       <category term="arp" scheme="https://sy-yunyi.github.io/tags/arp/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>计网实验基础之网络命令-route</title>
-    <link href="https://sy-yunyi.github.io/2019/01/26/%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E5%9F%BA%E7%A1%80%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4-route/"/>
-    <id>https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/</id>
-    <published>2019-01-25T16:00:00.000Z</published>
-    <updated>2019-01-26T09:32:22.532Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="route命令"><a href="#route命令" class="headerlink" title="route命令"></a>route命令</h3><p> Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。</p><p><code>win</code> 与<code>linux</code>下相同，用法有细微差别。</p><p>Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。</p><a id="more"></a><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 命令格式</span></span><br><span class="line">route [-f] [-p] [Command [Destination] [mask Netmask] [Gateway] [metric Metric]] [if Interface]] </span><br><span class="line"><span class="comment"># 具体格式请按照使用的机器的提示进行，不同机器或许不同</span></span><br></pre></td></tr></table></figure><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 命令参数</span></span><br><span class="line">-c 显示更多信息</span><br><span class="line">-n 不解析名字</span><br><span class="line">-v 显示详细的处理信息</span><br><span class="line">-F 显示发送信息</span><br><span class="line">-C 显示路由缓存</span><br><span class="line">-f 清除所有网关入口的路由表。 </span><br><span class="line">-p 与 add 命令一起使用时使路由具有永久性。</span><br><span class="line">add:添加一条新路由。</span><br><span class="line">del:删除一条路由。</span><br><span class="line">-net:目标地址是一个网络。</span><br><span class="line">-host:目标地址是一个主机。</span><br><span class="line">netmask:当添加一个网络路由时，需要使用网络掩码。</span><br><span class="line">gw:路由数据包通过网关。注意，你指定的网关必须能够达到。</span><br><span class="line">metric：设置路由跳数。</span><br><span class="line">Command 指定您想运行的命令 (Add/Change/Delete/Print)。 </span><br><span class="line">Destination 指定该路由的网络目标。 </span><br><span class="line">mask Netmask 指定与网络目标相关的网络掩码（也被称作子网掩码）。 </span><br><span class="line">Gateway 指定网络目标定义的地址集和子网掩码可以到达的前进或下一跃点 IP 地址。 </span><br><span class="line">metric Metric 为路由指定一个整数成本值标（从 <span class="number">1</span> 至 <span class="number">9999</span>），当在路由表(与转发的数据包目标地址最匹配)的多个路由中进行选择时可以使用。 </span><br><span class="line"><span class="keyword">if</span> Interface 为可以访问目标的接口指定接口索引。若要获得一个接口列表和它们相应的接口索引，使用 route print 命令的显示功能。可以使用十进制或十六进制值进行接口索引。</span><br></pre></td></tr></table></figure><h4 id="使用详解"><a href="#使用详解" class="headerlink" title="使用详解"></a>使用详解</h4><ol><li><p>显示当前路由</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">route print <span class="comment"># win</span></span><br><span class="line">route print <span class="number">157</span>* <span class="comment"># win 打印匹配的项</span></span><br><span class="line">route       <span class="comment"># ubuntu</span></span><br></pre></td></tr></table></figure><center><img src="https://i.loli.net/2019/01/26/5c4c258e83a51.png" alt="route.png"></center><center><img src="https://i.loli.net/2019/01/26/5c4c25e84b267.png" alt="route_linux.png"></center><p>上面是win和linux下显示的不同的路由表。</p><blockquote><p>Flags标志说明：</p><p>U Up表示此路由当前为启动状态</p><p>H Host，表示此网关为一主机</p><p>G Gateway，表示此网关为一路由器</p><p>R Reinstate Route，使用动态路由重新初始化的路由</p><p>D Dynamically,此路由是动态性地写入</p><p>M Modified，此路由是由路由守护程序或导向器动态修改</p><p>! 表示此路由当前为关闭状态</p></blockquote></li><li><p>添加网关/设置网关</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">route ADD <span class="number">3</span>ffe::/<span class="number">32</span> <span class="number">3</span>ffe::<span class="number">1</span></span><br><span class="line">route ADD <span class="number">157.0</span>.<span class="number">0.0</span> MASK <span class="number">255.0</span>.<span class="number">0.0</span>  <span class="number">157.55</span>.<span class="number">80.1</span> METRIC <span class="number">3</span> <span class="keyword">IF</span> <span class="number">2</span></span><br><span class="line">       destination^      ^mask      ^gateway     metric^    ^</span><br><span class="line">                                                        Interface</span><br><span class="line">     <span class="comment"># 如果未给出 IF，它将尝试查找给定网关的最佳接口。</span></span><br></pre></td></tr></table></figure></li><li><p>修改网关</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">route CHANGE <span class="number">157.0</span>.<span class="number">0.0</span> MASK <span class="number">255.0</span>.<span class="number">0.0</span> <span class="number">157.55</span>.<span class="number">80.5</span> METRIC <span class="number">2</span> <span class="keyword">IF</span> <span class="number">2</span></span><br><span class="line">      <span class="comment"># CHANGE 只用于修改网关和/或跃点数。</span></span><br></pre></td></tr></table></figure></li><li><p>屏蔽路由</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add -net <span class="number">224.0</span>.<span class="number">0.0</span> netmask <span class="number">240.0</span>.<span class="number">0.0</span> reject</span><br></pre></td></tr></table></figure><p>增加一条屏蔽的路由，目的地址为 224.x.x.x 将被拒绝</p></li><li><p>删除路由记录</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">route DELETE 157.0.0.0</span><br><span class="line">route del -net 224.0.0.0 netmask 240.0.0.0  # linux</span><br></pre></td></tr></table></figure></li><li><p>清除路由表</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route -f</span><br></pre></td></tr></table></figure></li><li><p>添加永久性路由</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add addr -p</span><br></pre></td></tr></table></figure></li></ol>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;route命令&quot;&gt;&lt;a href=&quot;#route命令&quot; class=&quot;headerlink&quot; title=&quot;route命令&quot;&gt;&lt;/a&gt;route命令&lt;/h3&gt;&lt;p&gt; Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;win&lt;/code&gt; 与&lt;code&gt;linux&lt;/code&gt;下相同，用法有细微差别。&lt;/p&gt;
-&lt;p&gt;Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="网络实验" scheme="https://sy-yunyi.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
-    
-    
-      <category term="计算机网络实验" scheme="https://sy-yunyi.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
-    
-      <category term="网络命令" scheme="https://sy-yunyi.github.io/tags/%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4/"/>
-    
-      <category term="route" scheme="https://sy-yunyi.github.io/tags/route/"/>
     
   </entry>
   
@@ -242,30 +295,6 @@
   </entry>
   
   <entry>
-    <title>不得不说 - 记考研周年</title>
-    <link href="https://sy-yunyi.github.io/2018/12/23/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4---%E8%AE%B0%E8%80%83%E7%A0%94%E5%91%A8%E5%B9%B4/"/>
-    <id>https://sy-yunyi.github.io/2018/12/23/不得不说---记考研周年/</id>
-    <published>2018-12-22T16:00:00.000Z</published>
-    <updated>2019-03-03T03:05:12.631Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote class="blockquote-center"><p>最痛苦的在于你努力的成果在别人眼里就是一个笑话。</p><p>​                                —   <strong>SIX白勺记</strong></p></blockquote><a id="more"></a><p>首先要说一下，这次并不是因为拖延症才拖到现在才写。主要是因为最近真的很忙，马上要考试了，又开了实验室的年度总结报告，下周我还要做两次报告，真是工作都堆到一起了。</p><p>当然，本来是要先为今年考研的小伙伴加一下油，但现在看来是没有必要了。</p><p>那就随便说点吧。</p><p>时间真的好快，不知间已经过去一年了，想想去年的这个时候，我好像是心灰意冷，感觉天坍塌下来似的，怎么会想到坐到现在这个位置，只能说</p><blockquote><p>你做了你可以做的，下一步，顺其自然，或许并没有那么糟糕</p></blockquote><p>去年的时候是给自己找了后路的，考之前信誓旦旦不破楼兰誓不还，但考试就把自己的毅力消磨殆尽。拼了命的想为自己找一条后路。</p><blockquote><p>后路可以找，但永远是后路，不要当作你的希望</p></blockquote><p>说实话，如果没有在假期里的对人工智能的学习，我还真不确定自己能过的了面试，或许这就是上天安排的巧合吧。</p><blockquote><p>你的东西是靠自己的努力争取来的。</p></blockquote><p>感觉自己的运气都被考研耗光了，来到这里总感觉有不顺的地方。</p><p>刚来的时候，感觉饭菜还好，但是现在又瘦了= =|</p><p>实验室的师兄相处起来都挺好的，但是总感觉少了点东西，中国大学里普遍缺少的东西-对科研的敬畏之心。</p><p>从得知进入复试，科学家的梦想就一发不可收拾。但现实总是在时刻提醒着我，这真的仅仅是一个梦。</p><p>这个学期的课程选的有点失败，数学课程太多，有点吃不消。</p><p>决定之后每学期选一门数学课。</p><p>对科研或许应该算是入门了，但是对技术还是摸不着头脑，结束考试后，好好梳理一下。</p><p>考研结束，不是终点，而是一条不归路。</p><blockquote class="blockquote-center"><p>能力什么的，不是给别人看的。虽然被别人夸奖是一件很开心的事，但没有别人的夸奖它依然在。被夸了也不会多出多少。</p><p>​                                —   <strong>SIX白勺记</strong></p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote class=&quot;blockquote-center&quot;&gt;&lt;p&gt;最痛苦的在于你努力的成果在别人眼里就是一个笑话。&lt;/p&gt;
-&lt;p&gt;​                                —   &lt;strong&gt;SIX白勺记&lt;/strong&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-      <category term="SIX不言" scheme="https://sy-yunyi.github.io/categories/SIX%E4%B8%8D%E8%A8%80/"/>
-    
-    
-      <category term="鬼话连篇" scheme="https://sy-yunyi.github.io/tags/%E9%AC%BC%E8%AF%9D%E8%BF%9E%E7%AF%87/"/>
-    
-  </entry>
-  
-  <entry>
     <title>SDN安全论文选读（一）</title>
     <link href="https://sy-yunyi.github.io/2018/12/23/SDN%E5%AE%89%E5%85%A8%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB%EF%BC%88%E4%B8%80%EF%BC%89/"/>
     <id>https://sy-yunyi.github.io/2018/12/23/SDN安全论文选读（一）/</id>
@@ -288,6 +317,30 @@
       <category term="安全" scheme="https://sy-yunyi.github.io/tags/%E5%AE%89%E5%85%A8/"/>
     
       <category term="论文笔记" scheme="https://sy-yunyi.github.io/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>不得不说 - 记考研周年</title>
+    <link href="https://sy-yunyi.github.io/2018/12/23/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4---%E8%AE%B0%E8%80%83%E7%A0%94%E5%91%A8%E5%B9%B4/"/>
+    <id>https://sy-yunyi.github.io/2018/12/23/不得不说---记考研周年/</id>
+    <published>2018-12-22T16:00:00.000Z</published>
+    <updated>2019-03-03T03:05:12.631Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote class="blockquote-center"><p>最痛苦的在于你努力的成果在别人眼里就是一个笑话。</p><p>​                                —   <strong>SIX白勺记</strong></p></blockquote><a id="more"></a><p>首先要说一下，这次并不是因为拖延症才拖到现在才写。主要是因为最近真的很忙，马上要考试了，又开了实验室的年度总结报告，下周我还要做两次报告，真是工作都堆到一起了。</p><p>当然，本来是要先为今年考研的小伙伴加一下油，但现在看来是没有必要了。</p><p>那就随便说点吧。</p><p>时间真的好快，不知间已经过去一年了，想想去年的这个时候，我好像是心灰意冷，感觉天坍塌下来似的，怎么会想到坐到现在这个位置，只能说</p><blockquote><p>你做了你可以做的，下一步，顺其自然，或许并没有那么糟糕</p></blockquote><p>去年的时候是给自己找了后路的，考之前信誓旦旦不破楼兰誓不还，但考试就把自己的毅力消磨殆尽。拼了命的想为自己找一条后路。</p><blockquote><p>后路可以找，但永远是后路，不要当作你的希望</p></blockquote><p>说实话，如果没有在假期里的对人工智能的学习，我还真不确定自己能过的了面试，或许这就是上天安排的巧合吧。</p><blockquote><p>你的东西是靠自己的努力争取来的。</p></blockquote><p>感觉自己的运气都被考研耗光了，来到这里总感觉有不顺的地方。</p><p>刚来的时候，感觉饭菜还好，但是现在又瘦了= =|</p><p>实验室的师兄相处起来都挺好的，但是总感觉少了点东西，中国大学里普遍缺少的东西-对科研的敬畏之心。</p><p>从得知进入复试，科学家的梦想就一发不可收拾。但现实总是在时刻提醒着我，这真的仅仅是一个梦。</p><p>这个学期的课程选的有点失败，数学课程太多，有点吃不消。</p><p>决定之后每学期选一门数学课。</p><p>对科研或许应该算是入门了，但是对技术还是摸不着头脑，结束考试后，好好梳理一下。</p><p>考研结束，不是终点，而是一条不归路。</p><blockquote class="blockquote-center"><p>能力什么的，不是给别人看的。虽然被别人夸奖是一件很开心的事，但没有别人的夸奖它依然在。被夸了也不会多出多少。</p><p>​                                —   <strong>SIX白勺记</strong></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote class=&quot;blockquote-center&quot;&gt;&lt;p&gt;最痛苦的在于你努力的成果在别人眼里就是一个笑话。&lt;/p&gt;
+&lt;p&gt;​                                —   &lt;strong&gt;SIX白勺记&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="SIX不言" scheme="https://sy-yunyi.github.io/categories/SIX%E4%B8%8D%E8%A8%80/"/>
+    
+    
+      <category term="鬼话连篇" scheme="https://sy-yunyi.github.io/tags/%E9%AC%BC%E8%AF%9D%E8%BF%9E%E7%AF%87/"/>
     
   </entry>
   

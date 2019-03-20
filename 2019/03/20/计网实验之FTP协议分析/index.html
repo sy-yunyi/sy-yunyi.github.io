@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="计算机网络实验,FTP协议,">
 
 
 
@@ -81,13 +81,20 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Six&#39;s Blog">
-<meta property="og:url" content="https://sy-yunyi.github.io/tags/恶意域名检测/index.html">
+<meta name="description" content="FTP协议介绍文件传输协议FTP(File Transfer Protocol)是TCP/IP协议组种的应用层协议之一，是因特网中使用最广泛的文件传输协议。该协议旨在提高文件的共享性，透明、可靠的和高效的传送远程用户数据。其没有针对某种具体的操作系统或文件类型而设计，通过一些规程，利用网络低层的服务，屏蔽了计算机系统的细节，所以可以在异构网中传送文件。 主要功能用于实现用户间文件分发共享，以及网络">
+<meta name="keywords" content="计算机网络实验,FTP协议">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网实验之FTP协议分析">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/index.html">
 <meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="FTP协议介绍文件传输协议FTP(File Transfer Protocol)是TCP/IP协议组种的应用层协议之一，是因特网中使用最广泛的文件传输协议。该协议旨在提高文件的共享性，透明、可靠的和高效的传送远程用户数据。其没有针对某种具体的操作系统或文件类型而设计，通过一些规程，利用网络低层的服务，屏蔽了计算机系统的细节，所以可以在异构网中传送文件。 主要功能用于实现用户间文件分发共享，以及网络">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2019/03/06/5c7fb1c79bfa7.png">
+<meta property="og:updated_time" content="2019-03-20T07:36:39.015Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Six&#39;s Blog">
+<meta name="twitter:title" content="计网实验之FTP协议分析">
+<meta name="twitter:description" content="FTP协议介绍文件传输协议FTP(File Transfer Protocol)是TCP/IP协议组种的应用层协议之一，是因特网中使用最广泛的文件传输协议。该协议旨在提高文件的共享性，透明、可靠的和高效的传送远程用户数据。其没有针对某种具体的操作系统或文件类型而设计，通过一些规程，利用网络低层的服务，屏蔽了计算机系统的细节，所以可以在异构网中传送文件。 主要功能用于实现用户间文件分发共享，以及网络">
+<meta name="twitter:image" content="https://i.loli.net/2019/03/06/5c7fb1c79bfa7.png">
 
 
 
@@ -117,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="https://sy-yunyi.github.io/tags/恶意域名检测/">
+  <link rel="canonical" href="https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/">
 
 
 
 
 
-  <title>标签: 恶意域名检测 | Six's Blog</title>
+  <title>计网实验之FTP协议分析 | Six's Blog</title>
   
 
 
@@ -142,7 +149,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -308,52 +315,242 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>恶意域名检测<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Six">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Six's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/12/20/Building-a-Dynamic-Reputation-System-for-DNS/" itemprop="url">
-              
-                <span itemprop="name">《Building a Dynamic Reputation System for DNS》笔记</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">计网实验之FTP协议分析</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-12-20T00:00:00+08:00" content="2018-12-20">
-          12-20
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-20T00:00:00+08:00">
+                2019-03-20
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络实验/" itemprop="url" rel="index">
+                    <span itemprop="name">网络实验</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/20/计网实验之FTP协议分析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/03/20/计网实验之FTP协议分析/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="FTP协议介绍"><a href="#FTP协议介绍" class="headerlink" title="FTP协议介绍"></a>FTP协议介绍</h3><p>文件传输协议FTP(File Transfer Protocol)是TCP/IP协议组种的应用层协议之一，是因特网中使用最广泛的文件传输协议。该协议旨在提高文件的共享性，透明、可靠的和高效的传送远程用户数据。其没有针对某种具体的操作系统或文件类型而设计，通过一些规程，利用网络低层的服务，屏蔽了计算机系统的细节，所以可以在异构网中传送文件。</p>
+<p>主要功能用于实现用户间文件分发共享，以及网络管理者在进行设备版本升级、日志下载和配置保存等业务操作时，均会使用到FTP功能。</p>
+<a id="more"></a>
+<h4 id="TCP连接"><a href="#TCP连接" class="headerlink" title="TCP连接"></a>TCP连接</h4><p>FTP的有两种TCP连接控制连接和数据连接。</p>
+<p>在TCP/IP协议中，FTP协议标准命令TCP端口为21，port方式数据端口为20。</p>
+<p>控制连接（TCP 21端口）主要用于实现FTP协议控制信令传送，服务器端打开TCP 21端口被动等待客户端发起连接命令；客户端则以主动方式打开随机端口，发起连接的建立请求。</p>
+<blockquote>
+<p>在控制连接种使用的是ftp命令，其并不真正与FTP服务器交互，而是通过用户协议解释器翻译成真正的FTP命令，再与服务器交互。</p>
+</blockquote>
+<p>数据连接（TCP 20端口）主要用于实现应用数据传送，服务器的数据连接端使用端口20。服务器执行主动打开数据连接，通常也执行主动关闭数据连接 。</p>
+<blockquote>
+<p>数据连接只在传输文件时存在。</p>
+</blockquote>
+<p>控制连接再整个会话期间一直保持连接状态数据连接则时临时建立，在文件传输结束后被关闭。</p>
+<h4 id="FTP客户-服务器"><a href="#FTP客户-服务器" class="headerlink" title="FTP客户/服务器"></a>FTP客户/服务器</h4><p>FTP是一个客户/服务器系统。客户端和服务器端通过数据连接和控制连接进行通信。</p>
+<p><img src="https://i.loli.net/2019/03/06/5c7fb1c79bfa7.png" alt="FTP.png"></p>
+<h4 id="数据连接的两种模式"><a href="#数据连接的两种模式" class="headerlink" title="数据连接的两种模式"></a>数据连接的两种模式</h4><p>FTP的数据连接支持两种模式：主动模式和被动模式。两者的主要区别在于数据连接是由谁发起的。</p>
+<h5 id="主动模式"><a href="#主动模式" class="headerlink" title="主动模式"></a>主动模式</h5><p>即Port方式，FTP协议最初定义的数据传输连接方式。收到数据传送请求后，服务器主动与客户端建立连接。</p>
+<p>FTP客户端通过向FTP服务器发送PORT命令<code>PORT n1,n2,n3,n4,n5,n6</code>，其中前四位表示客户端的IP地址<code>n1,n2,n3,n4</code>,后两位确定临时端口号为<code>n5 × 256 + n6</code>。当需要传送数据时，服务器通过TCP端口号20与客户端的临时端口建立数据传输通道，完成数据传输。在建立数据连接的过程中，由服务器主动发起连接，因此被称为主动方式。</p>
+<h5 id="被动模式"><a href="#被动模式" class="headerlink" title="被动模式"></a>被动模式</h5><p>即Pasv模式。</p>
+<p>FTP客户端通过向FTP服务器发送<code>PASV</code>命令。服务器收到<code>PASV</code>命令后，随机打开一个高端端口，并告知客户端。当需要传送数据时，客户端主动与服务器的临时端口号建立数据传输通道，完成数据传输。在整个过程中，由于服务器总是被动接收客户端的数据连接，因此被称为被动方式。</p>
+<h5 id="两种模式优缺点"><a href="#两种模式优缺点" class="headerlink" title="两种模式优缺点"></a>两种模式优缺点</h5><p>主动FTP对FTP服务器的管理有利，但对客户端的管理不利。因为FTP服务器企图与客户端的高位随机端口建立连接，而这个端口很有可能被客户端的防火墙阻塞掉。</p>
+<p>被动FTP对FTP客户端的管理有利，但对服务器端的管理不利。因为客户端要与服务器端建立两个连接，其中一个连到一个高位随机端口，而这个端口很有可能被服务器端的防火墙阻塞掉。</p>
+<h5 id="FTP模式的选择"><a href="#FTP模式的选择" class="headerlink" title="FTP模式的选择"></a>FTP模式的选择</h5><p>当FTP服务器与FTP客户端均处于同一局域网内，即两者之间互访不存在防火墙或其他安全设备时，主动方式、被动方式均可实现FTP文件分发共享。</p>
+<p>如果FTP服务器处于路由器，防火墙或其他NAT设备之后，建议使用被动模式（passive mode）。因为在主动模式下传输数据时，由FTP发起的数据传输一般会被客户端网关的防火墙阻断。</p>
+<h4 id="FTP传输"><a href="#FTP传输" class="headerlink" title="FTP传输"></a>FTP传输</h4><p>FTP的一个突出的问题是它以明文的方式发送用户名和口令。所以导致任何人通过对网络进行嗅探就可以捕获用户名和密码。FTP发送的数据也是明文的，通过对FTP连接的监控和数据收集就可以收集和重现FTP的数据传输并实现协议连接回放。目前可以将FTP与SSL相结合，对数据包进行加密，来保护数据不被攻击者轻易得到。</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机网络实验/" rel="tag"><i class="fa fa-tag"></i> 计算机网络实验</a>
+          
+            <a href="/tags/FTP协议/" rel="tag"><i class="fa fa-tag"></i> FTP协议</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/20/计网实验之网络包分析工具-Wireshark/" rel="next" title="计网实验之网络包分析工具-Wireshark">
+                <i class="fa fa-chevron-left"></i> 计网实验之网络包分析工具-Wireshark
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -361,6 +558,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -381,8 +585,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -465,6 +678,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#FTP协议介绍"><span class="nav-number">1.</span> <span class="nav-text">FTP协议介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP连接"><span class="nav-number">1.1.</span> <span class="nav-text">TCP连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FTP客户-服务器"><span class="nav-number">1.2.</span> <span class="nav-text">FTP客户/服务器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据连接的两种模式"><span class="nav-number">1.3.</span> <span class="nav-text">数据连接的两种模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#主动模式"><span class="nav-number">1.3.1.</span> <span class="nav-text">主动模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#被动模式"><span class="nav-number">1.3.2.</span> <span class="nav-text">被动模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#两种模式优缺点"><span class="nav-number">1.3.3.</span> <span class="nav-text">两种模式优缺点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#FTP模式的选择"><span class="nav-number">1.3.4.</span> <span class="nav-text">FTP模式的选择</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FTP传输"><span class="nav-number">1.4.</span> <span class="nav-text">FTP传输</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -626,6 +855,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
