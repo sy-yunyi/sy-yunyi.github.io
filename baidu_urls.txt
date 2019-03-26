@@ -1,5 +1,5 @@
+https://sy-yunyi.github.io/2019/03/26/渗透技术基础之Windows提权/
 https://sy-yunyi.github.io/2019/03/25/Vulnhub实战之Acid/
 https://sy-yunyi.github.io/2019/03/24/编译器一些闲话-gcc、clang、llvm/
 https://sy-yunyi.github.io/2019/03/20/计网实验之网络包分析工具-Wireshark/
 https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/
-https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/
