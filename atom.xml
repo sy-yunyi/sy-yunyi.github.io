@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://sy-yunyi.github.io/"/>
-  <updated>2019-04-03T12:11:52.525Z</updated>
+  <updated>2019-04-10T08:01:16.828Z</updated>
   <id>https://sy-yunyi.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>计网实验之VLAN技术</title>
+    <link href="https://sy-yunyi.github.io/2019/04/10/%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E4%B9%8BVLAN%E6%8A%80%E6%9C%AF/"/>
+    <id>https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/</id>
+    <published>2019-04-09T16:00:00.000Z</published>
+    <updated>2019-04-10T08:01:16.828Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>虚拟局域网（Virtual Local Area Network,VLAN）是一种通过将局域网内的设备逻辑的划分成一个个网段，从而实现虚拟工作组的技术。VLAN很好的解决传统网络存在的网络结构、安全性、冗余路径等诸多问题。</p><p>利用交换机可以实现VLAN，但并不是所有交换机都具有VLAN功能。</p><a id="more"></a><p>一个VLAN组成一个逻辑子网，即一个逻辑广播域，可以覆盖多个网络设备，允许处于不同网络位置的网络用户加入到同一个逻辑子网中。IEEE与1999年颁布了用以标准化VLAN实现方案的IEEE 802.1q协议标准草案。</p><p>VLAN是为来解决以太网的广播问题和安全性问题而提出的一种协议，它在以太网帧的基础上增加了VLAN首部，用VLAN ID 把用户划分为更小的工作组，限制不同工作组之间的二层访问，每个工作组就形成了一个虚拟的局域网。</p><p>虚拟局域网的主要特点是可以限制广播范围，形成虚拟工作组，动态管理网络。</p><p>每个VLAN都包含一组有相同需求的工作站，与物理上形成的LAN有相同的属性。但由于其是逻辑上划分而不是物理划分，所以这些工作站不一定属于同一个物理网段。</p><p>一个VLAN内部的广播和单播流量都不会转发到其他VLAN中，从而有助于控制流量、减少设备投资、简化网络管理和提高网络的安全性。</p><p>VLAN的特征：</p><ul><li><p>不受网络物理位置的限制，可跨越多个物理网络和多台交换机。</p></li><li><p>可隔离广播信息，每个VLAN为一个广播域，可以有效防止广播风暴的发生。</p><blockquote><p>如果要实现不同VLAN之间的主机通信，则必须通过一台路由器或者三层交换机实现。</p></blockquote></li><li><p>可有效提升带宽，将网络上的用户按业务功能划分多个逻辑工作组，那么大部分通信交流将被限制在一个VLAN中，使带宽得到有效提升。</p></li><li><p>VLAN由软件实现定义和划分，建立和重组灵活。</p></li></ul><h3 id="VLAN分类"><a href="#VLAN分类" class="headerlink" title="VLAN分类"></a>VLAN分类</h3><ol><li><h4 id="基于端口划分VLAN-静态VLAN"><a href="#基于端口划分VLAN-静态VLAN" class="headerlink" title="基于端口划分VLAN  -   静态VLAN"></a>基于端口划分VLAN  -   <em>静态VLAN</em></h4><p>优点在于在定义VLAN成员时非常简单，只需将所有端口都定义为相应的VLAN即可，且适用于任何大小的网络。例如可以指定交换机1的端口1~ 6和交换机2的端口1~4端口为同一VLAN，即实现了跨越多台交换机的VLAN。</p><p>缺点在于用户从一个端口迁移至另一个端口时需要重新定义。</p></li><li><h4 id="基于MAC地址划分VLAN-动态VLAN"><a href="#基于MAC地址划分VLAN-动态VLAN" class="headerlink" title="基于MAC地址划分VLAN  -   动态VLAN"></a>基于MAC地址划分VLAN  -   <em>动态VLAN</em></h4><p>利用MAC地址区分不用的用户，根据规则将不同的用户划分至不同的VLAN。</p><p>优点在于用户物理移动不用重新配置VLAN。</p><p>缺点是初始化时，所有用户都必须进行配置，如果用户较多，则配置繁琐，适用于小型的局域网。</p></li><li><h4 id="基于网络层协议划分VLAN-动态VLAN"><a href="#基于网络层协议划分VLAN-动态VLAN" class="headerlink" title="基于网络层协议划分VLAN  -   动态VLAN"></a>基于网络层协议划分VLAN  -   <em>动态VLAN</em></h4><p>可分为IP、IPX、AppleTalk等，根据不同的协议类型进行流量控制。</p><p>优点是用户的物理位置改变时，既不需要重新配置所属VLAN，也不需要附件帧标签，可以减少网络的通信量。</p><p>缺点是效率低，检查IP帧头增加了延时时间。</p></li><li><h4 id="根据IP组播划分VLAN-动态VLAN"><a href="#根据IP组播划分VLAN-动态VLAN" class="headerlink" title="根据IP组播划分VLAN  -   动态VLAN"></a>根据IP组播划分VLAN  -   <em>动态VLAN</em></h4><p>此方法将一个IP组播组划分为一个VLAN，主要适用于将不在同一地理范围内的局域网组成一个VLAN。</p></li></ol><h3 id="VLAN数据帧标识"><a href="#VLAN数据帧标识" class="headerlink" title="VLAN数据帧标识"></a>VLAN数据帧标识</h3><p>最具代表性的VLAN数据帧标识方法时虚拟桥接局域网标准IEEE 802.1q。此协议定义了同一VLAN跨越交换机通信桥接的规则以及正确的标识VLAN的帧格式。IEEE 802.1q标准使用一种内部标记tag机制，该机制将标记插入到帧内，重新计算帧校验序列。每个标记包含4B，其中VPID是2B的控制信息，包含3位用户优先级，1位规范格式指示（默认为0，表示以太网）和12位的VLAN标识符。</p><p>基于IEEE 802.1q标准的tagVLAN用VID划分不同的VLAN，当数据帧通过交换机时，交换机根据数据帧中的tag的VID信息，标识特面所在的VLAN，这使得所有属于该VLAN的数据帧，都被限制在该逻辑VLAN中传输。</p><p>数据帧的格式如下：</p><table><thead><tr><th>前导帧</th><th>隔符</th><th>目的MAC地址</th><th>源MAC地址</th><th>类型</th><th>数据部分</th><th>帧检测序列</th></tr></thead><tbody><tr><td>7B</td><td>1B</td><td>6B</td><td>6B</td><td>2B</td><td>46~1500B</td><td>4B</td></tr></tbody></table><p>采用IEEE 802.1q方法标识的数据帧格式如下：</p><table><thead><tr><th>前导帧</th><th>隔符</th><th>目的MAC地址</th><th>源MAC地址</th><th>VPID</th><th>VCI</th><th>类型</th><th>数据部分</th><th>帧检测序列</th></tr></thead><tbody><tr><td>7B</td><td>1B</td><td>6B</td><td>6B</td><td>2B</td><td>2B</td><td>2B</td><td>46~1500B</td><td>4B</td></tr></tbody></table><p>以太网数据帧最大长度为1518B，加上VPID和VCI字段后长度增加至1522B。</p><h3 id="VLAN中的端口"><a href="#VLAN中的端口" class="headerlink" title="VLAN中的端口"></a>VLAN中的端口</h3><p>VLAN以VLAN ID 标识，ID 的取值范围为1~4096。一台交换机最多支持250个VLAN，其中，VLAN 1 是出厂默认设置的VLAN，如果不另行配置，所有交换机连接的设备都是VLAN1。VLAN1是不可删除的VLAN。</p><p>VLAN端口分为两种：Access端口和Trunk端口。</p><p><strong>Access端口</strong>只能属于一个VLAN，并且可以通过手工设置指定VLAN。此端口既不能直接从另一个VLAN接收信息，也不能像其他VLAN发送信息，只能传输属于此VLAN的帧。</p><p><strong>Trunk端口</strong>默认属于本交换机所有VLAN，通常位于交换机之间的来连接，以保证在跨越多台交换机上建立的同一个VLAN的成员可以通信。交换机之间互连用的即为Trunk端口，可以承载带VLAN和不带VLAN的报文。</p><p>交换机的Trunk端口不属于某个VLAN，而是承载所有VLAN的帧，帧的格式是IEEE 802.1q。Trunk端口基于OSI第二层。</p><h3 id="VLAN基本配置"><a href="#VLAN基本配置" class="headerlink" title="VLAN基本配置"></a>VLAN基本配置</h3><p>基于端口的VLAN配置包括两步：建立VLAN和配置VLAN端口。</p><h4 id="建立和修改VLAN"><a href="#建立和修改VLAN" class="headerlink" title="建立和修改VLAN"></a>建立和修改VLAN</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vlan valn-id</span><br></pre></td></tr></table></figure><p>vlan_id为输入的VLAN ID ，范围为1~4096。如果输入为新的vlan-id，则会创建VLAN；如果是已经存在的则修改VLAN。</p><p>这条命令执行于全局配置模式下[^若不了解全局配置，可看前一篇文章]，是进入VLAN配置模式的导航命令。</p><h4 id="删除VLAN"><a href="#删除VLAN" class="headerlink" title="删除VLAN"></a>删除VLAN</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">no vlan vlan-id</span><br></pre></td></tr></table></figure><h4 id="将Access端口分配给VLAN"><a href="#将Access端口分配给VLAN" class="headerlink" title="将Access端口分配给VLAN"></a>将Access端口分配给VLAN</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">switchport access vlan vlan-id</span><br></pre></td></tr></table></figure><p>VLAN不存在则先创建VLAN。</p><blockquote><p>将交换机端口0/5指定到VLAN  10</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> Switch(config) interface gigabiternet 0/5</span><br><span class="line"><span class="meta">&gt;</span> Switch(config-if) switchport access vlan 10</span><br><span class="line"><span class="meta">&gt;</span></span><br></pre></td></tr></table></figure></blockquote><h4 id="将端口移除"><a href="#将端口移除" class="headerlink" title="将端口移除"></a>将端口移除</h4><blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; Switch(config) interface gigabiternet 0/5</span><br><span class="line">&gt; Switch(config-if) switchport trunk allowed vlan remove 2</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></blockquote><h4 id="显示VLAN信息"><a href="#显示VLAN信息" class="headerlink" title="显示VLAN信息"></a>显示VLAN信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show vlan</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;基本概念&quot;&gt;&lt;a href=&quot;#基本概念&quot; class=&quot;headerlink&quot; title=&quot;基本概念&quot;&gt;&lt;/a&gt;基本概念&lt;/h3&gt;&lt;p&gt;虚拟局域网（Virtual Local Area Network,VLAN）是一种通过将局域网内的设备逻辑的划分成一个个网段，从而实现虚拟工作组的技术。VLAN很好的解决传统网络存在的网络结构、安全性、冗余路径等诸多问题。&lt;/p&gt;
+&lt;p&gt;利用交换机可以实现VLAN，但并不是所有交换机都具有VLAN功能。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="网络实验" scheme="https://sy-yunyi.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+    
+      <category term="计算机网络实验" scheme="https://sy-yunyi.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+      <category term="VLAN" scheme="https://sy-yunyi.github.io/tags/VLAN/"/>
+    
+  </entry>
   
   <entry>
     <title>计网实验之交换机技术</title>
@@ -261,34 +286,6 @@
   </entry>
   
   <entry>
-    <title>计网实验基础之网络命令-route</title>
-    <link href="https://sy-yunyi.github.io/2019/01/26/%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E5%9F%BA%E7%A1%80%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4-route/"/>
-    <id>https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/</id>
-    <published>2019-01-25T16:00:00.000Z</published>
-    <updated>2019-01-26T09:32:22.532Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="route命令"><a href="#route命令" class="headerlink" title="route命令"></a>route命令</h3><p> Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。</p><p><code>win</code> 与<code>linux</code>下相同，用法有细微差别。</p><p>Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。</p><a id="more"></a><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 命令格式</span></span><br><span class="line">route [-f] [-p] [Command [Destination] [mask Netmask] [Gateway] [metric Metric]] [if Interface]] </span><br><span class="line"><span class="comment"># 具体格式请按照使用的机器的提示进行，不同机器或许不同</span></span><br></pre></td></tr></table></figure><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 命令参数</span></span><br><span class="line">-c 显示更多信息</span><br><span class="line">-n 不解析名字</span><br><span class="line">-v 显示详细的处理信息</span><br><span class="line">-F 显示发送信息</span><br><span class="line">-C 显示路由缓存</span><br><span class="line">-f 清除所有网关入口的路由表。 </span><br><span class="line">-p 与 add 命令一起使用时使路由具有永久性。</span><br><span class="line">add:添加一条新路由。</span><br><span class="line">del:删除一条路由。</span><br><span class="line">-net:目标地址是一个网络。</span><br><span class="line">-host:目标地址是一个主机。</span><br><span class="line">netmask:当添加一个网络路由时，需要使用网络掩码。</span><br><span class="line">gw:路由数据包通过网关。注意，你指定的网关必须能够达到。</span><br><span class="line">metric：设置路由跳数。</span><br><span class="line">Command 指定您想运行的命令 (Add/Change/Delete/Print)。 </span><br><span class="line">Destination 指定该路由的网络目标。 </span><br><span class="line">mask Netmask 指定与网络目标相关的网络掩码（也被称作子网掩码）。 </span><br><span class="line">Gateway 指定网络目标定义的地址集和子网掩码可以到达的前进或下一跃点 IP 地址。 </span><br><span class="line">metric Metric 为路由指定一个整数成本值标（从 <span class="number">1</span> 至 <span class="number">9999</span>），当在路由表(与转发的数据包目标地址最匹配)的多个路由中进行选择时可以使用。 </span><br><span class="line"><span class="keyword">if</span> Interface 为可以访问目标的接口指定接口索引。若要获得一个接口列表和它们相应的接口索引，使用 route print 命令的显示功能。可以使用十进制或十六进制值进行接口索引。</span><br></pre></td></tr></table></figure><h4 id="使用详解"><a href="#使用详解" class="headerlink" title="使用详解"></a>使用详解</h4><ol><li><p>显示当前路由</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">route print <span class="comment"># win</span></span><br><span class="line">route print <span class="number">157</span>* <span class="comment"># win 打印匹配的项</span></span><br><span class="line">route       <span class="comment"># ubuntu</span></span><br></pre></td></tr></table></figure><center><img src="https://i.loli.net/2019/01/26/5c4c258e83a51.png" alt="route.png"></center><center><img src="https://i.loli.net/2019/01/26/5c4c25e84b267.png" alt="route_linux.png"></center><p>上面是win和linux下显示的不同的路由表。</p><blockquote><p>Flags标志说明：</p><p>U Up表示此路由当前为启动状态</p><p>H Host，表示此网关为一主机</p><p>G Gateway，表示此网关为一路由器</p><p>R Reinstate Route，使用动态路由重新初始化的路由</p><p>D Dynamically,此路由是动态性地写入</p><p>M Modified，此路由是由路由守护程序或导向器动态修改</p><p>! 表示此路由当前为关闭状态</p></blockquote></li><li><p>添加网关/设置网关</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">route ADD <span class="number">3</span>ffe::/<span class="number">32</span> <span class="number">3</span>ffe::<span class="number">1</span></span><br><span class="line">route ADD <span class="number">157.0</span>.<span class="number">0.0</span> MASK <span class="number">255.0</span>.<span class="number">0.0</span>  <span class="number">157.55</span>.<span class="number">80.1</span> METRIC <span class="number">3</span> <span class="keyword">IF</span> <span class="number">2</span></span><br><span class="line">       destination^      ^mask      ^gateway     metric^    ^</span><br><span class="line">                                                        Interface</span><br><span class="line">     <span class="comment"># 如果未给出 IF，它将尝试查找给定网关的最佳接口。</span></span><br></pre></td></tr></table></figure></li><li><p>修改网关</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">route CHANGE <span class="number">157.0</span>.<span class="number">0.0</span> MASK <span class="number">255.0</span>.<span class="number">0.0</span> <span class="number">157.55</span>.<span class="number">80.5</span> METRIC <span class="number">2</span> <span class="keyword">IF</span> <span class="number">2</span></span><br><span class="line">      <span class="comment"># CHANGE 只用于修改网关和/或跃点数。</span></span><br></pre></td></tr></table></figure></li><li><p>屏蔽路由</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add -net <span class="number">224.0</span>.<span class="number">0.0</span> netmask <span class="number">240.0</span>.<span class="number">0.0</span> reject</span><br></pre></td></tr></table></figure><p>增加一条屏蔽的路由，目的地址为 224.x.x.x 将被拒绝</p></li><li><p>删除路由记录</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">route DELETE 157.0.0.0</span><br><span class="line">route del -net 224.0.0.0 netmask 240.0.0.0  # linux</span><br></pre></td></tr></table></figure></li><li><p>清除路由表</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route -f</span><br></pre></td></tr></table></figure></li><li><p>添加永久性路由</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add addr -p</span><br></pre></td></tr></table></figure></li></ol>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;route命令&quot;&gt;&lt;a href=&quot;#route命令&quot; class=&quot;headerlink&quot; title=&quot;route命令&quot;&gt;&lt;/a&gt;route命令&lt;/h3&gt;&lt;p&gt; Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;win&lt;/code&gt; 与&lt;code&gt;linux&lt;/code&gt;下相同，用法有细微差别。&lt;/p&gt;
-&lt;p&gt;Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="网络实验" scheme="https://sy-yunyi.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
-    
-    
-      <category term="计算机网络实验" scheme="https://sy-yunyi.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
-    
-      <category term="网络命令" scheme="https://sy-yunyi.github.io/tags/%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4/"/>
-    
-      <category term="route" scheme="https://sy-yunyi.github.io/tags/route/"/>
-    
-  </entry>
-  
-  <entry>
     <title>计网实验基础之网络命令-arp</title>
     <link href="https://sy-yunyi.github.io/2019/01/26/%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E5%9F%BA%E7%A1%80%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4-arp/"/>
     <id>https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-arp/</id>
@@ -344,6 +341,34 @@
       <category term="ifconfig" scheme="https://sy-yunyi.github.io/tags/ifconfig/"/>
     
       <category term="netstat" scheme="https://sy-yunyi.github.io/tags/netstat/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>计网实验基础之网络命令-route</title>
+    <link href="https://sy-yunyi.github.io/2019/01/26/%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E5%9F%BA%E7%A1%80%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4-route/"/>
+    <id>https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/</id>
+    <published>2019-01-25T16:00:00.000Z</published>
+    <updated>2019-01-26T09:32:22.532Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="route命令"><a href="#route命令" class="headerlink" title="route命令"></a>route命令</h3><p> Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。</p><p><code>win</code> 与<code>linux</code>下相同，用法有细微差别。</p><p>Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。</p><a id="more"></a><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 命令格式</span></span><br><span class="line">route [-f] [-p] [Command [Destination] [mask Netmask] [Gateway] [metric Metric]] [if Interface]] </span><br><span class="line"><span class="comment"># 具体格式请按照使用的机器的提示进行，不同机器或许不同</span></span><br></pre></td></tr></table></figure><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 命令参数</span></span><br><span class="line">-c 显示更多信息</span><br><span class="line">-n 不解析名字</span><br><span class="line">-v 显示详细的处理信息</span><br><span class="line">-F 显示发送信息</span><br><span class="line">-C 显示路由缓存</span><br><span class="line">-f 清除所有网关入口的路由表。 </span><br><span class="line">-p 与 add 命令一起使用时使路由具有永久性。</span><br><span class="line">add:添加一条新路由。</span><br><span class="line">del:删除一条路由。</span><br><span class="line">-net:目标地址是一个网络。</span><br><span class="line">-host:目标地址是一个主机。</span><br><span class="line">netmask:当添加一个网络路由时，需要使用网络掩码。</span><br><span class="line">gw:路由数据包通过网关。注意，你指定的网关必须能够达到。</span><br><span class="line">metric：设置路由跳数。</span><br><span class="line">Command 指定您想运行的命令 (Add/Change/Delete/Print)。 </span><br><span class="line">Destination 指定该路由的网络目标。 </span><br><span class="line">mask Netmask 指定与网络目标相关的网络掩码（也被称作子网掩码）。 </span><br><span class="line">Gateway 指定网络目标定义的地址集和子网掩码可以到达的前进或下一跃点 IP 地址。 </span><br><span class="line">metric Metric 为路由指定一个整数成本值标（从 <span class="number">1</span> 至 <span class="number">9999</span>），当在路由表(与转发的数据包目标地址最匹配)的多个路由中进行选择时可以使用。 </span><br><span class="line"><span class="keyword">if</span> Interface 为可以访问目标的接口指定接口索引。若要获得一个接口列表和它们相应的接口索引，使用 route print 命令的显示功能。可以使用十进制或十六进制值进行接口索引。</span><br></pre></td></tr></table></figure><h4 id="使用详解"><a href="#使用详解" class="headerlink" title="使用详解"></a>使用详解</h4><ol><li><p>显示当前路由</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">route print <span class="comment"># win</span></span><br><span class="line">route print <span class="number">157</span>* <span class="comment"># win 打印匹配的项</span></span><br><span class="line">route       <span class="comment"># ubuntu</span></span><br></pre></td></tr></table></figure><center><img src="https://i.loli.net/2019/01/26/5c4c258e83a51.png" alt="route.png"></center><center><img src="https://i.loli.net/2019/01/26/5c4c25e84b267.png" alt="route_linux.png"></center><p>上面是win和linux下显示的不同的路由表。</p><blockquote><p>Flags标志说明：</p><p>U Up表示此路由当前为启动状态</p><p>H Host，表示此网关为一主机</p><p>G Gateway，表示此网关为一路由器</p><p>R Reinstate Route，使用动态路由重新初始化的路由</p><p>D Dynamically,此路由是动态性地写入</p><p>M Modified，此路由是由路由守护程序或导向器动态修改</p><p>! 表示此路由当前为关闭状态</p></blockquote></li><li><p>添加网关/设置网关</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">route ADD <span class="number">3</span>ffe::/<span class="number">32</span> <span class="number">3</span>ffe::<span class="number">1</span></span><br><span class="line">route ADD <span class="number">157.0</span>.<span class="number">0.0</span> MASK <span class="number">255.0</span>.<span class="number">0.0</span>  <span class="number">157.55</span>.<span class="number">80.1</span> METRIC <span class="number">3</span> <span class="keyword">IF</span> <span class="number">2</span></span><br><span class="line">       destination^      ^mask      ^gateway     metric^    ^</span><br><span class="line">                                                        Interface</span><br><span class="line">     <span class="comment"># 如果未给出 IF，它将尝试查找给定网关的最佳接口。</span></span><br></pre></td></tr></table></figure></li><li><p>修改网关</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">route CHANGE <span class="number">157.0</span>.<span class="number">0.0</span> MASK <span class="number">255.0</span>.<span class="number">0.0</span> <span class="number">157.55</span>.<span class="number">80.5</span> METRIC <span class="number">2</span> <span class="keyword">IF</span> <span class="number">2</span></span><br><span class="line">      <span class="comment"># CHANGE 只用于修改网关和/或跃点数。</span></span><br></pre></td></tr></table></figure></li><li><p>屏蔽路由</p><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add -net <span class="number">224.0</span>.<span class="number">0.0</span> netmask <span class="number">240.0</span>.<span class="number">0.0</span> reject</span><br></pre></td></tr></table></figure><p>增加一条屏蔽的路由，目的地址为 224.x.x.x 将被拒绝</p></li><li><p>删除路由记录</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">route DELETE 157.0.0.0</span><br><span class="line">route del -net 224.0.0.0 netmask 240.0.0.0  # linux</span><br></pre></td></tr></table></figure></li><li><p>清除路由表</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route -f</span><br></pre></td></tr></table></figure></li><li><p>添加永久性路由</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add addr -p</span><br></pre></td></tr></table></figure></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;route命令&quot;&gt;&lt;a href=&quot;#route命令&quot; class=&quot;headerlink&quot; title=&quot;route命令&quot;&gt;&lt;/a&gt;route命令&lt;/h3&gt;&lt;p&gt; Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;win&lt;/code&gt; 与&lt;code&gt;linux&lt;/code&gt;下相同，用法有细微差别。&lt;/p&gt;
+&lt;p&gt;Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="网络实验" scheme="https://sy-yunyi.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+    
+      <category term="计算机网络实验" scheme="https://sy-yunyi.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+      <category term="网络命令" scheme="https://sy-yunyi.github.io/tags/%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4/"/>
+    
+      <category term="route" scheme="https://sy-yunyi.github.io/tags/route/"/>
     
   </entry>
   
@@ -457,6 +482,30 @@
   </entry>
   
   <entry>
+    <title>不得不说 - 记考研周年</title>
+    <link href="https://sy-yunyi.github.io/2018/12/23/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4---%E8%AE%B0%E8%80%83%E7%A0%94%E5%91%A8%E5%B9%B4/"/>
+    <id>https://sy-yunyi.github.io/2018/12/23/不得不说---记考研周年/</id>
+    <published>2018-12-22T16:00:00.000Z</published>
+    <updated>2019-03-03T03:05:12.631Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote class="blockquote-center"><p>最痛苦的在于你努力的成果在别人眼里就是一个笑话。</p><p>​                                —   <strong>SIX白勺记</strong></p></blockquote><a id="more"></a><p>首先要说一下，这次并不是因为拖延症才拖到现在才写。主要是因为最近真的很忙，马上要考试了，又开了实验室的年度总结报告，下周我还要做两次报告，真是工作都堆到一起了。</p><p>当然，本来是要先为今年考研的小伙伴加一下油，但现在看来是没有必要了。</p><p>那就随便说点吧。</p><p>时间真的好快，不知间已经过去一年了，想想去年的这个时候，我好像是心灰意冷，感觉天坍塌下来似的，怎么会想到坐到现在这个位置，只能说</p><blockquote><p>你做了你可以做的，下一步，顺其自然，或许并没有那么糟糕</p></blockquote><p>去年的时候是给自己找了后路的，考之前信誓旦旦不破楼兰誓不还，但考试就把自己的毅力消磨殆尽。拼了命的想为自己找一条后路。</p><blockquote><p>后路可以找，但永远是后路，不要当作你的希望</p></blockquote><p>说实话，如果没有在假期里的对人工智能的学习，我还真不确定自己能过的了面试，或许这就是上天安排的巧合吧。</p><blockquote><p>你的东西是靠自己的努力争取来的。</p></blockquote><p>感觉自己的运气都被考研耗光了，来到这里总感觉有不顺的地方。</p><p>刚来的时候，感觉饭菜还好，但是现在又瘦了= =|</p><p>实验室的师兄相处起来都挺好的，但是总感觉少了点东西，中国大学里普遍缺少的东西-对科研的敬畏之心。</p><p>从得知进入复试，科学家的梦想就一发不可收拾。但现实总是在时刻提醒着我，这真的仅仅是一个梦。</p><p>这个学期的课程选的有点失败，数学课程太多，有点吃不消。</p><p>决定之后每学期选一门数学课。</p><p>对科研或许应该算是入门了，但是对技术还是摸不着头脑，结束考试后，好好梳理一下。</p><p>考研结束，不是终点，而是一条不归路。</p><blockquote class="blockquote-center"><p>能力什么的，不是给别人看的。虽然被别人夸奖是一件很开心的事，但没有别人的夸奖它依然在。被夸了也不会多出多少。</p><p>​                                —   <strong>SIX白勺记</strong></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote class=&quot;blockquote-center&quot;&gt;&lt;p&gt;最痛苦的在于你努力的成果在别人眼里就是一个笑话。&lt;/p&gt;
+&lt;p&gt;​                                —   &lt;strong&gt;SIX白勺记&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="SIX不言" scheme="https://sy-yunyi.github.io/categories/SIX%E4%B8%8D%E8%A8%80/"/>
+    
+    
+      <category term="鬼话连篇" scheme="https://sy-yunyi.github.io/tags/%E9%AC%BC%E8%AF%9D%E8%BF%9E%E7%AF%87/"/>
+    
+  </entry>
+  
+  <entry>
     <title>SDN安全论文选读（一）</title>
     <link href="https://sy-yunyi.github.io/2018/12/23/SDN%E5%AE%89%E5%85%A8%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB%EF%BC%88%E4%B8%80%EF%BC%89/"/>
     <id>https://sy-yunyi.github.io/2018/12/23/SDN安全论文选读（一）/</id>
@@ -479,30 +528,6 @@
       <category term="论文笔记" scheme="https://sy-yunyi.github.io/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"/>
     
       <category term="SDN" scheme="https://sy-yunyi.github.io/tags/SDN/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>不得不说 - 记考研周年</title>
-    <link href="https://sy-yunyi.github.io/2018/12/23/%E4%B8%8D%E5%BE%97%E4%B8%8D%E8%AF%B4---%E8%AE%B0%E8%80%83%E7%A0%94%E5%91%A8%E5%B9%B4/"/>
-    <id>https://sy-yunyi.github.io/2018/12/23/不得不说---记考研周年/</id>
-    <published>2018-12-22T16:00:00.000Z</published>
-    <updated>2019-03-03T03:05:12.631Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote class="blockquote-center"><p>最痛苦的在于你努力的成果在别人眼里就是一个笑话。</p><p>​                                —   <strong>SIX白勺记</strong></p></blockquote><a id="more"></a><p>首先要说一下，这次并不是因为拖延症才拖到现在才写。主要是因为最近真的很忙，马上要考试了，又开了实验室的年度总结报告，下周我还要做两次报告，真是工作都堆到一起了。</p><p>当然，本来是要先为今年考研的小伙伴加一下油，但现在看来是没有必要了。</p><p>那就随便说点吧。</p><p>时间真的好快，不知间已经过去一年了，想想去年的这个时候，我好像是心灰意冷，感觉天坍塌下来似的，怎么会想到坐到现在这个位置，只能说</p><blockquote><p>你做了你可以做的，下一步，顺其自然，或许并没有那么糟糕</p></blockquote><p>去年的时候是给自己找了后路的，考之前信誓旦旦不破楼兰誓不还，但考试就把自己的毅力消磨殆尽。拼了命的想为自己找一条后路。</p><blockquote><p>后路可以找，但永远是后路，不要当作你的希望</p></blockquote><p>说实话，如果没有在假期里的对人工智能的学习，我还真不确定自己能过的了面试，或许这就是上天安排的巧合吧。</p><blockquote><p>你的东西是靠自己的努力争取来的。</p></blockquote><p>感觉自己的运气都被考研耗光了，来到这里总感觉有不顺的地方。</p><p>刚来的时候，感觉饭菜还好，但是现在又瘦了= =|</p><p>实验室的师兄相处起来都挺好的，但是总感觉少了点东西，中国大学里普遍缺少的东西-对科研的敬畏之心。</p><p>从得知进入复试，科学家的梦想就一发不可收拾。但现实总是在时刻提醒着我，这真的仅仅是一个梦。</p><p>这个学期的课程选的有点失败，数学课程太多，有点吃不消。</p><p>决定之后每学期选一门数学课。</p><p>对科研或许应该算是入门了，但是对技术还是摸不着头脑，结束考试后，好好梳理一下。</p><p>考研结束，不是终点，而是一条不归路。</p><blockquote class="blockquote-center"><p>能力什么的，不是给别人看的。虽然被别人夸奖是一件很开心的事，但没有别人的夸奖它依然在。被夸了也不会多出多少。</p><p>​                                —   <strong>SIX白勺记</strong></p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote class=&quot;blockquote-center&quot;&gt;&lt;p&gt;最痛苦的在于你努力的成果在别人眼里就是一个笑话。&lt;/p&gt;
-&lt;p&gt;​                                —   &lt;strong&gt;SIX白勺记&lt;/strong&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-      <category term="SIX不言" scheme="https://sy-yunyi.github.io/categories/SIX%E4%B8%8D%E8%A8%80/"/>
-    
-    
-      <category term="鬼话连篇" scheme="https://sy-yunyi.github.io/tags/%E9%AC%BC%E8%AF%9D%E8%BF%9E%E7%AF%87/"/>
     
   </entry>
   
@@ -531,32 +556,6 @@
       <category term="安全" scheme="https://sy-yunyi.github.io/tags/%E5%AE%89%E5%85%A8/"/>
     
       <category term="论文笔记" scheme="https://sy-yunyi.github.io/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>别瞎折腾，没什么用---《等风来》</title>
-    <link href="https://sy-yunyi.github.io/2018/12/17/%E5%88%AB%E7%9E%8E%E6%8A%98%E8%85%BE%EF%BC%8C%E6%B2%A1%E4%BB%80%E4%B9%88%E7%94%A8---%E3%80%8A%E7%AD%89%E9%A3%8E%E6%9D%A5%E3%80%8B/"/>
-    <id>https://sy-yunyi.github.io/2018/12/17/别瞎折腾，没什么用---《等风来》/</id>
-    <published>2018-12-16T16:00:00.000Z</published>
-    <updated>2019-03-03T03:05:44.788Z</updated>
-    
-    <content type="html"><![CDATA[<p>​    犹豫了很久，最终还是选了它做题目。没什么含义，只是感觉这八个字说了很多。</p><a id="more"></a><p>​    片子出奇的没有涉足很火的爱情，或许是编剧安排的巧妙，但总体从影片上说，这不是一部爱情片，这是一部地地道道的青春治愈片，女主一直是单身，无论是回忆还是现实，虽然在路上碰到了很二的高富帅但在电影范围之内却没有丝毫爱情萌发的暗示。整个片子都是在讲困境与挫折，感悟与生活，别瞎折腾，该怎么活你就踏踏实实去活，生活没有把你逼到跳楼的份上，你就要在原地踏步；你没有一步登天的能力，你只能安安分分过好自己的生活。</p><p>​    <em>跳楼登天，我们还是选择在路上行走。</em></p><p>​    主角是杂志社一个栏目的作者，于是为了栏目需求，她需要拿着2K的月薪去写月薪2W的生活，这是生活逼的，你不写便没有饭吃；这也是她自己逼的，“我不回去，回去就输了”。本来计划好的出国旅行也因某个富家子弟的活动而被搅，她怒了，为什么，为什么生活如此不公，为什么连我这么小小的希望都要剥夺。然而主编的一席话却又把她从冲动的女青年拉回了现实。你没有资本，你不能一步登天，你也没有勇气，不会因为生活不公而跳下楼，那么你能做的便是接受现实，在路上慢慢走，就算不公平又能怎样，世间又有什么是公平的。两条路摆在她的面前，去或者被广告部的小林代替。</p><p>​    参加的是“幸福之旅”旅行团，去的是幸福指数‘很高’的尼泊尔。</p><p>​    然而从水管里流出的经过几次沉淀的雨水，盘子里装的不明物体，摇摇欲坠的宾馆，却将幸福藏在她找不到的地方。从一名扫雪工到一名雪花制造者，几天“真实”的生活却将她几年学会的华丽的辞藻吞噬，在这里竟然写不出主编满意的文章。</p><p>​    另外值得一提是片中的李热血，一位失恋出来放松的女生，大大咧咧，做事不计后果。莫名其妙的被男朋友分手，实在想不出原因，便想到出来走走，于是便遇上了作者这批人。后来，她明白了男友离开的原因其实很简单，受不来和她在一起时那种时时刻刻的愧疚感，原因只是她想起什么做什么，完全没有顾及他的感受。经历一夜惊魂的李热血抱着手机向男友哭诉，对面传来关心的话语，丝毫没有显出不耐烦的语气，我想，他还是喜欢这个纯洁无脑的女孩子的，不管她做了什么，她还是她，那个他喜欢的她。</p><p>​    别瞎折腾，没什么用。就算你捅破大天，又有什么用，你也只是一个普通的平凡人，安安生生的做好自己，做一个平凡的人，不去盼望着一步登天，也不会因为生活的逼迫去跳楼，平凡一点，再平凡一点，我们只是一个平凡的人。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;​    犹豫了很久，最终还是选了它做题目。没什么含义，只是感觉这八个字说了很多。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="SIX不言" scheme="https://sy-yunyi.github.io/categories/SIX%E4%B8%8D%E8%A8%80/"/>
-    
-    
-      <category term="等风来" scheme="https://sy-yunyi.github.io/tags/%E7%AD%89%E9%A3%8E%E6%9D%A5/"/>
-    
-      <category term="电影" scheme="https://sy-yunyi.github.io/tags/%E7%94%B5%E5%BD%B1/"/>
-    
-      <category term="影评" scheme="https://sy-yunyi.github.io/tags/%E5%BD%B1%E8%AF%84/"/>
     
   </entry>
   

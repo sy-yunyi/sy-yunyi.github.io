@@ -1,5 +1,5 @@
+https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/
 https://sy-yunyi.github.io/2019/04/03/计网实验之交换机技术/
 https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/
 https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/
 https://sy-yunyi.github.io/2019/03/26/渗透技术基础之Windows提权/
-https://sy-yunyi.github.io/2019/03/25/Vulnhub实战之Acid/
