@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://sy-yunyi.github.io/"/>
-  <updated>2019-04-10T08:01:16.828Z</updated>
+  <updated>2019-04-17T10:14:39.444Z</updated>
   <id>https://sy-yunyi.github.io/</id>
   
   <author>
@@ -15,6 +15,56 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>计网实验之端口聚合</title>
+    <link href="https://sy-yunyi.github.io/2019/04/17/%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E4%B9%8B%E7%AB%AF%E5%8F%A3%E8%81%9A%E5%90%88/"/>
+    <id>https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/</id>
+    <published>2019-04-16T16:00:00.000Z</published>
+    <updated>2019-04-17T10:14:39.444Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="端口聚合"><a href="#端口聚合" class="headerlink" title="端口聚合"></a>端口聚合</h3><p>端口聚合(Aggregating Port,AP)又称端口绑定，链路聚合，遵循IEEE 802.3ad协议的标准。</p><p>端口聚合是指将多个端口聚合在一起形成一个聚合组，以实现将输入\输出的负荷分担在各成员端口中，同时也提供了更高的连接可靠性。</p><a id="more"></a><p>端口聚合服务的上层实体将同一聚合组内的多条物理链路是为一条逻辑链路，从整体上看，一个聚合组形同一个端口。</p><p>端口聚合是在MAC子层和物理层之间的小层次，即数据链路层和物理层之间。</p><p>为了不改变以太网的协议栈，将链路聚合归结为数据链路层，因此端口聚合也成为链路聚合。</p><h4 id="端口聚合的特点"><a href="#端口聚合的特点" class="headerlink" title="端口聚合的特点"></a>端口聚合的特点</h4><ul><li><p>实现了各个聚合端口的符合分担及同组成员之间的动态备份</p></li><li><p>增加了链路带宽，又防止形成环路</p></li><li><p>聚合后的带宽是每个独立端口的带宽总和</p><blockquote><p>当端口上流量增加而成为限制网络性能的瓶颈时，可以通过端口聚合增加带宽</p></blockquote></li><li><p>支持流量平衡，可以把流量均匀的分配至各成员链路</p></li><li><p>链路备份，当聚合组中一条成员链路断开时，将其链路上的流量自动分配至其他成员链路上</p></li></ul><h4 id="端口聚合限制条件"><a href="#端口聚合限制条件" class="headerlink" title="端口聚合限制条件"></a>端口聚合限制条件</h4><ol><li><p>只有同类型端口且双工速率一致才能聚合为一个AG端口。光口和电口不能绑定。</p><blockquote><p>AP成员端口速率要一致</p><p>端口类型要一致，二层端口只能加入二层AP；三层端口只能加入三层AP</p></blockquote></li><li><p>所有物理端口必须属于同一个VLAN。</p></li><li><p>最多支持8个物理端口聚合为一个AG。</p></li><li><p>当一个端口加入AP后,不能在该端口上进行任何配置,直到该端口退出AP。</p></li><li><p>AP不能设置端口安全功能。</p></li><li><p>若端口加入AP，则端口的属性被AP属性取代。</p></li><li><p>若端口从AP中删除，则端口属性恢复至加入AP前的属性。</p></li></ol><h3 id="配置流量平衡"><a href="#配置流量平衡" class="headerlink" title="配置流量平衡"></a>配置流量平衡</h3><p>流量平衡又称负载均衡。其建立在现有网络上，通过一种廉价、有效、透明的方法扩展网络设备和服务器的带宽并增加吞吐量，加强网络数据处理能力，提高网络的灵活性和可用性。</p><p>流量平衡</p><ul><li>将大量并发访问或者数据流量分担到多台节点设别分别处理，减少用户的响应时间</li><li>将单个重负载的运算分担到多个节点设备做并行处理，系统处理能力得到提高</li></ul><h4 id="流量平衡模式"><a href="#流量平衡模式" class="headerlink" title="流量平衡模式"></a>流量平衡模式</h4><p>端口聚合的流量平衡模式有很多，包括根据报文的源 MAC 地址、目的 MAC 地址、源 MAC 地址+目的 MAC 地址、源 IP 地址，目的 IP 地址以及源 IP 地址+目的 IP 地址等特征值把流量平均地分配到 AP 的成员链路中。</p><p><strong>源MAC地址流量平衡</strong>是根据报文的源MAC地址把报文分配至AP的各个成员链路中。不同源MAC地址的报文，其转发链路不同，相同的源MAC地址报文向同一个成员链路转发。</p><p><strong>目的MAC地址流量平衡</strong>是根据报文的目的MAC地址把报文分配至AP的各个成员链路中。相同源目的MAC地址的报文同一个成员链路转发，不同的源MAC地址报文转发链路不同。</p><p><strong>源MAC+目的MAC流量平衡</strong>是根据报文的源MAC地址和目的MAC地址把报文分配至AP的各个成员链路中。不同MAC地址的报文，其转发链路不同，相同的MAC地址报文向同一个成员链路转发。</p><p><strong>源IP地址或目的IP地址流量平衡</strong>是根据报文的源IP地址和目的IP地址进行流量分配。该模式用于三层报文，如果该模式下收到二层报文，则根据报文中的源MAC地址或者目的MAC地址进行转发。</p><p><strong>源IP地址+目的IP地址流量平衡</strong>是根据报文的源IP地址和目的IP地址进行流量分配。该模式用于三层报文，如果该模式下收到二层报文，则根据报文中的源MAC地址或者目的MAC地址进行转发。具有不同的源IP地址+目的IP地址的报文可能会被分配至同一个成员链路中。</p><h3 id="端聚合配置命令"><a href="#端聚合配置命令" class="headerlink" title="端聚合配置命令"></a>端聚合配置命令</h3><p><strong>创建AP</strong></p><p>在全局配置模式下，使用命令</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">interface aggregateport n  # n为AP号</span><br></pre></td></tr></table></figure><p><strong>将端口加入AP</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(config) # interface gigabitethernet 0/1</span><br><span class="line">(config-if) # port-group port-group-number</span><br></pre></td></tr></table></figure><p><strong>物理端口退出AP</strong></p><p>在端口配置模式下，</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">no port-group</span><br></pre></td></tr></table></figure><p><strong>配置三层AP</strong></p><p>默认情况下配置的为二层AP，如果想配置三层AP，则只需要增加IP配置</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(config)# interface aggretegateport 3</span><br><span class="line">(config-if)# no switchport  !声明三层端口</span><br><span class="line">(config-if)# ip address ip-addr  mask</span><br><span class="line">(config-if)# end</span><br></pre></td></tr></table></figure><p>将端口加入三层AP，需要先创建AP</p><p>将端口加入三层AP</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(config) # interface range gigabitethernet 0/1-3</span><br><span class="line">(config-if)# no switchport</span><br><span class="line">(config-if)# port-group 2</span><br></pre></td></tr></table></figure><p><strong>显示AP</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show aggregateport [port-number]&#123;load-balance | summary&#125;</span><br></pre></td></tr></table></figure><p>显示AP设置</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># show aggregateport port-number load-balance</span><br></pre></td></tr></table></figure><p>显示AP汇总信息</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show aggregateport port-number summary</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;端口聚合&quot;&gt;&lt;a href=&quot;#端口聚合&quot; class=&quot;headerlink&quot; title=&quot;端口聚合&quot;&gt;&lt;/a&gt;端口聚合&lt;/h3&gt;&lt;p&gt;端口聚合(Aggregating Port,AP)又称端口绑定，链路聚合，遵循IEEE 802.3ad协议的标准。&lt;/p&gt;
+&lt;p&gt;端口聚合是指将多个端口聚合在一起形成一个聚合组，以实现将输入\输出的负荷分担在各成员端口中，同时也提供了更高的连接可靠性。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="网络实验" scheme="https://sy-yunyi.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+    
+      <category term="计算机网络实验" scheme="https://sy-yunyi.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+      <category term="端口聚合" scheme="https://sy-yunyi.github.io/tags/%E7%AB%AF%E5%8F%A3%E8%81%9A%E5%90%88/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>计网实验之生成树协议</title>
+    <link href="https://sy-yunyi.github.io/2019/04/17/%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E4%B9%8B%E7%94%9F%E6%88%90%E6%A0%91%E5%8D%8F%E8%AE%AE/"/>
+    <id>https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/</id>
+    <published>2019-04-16T16:00:00.000Z</published>
+    <updated>2019-04-17T07:22:19.148Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="STP介绍"><a href="#STP介绍" class="headerlink" title="STP介绍"></a>STP介绍</h3><p>对于二层以太网而言，两个局域网间只能有一条活动的通路，否则就会产生广播风暴。</p><p>但为了加强一个局域网的可靠性，又需要建立冗余链路，其中一些通路必须处于备份状态。</p><a id="more"></a><p><img src="C:\Users\sky_y\AppData\Roaming\Typora\typora-user-images\1555481604188.png" alt="1555481604188"></p><p>若网络发生故障导致一条链路失效，相应的冗余链路就会提升至活动状态。</p><p>生成树协议(Spanning Tree Protocol,STP)是为了解决冗余网络中的广播风暴问题而产生的，是一种网桥嵌套协议。</p><h4 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h4><p>STP定义了网桥协议数据单元(Bridge Protocol Data Unit, BPDU), 网桥利用BPDU进行通信，并用BPDU的相关机制动态的选择根网桥和备份网桥。从而打破物理环路，建立一个无循环的逻辑拓扑。</p><h4 id="相关术语"><a href="#相关术语" class="headerlink" title="相关术语"></a>相关术语</h4><p><strong>根端口</strong>：提供最短路径到根网桥的端口。每台非根交换机都必须选取一个根端口。</p><p><strong>指派端口</strong>：每个网段通过该端口连接到根网桥。根网桥上的端口。</p><p><strong>替换端口</strong>：根端口的替换端口，一旦根端口失效，该端口立刻成为根端口。</p><p><strong>备份端口</strong>：指派端口的备份端口，但过一个网桥有两个端口都连在一个网段上时，优先级高的为指派端口，优先级低的为备份端口。</p><p><strong>非活动端口</strong>：当前不处在活动状态的端口。</p><p><strong>端口优先级</strong>：默认为根端口、指派端口、替换端口、备份端口。</p><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><ul><li>STP避免了当网络中存在环路时产生广播风暴</li><li>环路消失时，自动开启原来切断的端口，提高了网络可靠性</li></ul><h3 id="生成树形成过程"><a href="#生成树形成过程" class="headerlink" title="生成树形成过程"></a>生成树形成过程</h3><ol><li>通过比较交换机优先级选取根交换机</li><li>其余非根交换机只有一个通向根交换机的端口，称为根端口</li><li>认定网段的指派交换机</li><li>每个网段只有一个转发端口，根交换机所有端口均为转发端口</li></ol><blockquote><p>给定广播域内只有一台根交换机</p></blockquote><p>生成树协议使用IEEE 802.1d 标准中的生成树算法(Spanning Tree Algorithm,STA)，在一个具有冗余的容错网络中计算出一个无环路路径。</p><p>一部分端口处于转发状态，一部分处于阻塞状态，保证网络中任何一点到另一点的路径有且只有一条。</p><p>除了根端口和指派端口外的端口都处于阻塞状态。所以在确定了根交换机、交换机的根端口以及每个网段的指派交换机和指派端口后，一个生成树的拓扑结构就确定了。</p><p>当某台交换机发现拓扑发生变化后，向根交换机定时发送拓扑变化BPDU，在根交换机接收到消息后，根交换机发送给配置BPDU，重新进行生成树配置。</p><h3 id="BPDU格式"><a href="#BPDU格式" class="headerlink" title="BPDU格式"></a>BPDU格式</h3><p><img src="C:\Users\sky_y\AppData\Roaming\Typora\typora-user-images\1555483717951.png" alt="1555483717951"></p><p>DMA是目的MAC地址，配置消息的目的地址是一个固定的网桥组播地址（0x0180c2000000）；</p><p>SMA是源MAC地址，即发送该配置消息的网桥的MAC地址；</p><p>L/T是帧长；</p><p>LLC Header 是配置消息固定的链路头；</p><p>Playload是BPDU数据，具体字段为</p><table><thead><tr><th>字段名称</th><th>字节</th></tr></thead><tbody><tr><td>协议ID</td><td>2</td></tr><tr><td>版本号</td><td>1</td></tr><tr><td>报文类型</td><td>1</td></tr><tr><td>标记域</td><td>1</td></tr><tr><td>根网桥ID</td><td>8</td></tr><tr><td>根路径成本</td><td>4</td></tr><tr><td>发送网桥ID</td><td>8</td></tr><tr><td>端口ID</td><td>2</td></tr><tr><td>报文老化时间</td><td>2</td></tr><tr><td>最大老化时间</td><td>2</td></tr><tr><td>访问时间</td><td>2</td></tr><tr><td>转发延迟</td><td>2</td></tr></tbody></table><h3 id="端口状态学习"><a href="#端口状态学习" class="headerlink" title="端口状态学习"></a>端口状态学习</h3><p>生成树协议工作时，所有端口都要经过一个端口状态建立的过程。</p><p><img src="C:\Users\sky_y\AppData\Roaming\Typora\typora-user-images\1555484539931.png" alt="1555484539931"></p><p>生成树协议通过BPDU广播，确定各交换机及其端口的工作状态和角色。交换机上的端口状态分别有关闭、阻塞、侦听、学习和转发。</p><ol><li>关闭状态(Disable)：不收发任何报文，当端口空连接或人为关闭时的状态。</li><li>阻塞状态(Blocking)：在机器刚启动时，端口处于阻塞状态，但可以接收BPDU信息。</li><li>侦听状态(Listening)：不接受用户数据，收发BPDU，确定网桥及端口角色。</li><li>学习状态(Learing)：不接受用户数据，收发BPDU，进行地址学习。</li><li>转发状态(Forwarding)：收发用户数据。继续收发BPDU和进行地址学习，维护STP。</li></ol><p>端口由阻塞状态进入转发状态要经过一定时间的延迟，延迟时间至少是是配置消息传播到整个网络所需最大时间的两倍。</p><h3 id="快速生成树协议"><a href="#快速生成树协议" class="headerlink" title="快速生成树协议"></a>快速生成树协议</h3><p>生成树协议虽然避免了广播风暴的发生，但是也存在一些不足。网络链路故障的恢复时间是两倍的转发时延，如果网络拓扑频繁变化，则会导致网络通信质量降低。</p><p>快速生成树协议(Rapid Spanning Tree Protocol,RSTP)是从STP发展来的，在IEEE 802.1w中描述了其规范。</p><p>RSTP主要是在网络拓扑发生变化时做了改进。</p><ol><li>若旧根端口处于阻塞状态，若其替换端口连接的对端交换机的指定端口处于转发状态，则替换端口立即转换为转发状态。</li><li>指定端口可以通过于相连的网桥进行一次握手而快速进入转发状态。</li><li>网络边缘的端口可以直接进入转发状态。</li></ol><p>RSTP与STP的主要区别在于：</p><ul><li>消息报文格式不同</li><li>拓扑改变消息传播方式不同</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;STP介绍&quot;&gt;&lt;a href=&quot;#STP介绍&quot; class=&quot;headerlink&quot; title=&quot;STP介绍&quot;&gt;&lt;/a&gt;STP介绍&lt;/h3&gt;&lt;p&gt;对于二层以太网而言，两个局域网间只能有一条活动的通路，否则就会产生广播风暴。&lt;/p&gt;
+&lt;p&gt;但为了加强一个局域网的可靠性，又需要建立冗余链路，其中一些通路必须处于备份状态。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="网络实验" scheme="https://sy-yunyi.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+    
+      <category term="计算机网络实验" scheme="https://sy-yunyi.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+      <category term="生成树" scheme="https://sy-yunyi.github.io/tags/%E7%94%9F%E6%88%90%E6%A0%91/"/>
+    
+  </entry>
   
   <entry>
     <title>计网实验之VLAN技术</title>
@@ -502,60 +552,6 @@
     
     
       <category term="鬼话连篇" scheme="https://sy-yunyi.github.io/tags/%E9%AC%BC%E8%AF%9D%E8%BF%9E%E7%AF%87/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SDN安全论文选读（一）</title>
-    <link href="https://sy-yunyi.github.io/2018/12/23/SDN%E5%AE%89%E5%85%A8%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB%EF%BC%88%E4%B8%80%EF%BC%89/"/>
-    <id>https://sy-yunyi.github.io/2018/12/23/SDN安全论文选读（一）/</id>
-    <published>2018-12-22T16:00:00.000Z</published>
-    <updated>2019-03-03T03:19:43.024Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="Security-of-Software-Defined-Networks-Taxonomic-Modeling-Key-Components-and-Open-research-area"><a href="#Security-of-Software-Defined-Networks-Taxonomic-Modeling-Key-Components-and-Open-research-area" class="headerlink" title="Security of Software Defined Networks: Taxonomic Modeling, Key Components and Open research area"></a>Security of Software Defined Networks: Taxonomic Modeling, Key Components and Open research area</h3><h4 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h4><p><em>Kaur R, Singh A, Singh S, et al. Security of software defined networks: Taxonomic modeling, key components and open research area[C]//Electrical, Electronics, and Optimization Techniques (ICEEOT), International Conference on. IEEE, 2016: 2832-2839.</em></p><a id="more"></a><blockquote><p>为了做关于SDN安全的报告而读的一篇论文，可能看的并不仔细。</p></blockquote><h4 id="软件定义网络"><a href="#软件定义网络" class="headerlink" title="软件定义网络"></a>软件定义网络</h4><p>软件定义网络承诺网络运营商大大简化网络管理，其通过网络可编程性提供灵活性和创新。 借助SDN，网络管理从低级设备配置的编码功能转变为构建便于网络管理和调试的软件，为解决存在已久的问题提供了一种新的方法。</p><p>但是，SDN的发展也带来了新的挑战。</p><p>各种架构组件的引入和SDN新颖实体的上升循环带来了新的安全问题和威胁。</p><p>SDN被认为是数字威胁和网络攻击的主要目标，并且比简单网络具有更具破坏性的影响。</p><p>SDN的架构引发了新的外部和内部威胁和漏洞。</p><ul><li>完整性和安全性没有被证明，更容易被通过单点攻击整个网络</li><li>可编程性为攻击者提供了执行恶意代码的能力</li><li>南向接口可能存在拒绝服务攻击和侧信道攻击</li><li>配置错误可能带来更大的危害。</li><li>SDN的代理可能被注入错误的流信息。</li></ul><h4 id="可能漏洞"><a href="#可能漏洞" class="headerlink" title="可能漏洞"></a>可能漏洞</h4><ul><li>认证攻击</li><li>数据泄露</li><li>恶意注入攻击</li><li>控制器劫持或欺骗规则注入</li><li>拒绝服务攻击<ul><li>控制器-交换器通信洪泛</li><li>交换器流表洪泛</li></ul></li><li>配置错误</li></ul><h4 id="安全解决方案分类"><a href="#安全解决方案分类" class="headerlink" title="安全解决方案分类"></a>安全解决方案分类</h4><ol><li>Secure Composition <ul><li>FRESCO [6] - 主要解决安全可编程问题，对于除了数据层其他层都有很大的影响，它旨在解决可加速设计新的SDN安全服务的各种关键问题。它还导出一个脚本API，使安全专家能够将安全监控和威胁检测逻辑编码为模块化库。</li><li>FORTNOX [2] - 新的安全策略实施内核。它处理授权和规则冲突，并对接口和控制层产生直接影响。</li></ul></li><li>Security Audit <ul><li>VERIFICARE - 给出满足设计要求的模型。该提议作为验证网络正确性和规范建模的验证平台。</li><li>SDN DEBUGGER - SDN调试器帮助研究人员找出bug的根本原因。它捕获并重建导致错误行为的事件序列。调试器可帮助研究人员解决逻辑错误，并帮助网络运营商收集错误报告，然后将其提交给供应商。</li></ul></li><li>Security enforcement policy <ul><li>VERIFLOW - Veriflow [6]基本上实时验证了网络范围内的不变量。 它是SDN控制器和网络设备之间的一个层，可以在插入修改和删除的每个转发规则时动态检查实时不变量违规。</li><li>FLOVER - Son.et al提出的Flover [6]基本上是一种检查模型，用于根据网络安全策略确定和验证流策略。它有助于设计复杂的威胁检测和缓解模块。</li><li>Perm OF  - 一个细粒度的权限系统，包含各种特定于OF的权限。</li></ul></li><li>Security Enhancement <ul><li>FleXam - FleXam是OpenFlow的采样扩展，允许Controller定义应该采样的数据包，应该选择每个数据包的哪些部分以及应该将它们发送到何处。FleXam使控制器能够动态调整采样率，从而降低控制平面负载。</li><li>CLOUDWATCHER - 一种监控云的新安全监控服务模型。CLOUDWATCHER [7]改变了网络流量的路由路径，它使流量通过安全设备所在的网络节点进行传输。</li><li>L-IDS - 学习入侵检测系统（IDS）。L-IDS是移动设备的安全服务，用于在特定区域或位置进行保护。</li></ul></li><li>Security Analysis<ul><li>OpenWatch - 它是一个程序，可以将不同的异常检测应用程序作为输入，并决定应监视哪些流程</li><li>AVANT-GUARD - 包含两种技术，第一种技术是连接迁移，它显着减少了由于南向接口上的DOS攻击而产生的数据到控制平面的交互。另一种技术是通过在SDN设备中提供条件触发推送功能来解决响应性挑战的致动触发器。</li><li>HEADER SPACE ANALYSIS - 通过检查防火墙流量空间和授权空间来解决SDN防火墙中的问题和冲突。此方法的功能是搜索整个网络中的流路径，并根据所有防火墙拒绝规则确定流路径以确定问题。</li></ul></li></ol><h4 id="SDN安全的关键组件"><a href="#SDN安全的关键组件" class="headerlink" title="SDN安全的关键组件"></a>SDN安全的关键组件</h4><ol><li>Securing the control layer - 控制器被称为SDN的大脑或所有功能发生的中央决策点。作为一个中心点，控制器是黑客感兴趣的攻击目标。潜在的攻击者可以尝试控制网络，伪装成SDN控制器或者只是闯入控制器本身。为了保护SDN控制器，需要强大的访问控制，需要DDoS保护，防病毒和其他威胁防御和检测，缓解技术。</li><li>Securing traffic flow - SDN基于智能转发流量。它是SDN功能的主要部分，因此必须加以保护。</li><li>Layered Taxonomy of SDN Security</li></ol><h4 id="SDN安全的开放研究领域"><a href="#SDN安全的开放研究领域" class="headerlink" title="SDN安全的开放研究领域"></a>SDN安全的开放研究领域</h4><ol><li>Operating system alteration- 操作系统是管理网络硬件和软件资源并为网络程序提供公共服务的软件。 如果操作系统发生变化，结果将足够危险。它可以感染所有层和接口，并可能影响应用程序管理功能。操作系统的更改可以通过可信计算进行保护，但是需要在此领域开展工作的研究。</li><li>Unauthorized Intrusion - 这是一种非法访问任何网络的行为。所有层和接口都是这些类型攻击的目标。它可能破坏网络的所有功能。所以，需要安全管理模块作为保护技术。</li><li>Several attacks - 对于SDN安全性，应该仔细确定几种类型的攻击。大多数攻击都是由研究人员解决的，但是还存在其他一些攻击仍未得到解决，如欺骗攻击。</li></ol>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;Security-of-Software-Defined-Networks-Taxonomic-Modeling-Key-Components-and-Open-research-area&quot;&gt;&lt;a href=&quot;#Security-of-Software-Defined-Networks-Taxonomic-Modeling-Key-Components-and-Open-research-area&quot; class=&quot;headerlink&quot; title=&quot;Security of Software Defined Networks: Taxonomic Modeling, Key Components and Open research area&quot;&gt;&lt;/a&gt;Security of Software Defined Networks: Taxonomic Modeling, Key Components and Open research area&lt;/h3&gt;&lt;h4 id=&quot;来源&quot;&gt;&lt;a href=&quot;#来源&quot; class=&quot;headerlink&quot; title=&quot;来源&quot;&gt;&lt;/a&gt;来源&lt;/h4&gt;&lt;p&gt;&lt;em&gt;Kaur R, Singh A, Singh S, et al. Security of software defined networks: Taxonomic modeling, key components and open research area[C]//Electrical, Electronics, and Optimization Techniques (ICEEOT), International Conference on. IEEE, 2016: 2832-2839.&lt;/em&gt;&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="论文选读" scheme="https://sy-yunyi.github.io/categories/%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB/"/>
-    
-    
-      <category term="安全" scheme="https://sy-yunyi.github.io/tags/%E5%AE%89%E5%85%A8/"/>
-    
-      <category term="论文笔记" scheme="https://sy-yunyi.github.io/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"/>
-    
-      <category term="SDN" scheme="https://sy-yunyi.github.io/tags/SDN/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>《Building a Dynamic Reputation System for DNS》笔记</title>
-    <link href="https://sy-yunyi.github.io/2018/12/20/Building-a-Dynamic-Reputation-System-for-DNS/"/>
-    <id>https://sy-yunyi.github.io/2018/12/20/Building-a-Dynamic-Reputation-System-for-DNS/</id>
-    <published>2018-12-19T16:00:00.000Z</published>
-    <updated>2019-01-03T13:50:12.371Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h4><p><em>Antonakakis M, Perdisci R, Dagon D, et al. Building a Dynamic Reputation System for DNS[C]//USENIX security symposium. 2010: 273-290.</em></p><a id="more"></a><h4 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h4><p>DNS对于合法的网络应用和网络攻击都是十分关键的协议。</p><p>黑名单对于应对恶意攻击是十分有效的，但是黑客可以通过变化域名来越过黑名单，所以如何及时准确的扩充黑名单是一个严峻的问题。本文研究的问题是如何动态的为一个新的未知的域名进行信誉评分。本文是基于对动态的恶意的DNS利用的独有特征的观察，可以从这些特征中分辨恶意与合法的行为。</p><p>文中设计了一个系统Notos。其利用从多方面收集的被动的DNS解析记录去建立对于合法的服务DNS资源是如何分配和利用的模型，利用已经获得的恶意域名及其行为来建立恶意域名的网络资源的利用的模型。</p><p>在之前的工作中，有研究者利用IP地址的信誉来过滤垃圾邮件或者恶意行为。</p><p><strong>我们的系统是第一个综合的动态域名信誉系统。</strong></p><p>被动DNS信息收集是Florian Weimer 首先提出的。</p><p><code>F. Weimer. Passive DNS replication. In Proceedings of FIRST Conference on Computer Security Incident, Hand ling, Singapore, 2005.</code> </p><p>B. Zdrnja 讨论了如何利用pDNS数据进行安全信息的收集。</p><p><code>B. Zdrnja, N. Brownlee, and D. Wessels. Passive monitoring of DNS anomalies. In Proceedings of DIMVA Conference, 2007.</code> </p><p>研究者试图利用独有的特征去检测恶意行为的来源。</p><p>Anderson proposed Spamscatter as the first system to identify and characterize spamming infrastructure by utilizing layer 7 analysis  。</p><p>利用7层分析去确定垃圾邮件设施。</p><p><code>D. Anderson, C. Fleizach, S. Savage, and G. Voelker. Spamscatter: Characterizing internet scam hosting infrastructure. In Proceedings of the USENIX Security Symposium, 2007</code> </p><p>Felegyhazi proposed a DNS reputation blacklisting methodology based on WHOIS observations. </p><p>基于WHOIS信息的DNS信誉黑名单方法</p><p><code>M. Felegyhazi, C. Keibich, and V. Paxson. On the potential of proactive domain blacklisting. In Third USENIX LEET Workshop, 2010.</code> </p><p>Sato proposed a way to extend current blacklists by observing the co-occurrence of IP address information. </p><p>通过观察IP地址的相关性来扩展现有的黑名单。</p><p><code>K. Sato, K. Ishibashi, T. Toyono, and N. Miyake. Extending black domain name list by using co-occurrence relation between dns queries. In Third USENIX LEET Workshop, 2010.</code> </p><h4 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h4><p>Notos 利用的信息包括网络IP地址的归属，自治系统和蜜罐分析，生存时间很短的被动的DNS信息。</p><p>从被动信息中提取的信息包括：</p><ul><li>Related Historic IPs (RHIPs)  IP相关历史</li><li>Related Historic Domains (RHDNs)  域名相关历史</li></ul><p>然后进行分类：</p><ul><li>Network-based features <ul><li>共18个特征</li><li>BGP features  9个特征</li><li>AS features  3个特征</li><li>AS features 6个特征</li></ul></li><li>Zone-based features <ul><li>共17个特征</li><li>String features  12个特征</li><li>TLD features  5个特征</li></ul></li><li>Evidence-based features <ul><li>共6个特征</li><li>Honeypot features  3个特征</li><li>Blacklist features  3个特征</li></ul></li></ul><p>离线模块：</p><ul><li>Network Profiles Model <ul><li>Popular Domains </li><li>Common Domains </li><li>Akamai Domains </li><li>CDN Domains </li><li>Dynamic DNS Domains </li></ul></li><li>Domain Name Clusters <ul><li>Network-based Clustering </li><li>Zone-based Clustering </li></ul></li><li>Reputation Function </li></ul><h4 id="数据收集"><a href="#数据收集" class="headerlink" title="数据收集"></a>数据收集</h4><p>两个方面：</p><ul><li>the historical or “passive” information from successful A-type DNS resolutions<ul><li>two ISP-based sensors </li></ul></li><li>the aggregated DNS traffic from the different networks covered by the SIE </li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h4 id=&quot;来源&quot;&gt;&lt;a href=&quot;#来源&quot; class=&quot;headerlink&quot; title=&quot;来源&quot;&gt;&lt;/a&gt;来源&lt;/h4&gt;&lt;p&gt;&lt;em&gt;Antonakakis M, Perdisci R, Dagon D, et al. Building a Dynamic Reputation System for DNS[C]//USENIX security symposium. 2010: 273-290.&lt;/em&gt;&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="论文选读" scheme="https://sy-yunyi.github.io/categories/%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB/"/>
-    
-    
-      <category term="DNS" scheme="https://sy-yunyi.github.io/tags/DNS/"/>
-    
-      <category term="恶意域名检测" scheme="https://sy-yunyi.github.io/tags/%E6%81%B6%E6%84%8F%E5%9F%9F%E5%90%8D%E6%A3%80%E6%B5%8B/"/>
-    
-      <category term="安全" scheme="https://sy-yunyi.github.io/tags/%E5%AE%89%E5%85%A8/"/>
-    
-      <category term="论文笔记" scheme="https://sy-yunyi.github.io/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
