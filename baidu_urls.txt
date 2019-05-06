@@ -1,5 +1,5 @@
+https://sy-yunyi.github.io/2019/05/06/Commando VM 第一个发行版Windows攻击平台/
+https://sy-yunyi.github.io/2019/05/06/DNS安全论文选读-Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History/
 https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/
 https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/
 https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/
-https://sy-yunyi.github.io/2019/04/03/计网实验之交换机技术/
-https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/
