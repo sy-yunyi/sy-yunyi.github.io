@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="DNS,恶意域名检测,安全,论文笔记,">
+  <meta name="keywords" content="安全,哈希扩展攻击,翻译,">
 
 
 
@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="来源Antonakakis M, Perdisci R, Dagon D, et al. Building a Dynamic Reputation System for DNS[C]//USENIX security symposium. 2010: 273-290.">
-<meta name="keywords" content="DNS,恶意域名检测,安全,论文笔记">
+<meta name="description" content="关于hash长度扩展攻击你需要了解的文章来源 ：https://blog.skullsecurity.org/2012/everything-you-need-to-know-about-hash-length-extension-attacks 之前我的朋友@mogigoma 在 https://stripe-ctf.com打CTF竞赛，其中一个挑战哈希长度扩展攻击。当时我并没有听过这种攻击，在">
+<meta name="keywords" content="安全,哈希扩展攻击,翻译">
 <meta property="og:type" content="article">
-<meta property="og:title" content="DNS论文选读 - Building a Dynamic Reputation System for DNS">
-<meta property="og:url" content="https://sy-yunyi.github.io/2018/12/20/Building-a-Dynamic-Reputation-System-for-DNS/index.html">
+<meta property="og:title" content="解析hash长度扩展攻击[翻译]">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/index.html">
 <meta property="og:site_name" content="Six&#39;s Blog">
-<meta property="og:description" content="来源Antonakakis M, Perdisci R, Dagon D, et al. Building a Dynamic Reputation System for DNS[C]//USENIX security symposium. 2010: 273-290.">
+<meta property="og:description" content="关于hash长度扩展攻击你需要了解的文章来源 ：https://blog.skullsecurity.org/2012/everything-you-need-to-know-about-hash-length-extension-attacks 之前我的朋友@mogigoma 在 https://stripe-ctf.com打CTF竞赛，其中一个挑战哈希长度扩展攻击。当时我并没有听过这种攻击，在">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-06T07:05:17.247Z">
+<meta property="og:updated_time" content="2019-05-07T02:00:57.573Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DNS论文选读 - Building a Dynamic Reputation System for DNS">
-<meta name="twitter:description" content="来源Antonakakis M, Perdisci R, Dagon D, et al. Building a Dynamic Reputation System for DNS[C]//USENIX security symposium. 2010: 273-290.">
+<meta name="twitter:title" content="解析hash长度扩展攻击[翻译]">
+<meta name="twitter:description" content="关于hash长度扩展攻击你需要了解的文章来源 ：https://blog.skullsecurity.org/2012/everything-you-need-to-know-about-hash-length-extension-attacks 之前我的朋友@mogigoma 在 https://stripe-ctf.com打CTF竞赛，其中一个挑战哈希长度扩展攻击。当时我并没有听过这种攻击，在">
 
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://sy-yunyi.github.io/2018/12/20/Building-a-Dynamic-Reputation-System-for-DNS/">
+  <link rel="canonical" href="https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/">
 
 
 
 
 
-  <title>DNS论文选读 - Building a Dynamic Reputation System for DNS | Six's Blog</title>
+  <title>解析hash长度扩展攻击[翻译] | Six's Blog</title>
   
 
 
@@ -327,7 +327,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2018/12/20/Building-a-Dynamic-Reputation-System-for-DNS/">
+    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Six">
@@ -344,7 +344,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">DNS论文选读 - Building a Dynamic Reputation System for DNS</h1>
+          <h1 class="post-title" itemprop="name headline">解析hash长度扩展攻击[翻译]</h1>
         
 
         <div class="post-meta">
@@ -356,8 +356,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-20T00:00:00+08:00">
-                2018-12-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-07T00:00:00+08:00">
+                2019-05-07
               </time>
             
 
@@ -379,8 +379,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/论文选读/" itemprop="url" rel="index">
-                    <span itemprop="name">论文选读</span>
+                  <a href="/categories/安全笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">安全笔记</span>
                   </a>
                 </span>
 
@@ -397,8 +397,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/20/Building-a-Dynamic-Reputation-System-for-DNS/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/12/20/Building-a-Dynamic-Reputation-System-for-DNS/" itemprop="commentCount"></span>
+                <a href="/2019/05/07/解析hash长度扩展攻击[翻译]/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/05/07/解析hash长度扩展攻击[翻译]/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -425,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  783
+                  2.5k
                 </span>
               
 
@@ -441,7 +441,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3
+                  10
                 </span>
               
             </div>
@@ -462,80 +462,78 @@
       
 
       
-        <h4 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h4><p><em>Antonakakis M, Perdisci R, Dagon D, et al. Building a Dynamic Reputation System for DNS[C]//USENIX security symposium. 2010: 273-290.</em></p>
+        <h3 id="关于hash长度扩展攻击你需要了解的"><a href="#关于hash长度扩展攻击你需要了解的" class="headerlink" title="关于hash长度扩展攻击你需要了解的"></a>关于hash长度扩展攻击你需要了解的</h3><p>文章来源 ：<a href="https://blog.skullsecurity.org/2012/everything-you-need-to-know-about-hash-length-extension-attacks" target="_blank" rel="noopener">https://blog.skullsecurity.org/2012/everything-you-need-to-know-about-hash-length-extension-attacks</a></p>
+<p>之前我的朋友@mogigoma 在 <a href="https://stripe-ctf.com/" target="_blank" rel="noopener">https://stripe-ctf.com</a>打CTF竞赛，其中一个挑战哈希长度扩展攻击。当时我并没有听过这种攻击，在了解了之后，我发现它不仅是看起来很cool，原理很简单，但是并没有好用的工具来实现这个攻击。在尝试了一个小时的错误长度的空字节或者不正确的增加的长度值，我发现要写一个让任何人都可以轻松实现这个攻击的工具。</p>
 <a id="more"></a>
-<h4 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h4><p>DNS对于合法的网络应用和网络攻击都是十分关键的协议。</p>
-<p>黑名单对于应对恶意攻击是十分有效的，但是黑客可以通过变化域名来越过黑名单，所以如何及时准确的扩充黑名单是一个严峻的问题。本文研究的问题是如何动态的为一个新的未知的域名进行信誉评分。本文是基于对动态的恶意的DNS利用的独有特征的观察，可以从这些特征中分辨恶意与合法的行为。</p>
-<p>文中设计了一个系统Notos。其利用从多方面收集的被动的DNS解析记录去建立对于合法的服务DNS资源是如何分配和利用的模型，利用已经获得的恶意域名及其行为来建立恶意域名的网络资源的利用的模型。</p>
-<p>在之前的工作中，有研究者利用IP地址的信誉来过滤垃圾邮件或者恶意行为。</p>
-<p><strong>我们的系统是第一个综合的动态域名信誉系统。</strong></p>
-<p>被动DNS信息收集是Florian Weimer 首先提出的。</p>
-<p><code>F. Weimer. Passive DNS replication. In Proceedings of FIRST Conference on Computer Security Incident, Hand ling, Singapore, 2005.</code> </p>
-<p>B. Zdrnja 讨论了如何利用pDNS数据进行安全信息的收集。</p>
-<p><code>B. Zdrnja, N. Brownlee, and D. Wessels. Passive monitoring of DNS anomalies. In Proceedings of DIMVA Conference, 2007.</code> </p>
-<p>研究者试图利用独有的特征去检测恶意行为的来源。</p>
-<p>Anderson proposed Spamscatter as the first system to identify and characterize spamming infrastructure by utilizing layer 7 analysis  。</p>
-<p>利用7层分析去确定垃圾邮件设施。</p>
-<p><code>D. Anderson, C. Fleizach, S. Savage, and G. Voelker. Spamscatter: Characterizing internet scam hosting infrastructure. In Proceedings of the USENIX Security Symposium, 2007</code> </p>
-<p>Felegyhazi proposed a DNS reputation blacklisting methodology based on WHOIS observations. </p>
-<p>基于WHOIS信息的DNS信誉黑名单方法</p>
-<p><code>M. Felegyhazi, C. Keibich, and V. Paxson. On the potential of proactive domain blacklisting. In Third USENIX LEET Workshop, 2010.</code> </p>
-<p>Sato proposed a way to extend current blacklists by observing the co-occurrence of IP address information. </p>
-<p>通过观察IP地址的相关性来扩展现有的黑名单。</p>
-<p><code>K. Sato, K. Ishibashi, T. Toyono, and N. Miyake. Extending black domain name list by using co-occurrence relation between dns queries. In Third USENIX LEET Workshop, 2010.</code> </p>
-<h4 id="特征提取"><a href="#特征提取" class="headerlink" title="特征提取"></a>特征提取</h4><p>Notos 利用的信息包括网络IP地址的归属，自治系统和蜜罐分析，生存时间很短的被动的DNS信息。</p>
-<p>从被动信息中提取的信息包括：</p>
+<p>现在我发布了这个工具，对我来说，我是不希望错过这么好的工具的。这个工具叫做<code>hash_extender</code>,实现了我了解的所有算法的长度扩展攻击：</p>
 <ul>
-<li>Related Historic IPs (RHIPs)  IP相关历史</li>
-<li>Related Historic Domains (RHDNs)  域名相关历史</li>
+<li>MD4</li>
+<li>MD5</li>
+<li>RIPEMD-160</li>
+<li>SHA-0</li>
+<li>SHA-1</li>
+<li>SHA-256</li>
+<li>SHA-512</li>
+<li>WHIRLPOOL</li>
 </ul>
-<p>然后进行分类：</p>
+<p>我也很乐意将这个工具扩展至其他散列算法，如果他们面对这个攻击是脆弱的 ，我尝试的 MD2, SHA-224,SHA-384 都不是。如果你有其他的发现，可以联系我，我会尽快添加到这个工具中。</p>
+<h4 id="攻击描述"><a href="#攻击描述" class="headerlink" title="攻击描述"></a>攻击描述</h4><p>如果应用将一个私有字符串（称为“盐”）添加到一个字符串上，并且利用有缺陷的算法对其进行散列，那么这个应用容易受到散列长度扩展的攻击。应用服务器依赖于“盐”值决定之后返回的数据是否与原始数据相同。</p>
+<p>事实上，即使攻击者不清楚所加的“盐”的值，也可以计算{<em>secret || data || attacker_controlled_data</em>}的有效散列值！要实现攻击，只需要从散列结束的地方继续进行散列就可以了。事实证明，大部分的散列函数继续进行散列所需要的状态全部来于其输出。我们只需将该状态加载到适当的散列结构中，就可以继续进行散列，从而得到我们指定值的散列值。</p>
+<p><em>给定一个由具有未知前缀的字符串组成的散列，攻击者可以附加到该字符串并生成一个仍然具有未知前缀的新散列</em></p>
+<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h4><p>我们来看一个循序渐进的例子。</p>
 <ul>
-<li>Network-based features <ul>
-<li>共18个特征</li>
-<li>BGP features  9个特征</li>
-<li>AS features  3个特征</li>
-<li>AS features 6个特征</li>
+<li><em>secret = “secret”</em></li>
+<li><em>data = “data”</em></li>
+<li><em>H = md5()</em></li>
+<li><em>signature = hash(secret || data) = 6036708eba0d11f6ef52ad44e8b74d5b</em></li>
+<li><em>append = “append”</em></li>
 </ul>
-</li>
-<li>Zone-based features <ul>
-<li>共17个特征</li>
-<li>String features  12个特征</li>
-<li>TLD features  5个特征</li>
-</ul>
-</li>
-<li>Evidence-based features <ul>
-<li>共6个特征</li>
-<li>Honeypot features  3个特征</li>
-<li>Blacklist features  3个特征</li>
-</ul>
-</li>
-</ul>
-<p>离线模块：</p>
+<p>服务器向攻击者发送了数据和签名。攻击者根据它的长度、应用源码、应用的说明或者能够获得其他的方式猜测应用使用的的散列函数是<code>MD5</code>。</p>
+<p>现在仅仅知道了数据，散列函数和签名，攻击者的目标是将<code>append</code>添加到数据中，并且对新数据生成有效果的签名。很容易就可以实现，继续向下看。</p>
+<h4 id="填充"><a href="#填充" class="headerlink" title="填充"></a>填充</h4><p>在我们见识实际的攻击之前，我们有必要要先了解填充的知识。</p>
+<p>当计算（<em>secret +data</em>）的散列值时，字符串(<em>secret + data</em>)会填充一个“1”位和一些“0”位，然后再加上字符串的长度。也就是说，在十六进制中，填充是<code>0x80</code>，后面跟着一些<code>0x00</code>，然后是长度。<code>0x00</code>的数量、为长度保留的字节数以及长度的编码方式取决于特定的算法和块大小。</p>
+<p>对于大多数的算法来说，包括MD4, MD5, RIPEMD-160, SHA-0, SHA-1, and SHA-256，字符串的长度整除64的余数为56。换种说法，它被填充到长度小于完整块(64字节)的8字节(8字节是编码长度字段的大小)。在<code>hash_extender</code>中有两种算法不是使用这个值： SHA-512使用128字节的块大小，为长度字段保留16个字节；WHIRLPOOL使用64字节的块大小，为l长度字段保留32个字节。</p>
+<p>长度字段的字节顺序也是非常重要的。MD4, MD5, and RIPEMD-160使用的是小端顺序，相反的SHA家族和WHIRLPOOL使用的大端顺序。</p>
+<p>在我们的例子中，<em>(secret || data)</em>的长度是<code>len(&quot;secretdata&quot;)=10[0x0a]</code>字节，或者说是80(0x50)比特。所以我们有10字节的数据(“secretdata”),46字节的填充（80 00 00 …），还有8字节的小端顺序的长度字段（50 00 00 00 00 00 00 00），一共是64字节。如下面所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0000  73 65 63 72 65 74 64 61 74 61 80 00 00 00 00 00  secretdata......</span><br><span class="line">0010  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0020  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0030  00 00 00 00 00 00 00 00 50 00 00 00 00 00 00 00  ........P.......</span><br></pre></td></tr></table></figure>
+<p>将字符串拆开，我们得到：</p>
 <ul>
-<li>Network Profiles Model <ul>
-<li>Popular Domains </li>
-<li>Common Domains </li>
-<li>Akamai Domains </li>
-<li>CDN Domains </li>
-<li>Dynamic DNS Domains </li>
+<li><em>“secret” = secret</em></li>
+<li><em>“data” = data</em></li>
+<li>80 00 00 … — 46字节的填充，开头为0x80</li>
+<li>50 00 00 00 00 00 00 00 — 小端描述的字符串长度</li>
 </ul>
-</li>
-<li>Domain Name Clusters <ul>
-<li>Network-based Clustering </li>
-<li>Zone-based Clustering </li>
-</ul>
-</li>
-<li>Reputation Function </li>
-</ul>
-<h4 id="数据收集"><a href="#数据收集" class="headerlink" title="数据收集"></a>数据收集</h4><p>两个方面：</p>
+<p>这就从使用H做散列的原始例子中得到的确切数据。</p>
+<h4 id="实现攻击"><a href="#实现攻击" class="headerlink" title="实现攻击"></a>实现攻击</h4><p>现在，我们看一下我们有了经过散列的数据，如何进行实际的攻击。</p>
+<p>首先，我们先将我们指定的字符串加到最后，这里是<code>append</code>，这一步非常简单：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0000  73 65 63 72 65 74 64 61 74 61 80 00 00 00 00 00  secretdata......</span><br><span class="line">0010  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0020  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0030  00 00 00 00 00 00 00 00 50 00 00 00 00 00 00 00  ........P.......</span><br><span class="line">0040  61 70 70 65 6e 64                                append</span><br></pre></td></tr></table></figure>
+<p>对于这个块的散列，我们想要实现的是，我们自己计算的出来，并且让服务器也进行计算。这个数据块的值可以通过两种方式进行计算：</p>
 <ul>
-<li>the historical or “passive” information from successful A-type DNS resolutions<ul>
-<li>two ISP-based sensors </li>
+<li>将它插入缓冲区并执行H，对其进行计算</li>
+<li>通过从第一个块的末尾开始，使用我们从签名中已经知道的状态，并从该状态开始计算<code>append</code>的散列值</li>
 </ul>
-</li>
-<li>the aggregated DNS traffic from the different networks covered by the SIE </li>
-</ul>
+<p>第一种方法是服务器会去做的，而第二种就是攻击者可以实现的。</p>
+<p>服务器做的比较的简单，我们先来看一下。</p>
+<h5 id="服务器计算过程"><a href="#服务器计算过程" class="headerlink" title="服务器计算过程"></a>服务器计算过程</h5><p>服务器在计算的时候会自己进行加盐，所以我们先把盐去掉：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0000  64 61 74 61 80 00 00 00 00 00 00 00 00 00 00 00  data............</span><br><span class="line">0010  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0020  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0030  00 00 50 00 00 00 00 00 00 00 61 70 70 65 6e 64  ..P.......append</span><br></pre></td></tr></table></figure>
+<p>不要被这正好是64字节(块大小)所欺骗——这只是因为secret和append的长度相同。也许我不应该选择这个作为例子，但是我不会从头开始!</p>
+<p>服务器先进行加盐，然后进行计算：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0000  73 65 63 72 65 74 64 61 74 61 80 00 00 00 00 00  secretdata......</span><br><span class="line">0010  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0020  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0030  00 00 00 00 00 00 00 00 50 00 00 00 00 00 00 00  ........P.......</span><br><span class="line">0040  61 70 70 65 6e 64                                append</span><br></pre></td></tr></table></figure>
+<p>最后得到的散列值是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6ee582a1669ce442f3719c47430dadee</span><br></pre></td></tr></table></figure>
+<p>你可以通过复制粘贴下面的代码到终端来证明它的工作原理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;</span><br><span class="line">  #include &lt;stdio.h&gt;</span><br><span class="line">  #include &lt;openssl/md5.h&gt;</span><br><span class="line"></span><br><span class="line">  int main(int argc, const char *argv[])</span><br><span class="line">  &#123;</span><br><span class="line">    MD5_CTX c;</span><br><span class="line">    unsigned char buffer[MD5_DIGEST_LENGTH];</span><br><span class="line">    int i;</span><br><span class="line"></span><br><span class="line">    MD5_Init(&amp;c);</span><br><span class="line">    MD5_Update(&amp;c, &quot;secret&quot;, 6);</span><br><span class="line">    MD5_Update(&amp;c, &quot;data&quot;</span><br><span class="line">                   &quot;\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&quot;</span><br><span class="line">                   &quot;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&quot;</span><br><span class="line">                   &quot;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&quot;</span><br><span class="line">                   &quot;\x00\x00\x00\x00&quot;</span><br><span class="line">                   &quot;\x50\x00\x00\x00\x00\x00\x00\x00&quot;</span><br><span class="line">                   &quot;append&quot;, 64);</span><br><span class="line">    MD5_Final(buffer, &amp;c);</span><br><span class="line"></span><br><span class="line">    for (i = 0; i &lt; 16; i++) &#123;</span><br><span class="line">      printf(&quot;%02x&quot;, buffer[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    printf(&quot;\n&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">  &#125;&apos; &gt; hash_extension_1.c</span><br><span class="line"></span><br><span class="line">  gcc -o hash_extension_1 hash_extension_1.c -lssl -lcrypto</span><br><span class="line"></span><br><span class="line">  ./hash_extension_1</span><br></pre></td></tr></table></figure>
+<p>所以，服务器会根据签名<code>6ee582a1669ce442f3719c47430dadee</code>检查我们发送的数据。现在，做为一个攻击者，我们需要计算得到这个签名。</p>
+<h5 id="攻击者计算过程"><a href="#攻击者计算过程" class="headerlink" title="攻击者计算过程"></a>攻击者计算过程</h5><p>那么，我们如何在不知道盐的具体的情况下计算数据的散列值呢？</p>
+<p>首先，我们需要看看我们必须处理的数据：<em>data</em>, <em>append</em>, <em>H</em>, and <em>H(secret || data)</em>。</p>
+<p>我们需要定义一个新的方法，<em>H′</em>,使用和H相同的散列算法，但是新方法开始的状态是 <em>H(secret || data)</em>的终止状态，也就是签名。一旦我们获得这些，我们就可以计算<em>H′(append)</em>，并且将这个函数的输出作为我们的散列值。听起来很简单，实现代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;openssl/md5.h&gt;</span><br><span class="line"></span><br><span class="line">int main(int argc, const char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">  int i;</span><br><span class="line">  unsigned char buffer[MD5_DIGEST_LENGTH];</span><br><span class="line">  MD5_CTX c;</span><br><span class="line"></span><br><span class="line">  MD5_Init(&amp;c);</span><br><span class="line">  MD5_Update(&amp;c, &quot;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&quot;, 64);</span><br><span class="line"></span><br><span class="line">  c.A = htonl(0x6036708e); /* 我们已经获得的散列值*/</span><br><span class="line">  c.B = htonl(0xba0d11f6);</span><br><span class="line">  c.C = htonl(0xef52ad44);</span><br><span class="line">  c.D = htonl(0xe8b74d5b);</span><br><span class="line"></span><br><span class="line">  MD5_Update(&amp;c, &quot;append&quot;, 6); /* 添加的指定数据 */</span><br><span class="line">  MD5_Final(buffer, &amp;c);</span><br><span class="line">  for (i = 0; i &lt; 16; i++) &#123;</span><br><span class="line">    printf(&quot;%02x&quot;, buffer[i]);</span><br><span class="line">  &#125;</span><br><span class="line">  printf(&quot;\n&quot;);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;&apos; &gt; hash_extension_2.c</span><br><span class="line"></span><br><span class="line">gcc -o hash_extension_2 hash_extension_2.c -lssl -lcrypto</span><br><span class="line"></span><br><span class="line">./hash_extension_2</span><br></pre></td></tr></table></figure>
+<p>这个程序的输出是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6ee582a1669ce442f3719c47430dadee</span><br></pre></td></tr></table></figure>
+<p>我们可以看出，我们已经计算出了指定数据的散列值，并且没有用到“盐”。怎么做到的呢？</p>
+<p>像平常一样，我们从头创建一个MD5_CTX结构。然后我们计算64个‘A’的MD5的值。我们使用‘A’组合成的一个完整(64字节)块的MD5，以确保除散列本身的状态之外的任何内部值都被设置为我们所期望的值。</p>
+<p>之后我们只用已经得到的签名<code>6036708eba0d11f6ef52ad44e8b74d5b</code>替换<em>c.A</em>, <em>c.B</em>, <em>c.C</em>, 和 <em>c.D</em>。这是使得MD5_CTX的结构与原本的结束状态是一致的。这意味着我们散列的任何其他任何数据——在本例中是<code>append</code>——将产生与我们按照通常方式散列它时相同的输出。</p>
+<p>在设置状态变量之前，我们对这些值使用htonl()，因为MD5是小端的，同时也以小端形式输出它的值。</p>
 
       
     </div>
@@ -553,13 +551,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/DNS/" rel="tag"><i class="fa fa-tag"></i> DNS</a>
-          
-            <a href="/tags/恶意域名检测/" rel="tag"><i class="fa fa-tag"></i> 恶意域名检测</a>
-          
             <a href="/tags/安全/" rel="tag"><i class="fa fa-tag"></i> 安全</a>
           
-            <a href="/tags/论文笔记/" rel="tag"><i class="fa fa-tag"></i> 论文笔记</a>
+            <a href="/tags/哈希扩展攻击/" rel="tag"><i class="fa fa-tag"></i> 哈希扩展攻击</a>
+          
+            <a href="/tags/翻译/" rel="tag"><i class="fa fa-tag"></i> 翻译</a>
           
         </div>
       
@@ -572,8 +568,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/17/别瞎折腾，没什么用---《等风来》/" rel="next" title="别瞎折腾，没什么用---《等风来》">
-                <i class="fa fa-chevron-left"></i> 别瞎折腾，没什么用---《等风来》
+              <a href="/2019/05/06/Commando VM 第一个发行版Windows攻击平台[翻译]/" rel="next" title="Commando VM 第一个发行版Windows攻击平台[翻译]">
+                <i class="fa fa-chevron-left"></i> Commando VM 第一个发行版Windows攻击平台[翻译]
               </a>
             
           </div>
@@ -581,10 +577,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/12/23/SDN安全论文选读（一）/" rel="prev" title="SDN安全论文选读（一）">
-                SDN安全论文选读（一） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -742,7 +734,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#来源"><span class="nav-number">1.</span> <span class="nav-text">来源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主要内容"><span class="nav-number">2.</span> <span class="nav-text">主要内容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#特征提取"><span class="nav-number">3.</span> <span class="nav-text">特征提取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据收集"><span class="nav-number">4.</span> <span class="nav-text">数据收集</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于hash长度扩展攻击你需要了解的"><span class="nav-number">1.</span> <span class="nav-text">关于hash长度扩展攻击你需要了解的</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#攻击描述"><span class="nav-number">1.1.</span> <span class="nav-text">攻击描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#例子"><span class="nav-number">1.2.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#填充"><span class="nav-number">1.3.</span> <span class="nav-text">填充</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现攻击"><span class="nav-number">1.4.</span> <span class="nav-text">实现攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#服务器计算过程"><span class="nav-number">1.4.1.</span> <span class="nav-text">服务器计算过程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#攻击者计算过程"><span class="nav-number">1.4.2.</span> <span class="nav-text">攻击者计算过程</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
