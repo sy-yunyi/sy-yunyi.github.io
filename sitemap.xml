@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://sy-yunyi.github.io/about/index.html</loc>
+    
+    <lastmod>2019-05-15T14:32:30.911Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://sy-yunyi.github.io/2019/05/15/DNS%E5%AE%89%E5%85%A8%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB-Is%20DNS%20Ready%20for%20Ubiquitous%20Internet%20of%20Things/</loc>
     
     <lastmod>2019-05-15T14:09:07.103Z</lastmod>
@@ -201,13 +208,6 @@
     <loc>https://sy-yunyi.github.io/2019/01/22/%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E5%9F%BA%E7%A1%80%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4-ping/</loc>
     
     <lastmod>2019-01-25T13:23:28.561Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://sy-yunyi.github.io/about/index.html</loc>
-    
-    <lastmod>2019-01-04T02:57:35.634Z</lastmod>
     
   </url>
   
