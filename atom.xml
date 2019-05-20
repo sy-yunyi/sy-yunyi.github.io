@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://sy-yunyi.github.io/"/>
-  <updated>2019-05-15T14:09:07.103Z</updated>
+  <updated>2019-05-15T14:07:16.116Z</updated>
   <id>https://sy-yunyi.github.io/</id>
   
   <author>
@@ -15,59 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>DNS安全论文选读-Is DNS Ready for Ubiquitous Internet of Things</title>
-    <link href="https://sy-yunyi.github.io/2019/05/15/DNS%E5%AE%89%E5%85%A8%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB-Is%20DNS%20Ready%20for%20Ubiquitous%20Internet%20of%20Things/"/>
-    <id>https://sy-yunyi.github.io/2019/05/15/DNS安全论文选读-Is DNS Ready for Ubiquitous Internet of Things/</id>
-    <published>2019-05-14T16:00:00.000Z</published>
-    <updated>2019-05-15T14:09:07.103Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="Is-DNS-Ready-for-Ubiquitous-Internet-of-Things"><a href="#Is-DNS-Ready-for-Ubiquitous-Internet-of-Things" class="headerlink" title="Is DNS Ready for Ubiquitous Internet of Things"></a>Is DNS Ready for Ubiquitous Internet of Things</h3><h4 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h4><p><em>IEEE Access 7: 28835-28846 (2019) Zhiwei Yan, Hongtao Li, Sherali Zeadally, Yu Zeng, Guanggang Geng:</em></p><h4 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h4><p>IOT的意愿不仅仅是覆盖具有完整规则的特定应用，还应该涵盖物理世界中更通用对象或事物或设备的普遍连接和虚拟世界中的相关信息。</p><a id="more"></a><ul><li><p>智慧城市</p><blockquote><ol><li>智慧城市交通网络</li><li>升级的饮水供给网络</li><li>垃圾处理设施</li><li>更加有效为建筑照明和供暖</li></ol></blockquote></li></ul><p>为了实现这些需要对每一个对象进行独特的名称解析，需要一个安全的、可扩展的、高效的名称解析。</p><p>目前有两大类解决方案</p><ul><li>基于现有DNS</li><li>网络演变出的新设计的规则</li></ul><p>本文要研究的问题</p><p><code>现有的DNS所提供的名称解析服务可以充分的满足未来的IOT需求么？</code></p><p>研究方法</p><p><code>分析现有DNS在支持IOT时的能力和挑战。</code></p><blockquote><p>从五个特征考虑：</p><ul><li>安全（security）</li><li>移动性（mobility）</li><li>基础设施的独立性（infrastructure independence）</li><li>地区性（localization）</li><li>高效性（efficiency）</li></ul><p>简称为<code>SMILE</code></p></blockquote><p>本文贡献</p><ul><li>分析典型的IOT设备及其对名称解析的关键性要求 - <code>SMILE</code></li><li>分析DNS的功能和性能，分析其部署模型在<code>SMILE</code>下的缺点和优点</li><li>总结在不同场景下的基于DNS的扩展和全新的设计的名称解析服务，揭示未来IOT名称解析服务的发展</li></ul><h4 id="DNS的演变与发展"><a href="#DNS的演变与发展" class="headerlink" title="DNS的演变与发展"></a>DNS的演变与发展</h4><p>从域名的两种特性：商标和协议标识两部分，介绍域名的含义和商业性价值。</p><p>介绍域名的注册流程，及相关管理机构。</p><p>域名空间的扩展，至2012年有1200多个新的顶级域开始使用。</p><p>DNS记录角度，现在存在着众多的记录类型以提供不同的服务，但是只有某几种类型的记录使用频率非常高。</p><p>DNSSEC带来的变化和影响。</p><h4 id="IOT名称服务的要求-SMILE"><a href="#IOT名称服务的要求-SMILE" class="headerlink" title="IOT名称服务的要求-SMILE"></a>IOT名称服务的要求-SMILE</h4><h5 id="Security"><a href="#Security" class="headerlink" title="Security"></a>Security</h5><p>在物联网中，设备之间相互连接，提高了被攻击的概率。安全是物联网最基础的赋能者。</p><p>名称服务安全要求</p><blockquote><p>足够鲁棒、安全、可信</p><p>鲁棒性代表抵抗攻击的能力，需要有足够的扩展能力，并且其提供的服务不依赖其他系统。</p><p>支持数据验证，阻止欺骗和篡改数据且保护关联名称的隐私，应用现有成熟的证书技术。</p></blockquote><h6 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h6><p>Named Data Networking(NDN)重新设计了基于TCP/IP的通信模型。</p><p><img src="https://i.loli.net/2019/05/15/5cdc1bdc8909971696.png" alt="1557731358348.png"></p><h5 id="Mobility"><a href="#Mobility" class="headerlink" title="Mobility"></a>Mobility</h5><p>思科的Visual Networking Index，预计在2020年全球的移动用户将达到55亿，占全球人口的70%。</p><p>98%的移动数据由不同的智能设备产生。</p><p>在物联网之前，移动性就是IP所面临的挑战。</p><p>对于传统解决移动性的方案对物联网并不可行，因为物联网设备资源有限，数量庞大且可能造成局部最优现象。</p><p>物联网对移动性的要求之高会给网络演变带来新的挑战。</p><h6 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h6><p>MobilityFirst 通过将网络设备与名称分离提高移动性，将<code>Global Unique IDentification</code>作为其命名策略。</p><blockquote><p>Global Unique IDentification 的设计是基于设备和标识符的分离规则</p></blockquote><p>NDN同样提供了提供移动性的方案，但是难以支持发行商。</p><h5 id="Infrastructure-Independence"><a href="#Infrastructure-Independence" class="headerlink" title="Infrastructure Independence"></a>Infrastructure Independence</h5><p>对于物联网，其网络拓扑是动态变化的且会引进资源相关或者功能相关的智能设备。</p><p><code>zero-configuration networking</code>可以支持设备自主的配置网络地址，名字和发现服务。但是名称手动配置问题随着设备的增多而加剧。</p><p>名称解析同时还要满足不依赖于基础设施，防止提供名称解析的基础设施出现故障。</p><h6 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h6><p><code>oneM2M</code>采用<code>Object Identifier</code>,名称由管理等级信息和设备等级信息组成，具有良好的可识别性。</p><h5 id="Localization"><a href="#Localization" class="headerlink" title="Localization"></a>Localization</h5><p>物联网设备的区域性包括两个部分，工作范围区域性和使用习惯区域性。</p><p>对于工作范围区域性，在特性情景下的设备可能仅仅在某个局域网内进行工作，不需要全局的地址。对于使用习惯区域性，针对不同地区的用户物联网设备应该匹配其使用习惯。</p><p>名称服务要求</p><ul><li>不同的地区其名字是可用并且可理解的</li><li>IOT设备中使用的名称标签对本地用户友好，尊重本地使用习惯</li></ul><h5 id="Efficiency"><a href="#Efficiency" class="headerlink" title="Efficiency"></a>Efficiency</h5><p>对于时延敏感的IOT设备效率是非常重要的。</p><p>随着技术的发展，各方面对效率的要求越来越高。</p><p>IOT设备的名称配置和解析必须具有高效的支持实时和时延敏感的应用，以避免影响IOT设备的整体性能。</p><h6 id="示例-3"><a href="#示例-3" class="headerlink" title="示例"></a>示例</h6><p><code>PUSRSUIT(Publish-Subscribe Internet Technology)</code>是一种在内容中心概念下的支持内容发布与订阅的新的体系结构。管理的核心元素是集结系统和拓扑管理。</p><h4 id="在SMILE下DNS的适应与挑战"><a href="#在SMILE下DNS的适应与挑战" class="headerlink" title="在SMILE下DNS的适应与挑战"></a>在<code>SMILE</code>下DNS的适应与挑战</h4><h5 id="Security-1"><a href="#Security-1" class="headerlink" title="Security"></a>Security</h5><p>为了应对DNS所面临的问题，IETF提出了<code>DNSSEC</code>。<code>DNSSEC</code>使用非对称的加密算法来保证数据不被篡改。</p><p><img src="https://i.loli.net/2019/05/15/5cdc1beb1911b81530.png" alt="1557747227582.png"></p><p>但是<code>DNSSEC</code>引进了更多的记录，为解析的性能带了较大的影响，同时，并没有解决信息泄露的问题。</p><p>针对信息泄露，可以使用<code>TLS</code>，但同样会使得性能下降。</p><p>在IOT的背景下，DNS需要更加轻量级的安全模式。</p><h5 id="Mobility-1"><a href="#Mobility-1" class="headerlink" title="Mobility"></a>Mobility</h5><p>对于DNS中的更新协议，当信息发生改变时，数据可能不会立刻更新，但是对于IOT设备来说，如果地址或者名称发生改变，必须尽可能快的更新信息。</p><p>DNS对移动性的支持的另一个限制因素是递归服务器的缓存，移动节点的变化需要将TTL设置为0。</p><p>虽然在DNS中也有一些移动解决方案，如<code>MIPv6</code>，<code>PMIPv6</code>。但是其并没有直接将DNS作为管理IOT设备的名称地址映射的数据库，而是将其用作一个定位管理设备信息数据库的发现服务。</p><h5 id="Infrastructure-Independence-1"><a href="#Infrastructure-Independence-1" class="headerlink" title="Infrastructure Independence"></a>Infrastructure Independence</h5><p>利用<code>Neighbor Discovery Protocol(NDP)</code>和<code>Dynamic Host Configuration Protocol(DHCP)</code>可以实现利用基础参数对设备进行初始化配置。</p><p>在没有有效的DNS基础设施的地区为了扩展名称服务，利用基于<code>Over Multicast DNS(mDNS)</code>的<code>DNS-based Service Discovery(DNS-SD)</code></p><h5 id="Localization-1"><a href="#Localization-1" class="headerlink" title="Localization"></a>Localization</h5><p>通过增强区域性的的递归解析和权威服务器，来提高DNS的性能。</p><p>在基于区域的服务中需要地理信息，存在两种实现方式：在实体配置名称时，将名称与地理信息进行绑定；DNS协议支持维持位置相关的记录<code>LOC RR</code></p><p>在区域性习惯方面，DNS已经支持国际化域名。</p><h5 id="Efficiency-1"><a href="#Efficiency-1" class="headerlink" title="Efficiency"></a>Efficiency</h5><p>DNS是层次结构，在解析时需要层层查询，需要的延时可能较长。</p><p>通过实验，表明随着缓存无法命中的的增加，延时逐渐升高。</p><p>DNS利用本地缓存来降低解析延时，利用任播缩短服务距离，但是仍无法有效的满足IOT对高效，高扩展性的要求。</p><h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>IPv6的地址空间可以支持IOT设备的地址要求，但是如何满足其对可扩展性、可靠性、高效性名称服务的要求，仍然是挑战。</p><p>分析</p><blockquote><ol><li>虽然DNS增强了安全，但是代价太高，不适合IOT设备</li><li>虽然DNS支持动态更新，但是其设计目的并不是面向移动性的，而且名称更新很复杂</li><li>DNS解析没有本地设施的依赖性，可以很好的适应本地连接的的扩展，和一些新出现的技术，如边缘计算</li><li>DNS在服务部署和名称格式的区域性上在发展</li><li>由于层次结构和不可预知的缓存导致的时延，使得高效性仍是一个巨大的挑战</li></ol></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;Is-DNS-Ready-for-Ubiquitous-Internet-of-Things&quot;&gt;&lt;a href=&quot;#Is-DNS-Ready-for-Ubiquitous-Internet-of-Things&quot; class=&quot;headerlink&quot; title=&quot;Is DNS Ready for Ubiquitous Internet of Things&quot;&gt;&lt;/a&gt;Is DNS Ready for Ubiquitous Internet of Things&lt;/h3&gt;&lt;h4 id=&quot;来源&quot;&gt;&lt;a href=&quot;#来源&quot; class=&quot;headerlink&quot; title=&quot;来源&quot;&gt;&lt;/a&gt;来源&lt;/h4&gt;&lt;p&gt;&lt;em&gt;IEEE Access 7: 28835-28846 (2019) Zhiwei Yan, Hongtao Li, Sherali Zeadally, Yu Zeng, Guanggang Geng:&lt;/em&gt;&lt;/p&gt;
-&lt;h4 id=&quot;综述&quot;&gt;&lt;a href=&quot;#综述&quot; class=&quot;headerlink&quot; title=&quot;综述&quot;&gt;&lt;/a&gt;综述&lt;/h4&gt;&lt;p&gt;IOT的意愿不仅仅是覆盖具有完整规则的特定应用，还应该涵盖物理世界中更通用对象或事物或设备的普遍连接和虚拟世界中的相关信息。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="论文选读" scheme="https://sy-yunyi.github.io/categories/%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB/"/>
-    
-    
-      <category term="DNS" scheme="https://sy-yunyi.github.io/tags/DNS/"/>
-    
-      <category term="安全" scheme="https://sy-yunyi.github.io/tags/%E5%AE%89%E5%85%A8/"/>
-    
-      <category term="论文笔记" scheme="https://sy-yunyi.github.io/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"/>
-    
-      <category term="IOT" scheme="https://sy-yunyi.github.io/tags/IOT/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>计网实验之静态路由</title>
-    <link href="https://sy-yunyi.github.io/2019/05/15/%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E4%B9%8B%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1/"/>
-    <id>https://sy-yunyi.github.io/2019/05/15/计网实验之静态路由/</id>
-    <published>2019-05-14T16:00:00.000Z</published>
-    <updated>2019-05-15T13:55:48.283Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="路由基本概念"><a href="#路由基本概念" class="headerlink" title="路由基本概念"></a>路由基本概念</h4><h5 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h5><p>指通过相互连接的网络吧信息兄源结点传输到目标结点的活动。一般而言，在路由过程中，信息至少会经过一个或多个中间结点。路由交换发生在OSI参考模型的第三层-网络层。</p><a id="more"></a><p>路由技术的关键点是如何选择某条最佳路径将信息送到目标结点。</p><h5 id="路由器"><a href="#路由器" class="headerlink" title="路由器"></a>路由器</h5><p>路由器是互联网的主要结点设备，通过运行路由算法决定数据的转发。转发策略称为路由选择。</p><p>路由作为不同不同网络之间相互连接的枢纽，构成了基于TCP/IP的国际互联网络的主题脉络，其处理速度是网络通信的主要瓶颈之一，其可靠性则直接影响这网络互连的质量。</p><h5 id="路由表"><a href="#路由表" class="headerlink" title="路由表"></a>路由表</h5><p>路由表记录着到达不同的网络的路线。一个路由信息包括：</p><ul><li>目的网络，用以匹配报文的目的地址进行路由选择</li><li>下一跳地址，指明路由的发送路径</li><li>跳跃数，标识路径的好坏，是进行路由选择的标准</li></ul><p>网络层协议根据目的地址信息查找到响应的路由信息，将报文按照正确的路径转发出去。</p><h5 id="路由器功能"><a href="#路由器功能" class="headerlink" title="路由器功能"></a>路由器功能</h5><p><strong>协议转换</strong></p><blockquote><p>不同的路由器有不同的路由器协议，一般路由器会支持多种网络协议，实现不同协议、不同体系结构网络之间的互连互通。</p></blockquote><p><strong>寻址</strong></p><blockquote><p>路由器中的寻址动作与主机类似，区别在于路由器不止一个出口，所以不能通过简单的配置一个默认网关解决所有数据分组转发，必须根据目的网络的不同选择对应的出口路径。</p></blockquote><p><strong>分组转发</strong></p><blockquote><p>路由器的主要功能是分组转发，在路由协议的支持下，路由器根据分组的目的地址将数据包从最合适的端口转发出去，从而实现互连互通。</p></blockquote><h5 id="路由分类"><a href="#路由分类" class="headerlink" title="路由分类"></a>路由分类</h5><p>典型的路由选择方式有两种：静态路由和动态路由。</p><p><strong>静态路由</strong>在路由器中设置固定的路由表，由管理员负责创建和维护。</p><p><strong>动态路由</strong>是网络中的路由器之间相互通信、传递路由信息、利用收集的路由信息更新路由表。可以实现实时的适应网络结构的变化。动态路由按照区域（自治系统）划分，可分为内部网关协议（Interior Gateway Protocol,IGP）和外部网关协议（Exterior Gateway Protocol, EGP）两大类。</p><p>动态路由网关协议分类：</p><blockquote><p>IGP</p><ul><li>链路状态 - <code>OSPF</code></li><li>距离矢量 - <code>RIPv1</code>、<code>RIPv2</code>、<code>IGRP</code></li><li>混合型 - <code>EIGRP</code>、<code>DEIGRP</code></li></ul><p>EGP</p><ul><li>EGP</li><li>BGP</li></ul></blockquote><h5 id="路由器端口配置原则"><a href="#路由器端口配置原则" class="headerlink" title="路由器端口配置原则"></a>路由器端口配置原则</h5><ol><li>路由器的物理网络端口通常有一个IP地址</li><li>相邻路由器的相邻端口的IP地址必须在同一IP网段上</li><li>同一路由器的不同端口的IP地址必须在不同的IP网段</li></ol><h4 id="静态路由"><a href="#静态路由" class="headerlink" title="静态路由"></a>静态路由</h4><p>静态路由是在路由器中手动配置的固定路由，路由明确的指定了数据包到达目的地必须经过的路径，除非人工干预，否则静态路由不会自动改变。</p><p>静态路由不会队网络的改变做出反应，所以静态路由适用于网络规模不大、拓扑结果相对固定的网络环境。</p><p>一条静态路由的条目通常由三个部分组成：目的IP地址对应的子网、子网掩码、网关。</p><h5 id="静态路由配置"><a href="#静态路由配置" class="headerlink" title="静态路由配置"></a>静态路由配置</h5><ol><li>为路由器每个端口配置IP地址</li><li>确定该路由器有哪些直连网络的路由信息</li><li>确定网络中有哪些非直连网段</li><li>添加该路由器的非直连网段的相关信息</li></ol><h5 id="静态路由配置命令"><a href="#静态路由配置命令" class="headerlink" title="静态路由配置命令"></a>静态路由配置命令</h5><ol><li><p>配置静态路由</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route 目的网段 子网掩码 下一跳路由器IP地址</span><br></pre></td></tr></table></figure></li><li><p>静态路由的删除</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">no ip route 目的网段 子网掩码 下一跳路由器IP地址</span><br></pre></td></tr></table></figure></li><li><p>默认路由</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip rounte 0.0.0.0 0.0.0.0</span><br></pre></td></tr></table></figure></li><li><p>路由器端口IP配置</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip address IP地址 子网掩码</span><br></pre></td></tr></table></figure></li><li><p>查看路由表</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show ip route</span><br></pre></td></tr></table></figure></li><li><p>查看路由器路由表信息</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route</span><br></pre></td></tr></table></figure></li><li><p>查看路由器全部配置</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show running-config</span><br></pre></td></tr></table></figure></li><li><p>查看验证路由器端口的配置</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show ip interface brief</span><br></pre></td></tr></table></figure></li></ol>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h4 id=&quot;路由基本概念&quot;&gt;&lt;a href=&quot;#路由基本概念&quot; class=&quot;headerlink&quot; title=&quot;路由基本概念&quot;&gt;&lt;/a&gt;路由基本概念&lt;/h4&gt;&lt;h5 id=&quot;路由&quot;&gt;&lt;a href=&quot;#路由&quot; class=&quot;headerlink&quot; title=&quot;路由&quot;&gt;&lt;/a&gt;路由&lt;/h5&gt;&lt;p&gt;指通过相互连接的网络吧信息兄源结点传输到目标结点的活动。一般而言，在路由过程中，信息至少会经过一个或多个中间结点。路由交换发生在OSI参考模型的第三层-网络层。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="网络实验" scheme="https://sy-yunyi.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
-    
-    
-      <category term="计算机网络实验" scheme="https://sy-yunyi.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
-    
-      <category term="静态路由" scheme="https://sy-yunyi.github.io/tags/%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1/"/>
-    
-  </entry>
   
   <entry>
     <title>DNS安全论文选读-An On-Demand Defense Scheme Against DNS Cache Poisoning Attacks</title>
@@ -100,6 +47,35 @@
   </entry>
   
   <entry>
+    <title>DNS安全论文选读-Is DNS Ready for Ubiquitous Internet of Things</title>
+    <link href="https://sy-yunyi.github.io/2019/05/15/DNS%E5%AE%89%E5%85%A8%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB-Is%20DNS%20Ready%20for%20Ubiquitous%20Internet%20of%20Things/"/>
+    <id>https://sy-yunyi.github.io/2019/05/15/DNS安全论文选读-Is DNS Ready for Ubiquitous Internet of Things/</id>
+    <published>2019-05-14T16:00:00.000Z</published>
+    <updated>2019-05-15T14:09:07.103Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="Is-DNS-Ready-for-Ubiquitous-Internet-of-Things"><a href="#Is-DNS-Ready-for-Ubiquitous-Internet-of-Things" class="headerlink" title="Is DNS Ready for Ubiquitous Internet of Things"></a>Is DNS Ready for Ubiquitous Internet of Things</h3><h4 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h4><p><em>IEEE Access 7: 28835-28846 (2019) Zhiwei Yan, Hongtao Li, Sherali Zeadally, Yu Zeng, Guanggang Geng:</em></p><h4 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h4><p>IOT的意愿不仅仅是覆盖具有完整规则的特定应用，还应该涵盖物理世界中更通用对象或事物或设备的普遍连接和虚拟世界中的相关信息。</p><a id="more"></a><ul><li><p>智慧城市</p><blockquote><ol><li>智慧城市交通网络</li><li>升级的饮水供给网络</li><li>垃圾处理设施</li><li>更加有效为建筑照明和供暖</li></ol></blockquote></li></ul><p>为了实现这些需要对每一个对象进行独特的名称解析，需要一个安全的、可扩展的、高效的名称解析。</p><p>目前有两大类解决方案</p><ul><li>基于现有DNS</li><li>网络演变出的新设计的规则</li></ul><p>本文要研究的问题</p><p><code>现有的DNS所提供的名称解析服务可以充分的满足未来的IOT需求么？</code></p><p>研究方法</p><p><code>分析现有DNS在支持IOT时的能力和挑战。</code></p><blockquote><p>从五个特征考虑：</p><ul><li>安全（security）</li><li>移动性（mobility）</li><li>基础设施的独立性（infrastructure independence）</li><li>地区性（localization）</li><li>高效性（efficiency）</li></ul><p>简称为<code>SMILE</code></p></blockquote><p>本文贡献</p><ul><li>分析典型的IOT设备及其对名称解析的关键性要求 - <code>SMILE</code></li><li>分析DNS的功能和性能，分析其部署模型在<code>SMILE</code>下的缺点和优点</li><li>总结在不同场景下的基于DNS的扩展和全新的设计的名称解析服务，揭示未来IOT名称解析服务的发展</li></ul><h4 id="DNS的演变与发展"><a href="#DNS的演变与发展" class="headerlink" title="DNS的演变与发展"></a>DNS的演变与发展</h4><p>从域名的两种特性：商标和协议标识两部分，介绍域名的含义和商业性价值。</p><p>介绍域名的注册流程，及相关管理机构。</p><p>域名空间的扩展，至2012年有1200多个新的顶级域开始使用。</p><p>DNS记录角度，现在存在着众多的记录类型以提供不同的服务，但是只有某几种类型的记录使用频率非常高。</p><p>DNSSEC带来的变化和影响。</p><h4 id="IOT名称服务的要求-SMILE"><a href="#IOT名称服务的要求-SMILE" class="headerlink" title="IOT名称服务的要求-SMILE"></a>IOT名称服务的要求-SMILE</h4><h5 id="Security"><a href="#Security" class="headerlink" title="Security"></a>Security</h5><p>在物联网中，设备之间相互连接，提高了被攻击的概率。安全是物联网最基础的赋能者。</p><p>名称服务安全要求</p><blockquote><p>足够鲁棒、安全、可信</p><p>鲁棒性代表抵抗攻击的能力，需要有足够的扩展能力，并且其提供的服务不依赖其他系统。</p><p>支持数据验证，阻止欺骗和篡改数据且保护关联名称的隐私，应用现有成熟的证书技术。</p></blockquote><h6 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h6><p>Named Data Networking(NDN)重新设计了基于TCP/IP的通信模型。</p><p><img src="https://i.loli.net/2019/05/15/5cdc1bdc8909971696.png" alt="1557731358348.png"></p><h5 id="Mobility"><a href="#Mobility" class="headerlink" title="Mobility"></a>Mobility</h5><p>思科的Visual Networking Index，预计在2020年全球的移动用户将达到55亿，占全球人口的70%。</p><p>98%的移动数据由不同的智能设备产生。</p><p>在物联网之前，移动性就是IP所面临的挑战。</p><p>对于传统解决移动性的方案对物联网并不可行，因为物联网设备资源有限，数量庞大且可能造成局部最优现象。</p><p>物联网对移动性的要求之高会给网络演变带来新的挑战。</p><h6 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h6><p>MobilityFirst 通过将网络设备与名称分离提高移动性，将<code>Global Unique IDentification</code>作为其命名策略。</p><blockquote><p>Global Unique IDentification 的设计是基于设备和标识符的分离规则</p></blockquote><p>NDN同样提供了提供移动性的方案，但是难以支持发行商。</p><h5 id="Infrastructure-Independence"><a href="#Infrastructure-Independence" class="headerlink" title="Infrastructure Independence"></a>Infrastructure Independence</h5><p>对于物联网，其网络拓扑是动态变化的且会引进资源相关或者功能相关的智能设备。</p><p><code>zero-configuration networking</code>可以支持设备自主的配置网络地址，名字和发现服务。但是名称手动配置问题随着设备的增多而加剧。</p><p>名称解析同时还要满足不依赖于基础设施，防止提供名称解析的基础设施出现故障。</p><h6 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h6><p><code>oneM2M</code>采用<code>Object Identifier</code>,名称由管理等级信息和设备等级信息组成，具有良好的可识别性。</p><h5 id="Localization"><a href="#Localization" class="headerlink" title="Localization"></a>Localization</h5><p>物联网设备的区域性包括两个部分，工作范围区域性和使用习惯区域性。</p><p>对于工作范围区域性，在特性情景下的设备可能仅仅在某个局域网内进行工作，不需要全局的地址。对于使用习惯区域性，针对不同地区的用户物联网设备应该匹配其使用习惯。</p><p>名称服务要求</p><ul><li>不同的地区其名字是可用并且可理解的</li><li>IOT设备中使用的名称标签对本地用户友好，尊重本地使用习惯</li></ul><h5 id="Efficiency"><a href="#Efficiency" class="headerlink" title="Efficiency"></a>Efficiency</h5><p>对于时延敏感的IOT设备效率是非常重要的。</p><p>随着技术的发展，各方面对效率的要求越来越高。</p><p>IOT设备的名称配置和解析必须具有高效的支持实时和时延敏感的应用，以避免影响IOT设备的整体性能。</p><h6 id="示例-3"><a href="#示例-3" class="headerlink" title="示例"></a>示例</h6><p><code>PUSRSUIT(Publish-Subscribe Internet Technology)</code>是一种在内容中心概念下的支持内容发布与订阅的新的体系结构。管理的核心元素是集结系统和拓扑管理。</p><h4 id="在SMILE下DNS的适应与挑战"><a href="#在SMILE下DNS的适应与挑战" class="headerlink" title="在SMILE下DNS的适应与挑战"></a>在<code>SMILE</code>下DNS的适应与挑战</h4><h5 id="Security-1"><a href="#Security-1" class="headerlink" title="Security"></a>Security</h5><p>为了应对DNS所面临的问题，IETF提出了<code>DNSSEC</code>。<code>DNSSEC</code>使用非对称的加密算法来保证数据不被篡改。</p><p><img src="https://i.loli.net/2019/05/15/5cdc1beb1911b81530.png" alt="1557747227582.png"></p><p>但是<code>DNSSEC</code>引进了更多的记录，为解析的性能带了较大的影响，同时，并没有解决信息泄露的问题。</p><p>针对信息泄露，可以使用<code>TLS</code>，但同样会使得性能下降。</p><p>在IOT的背景下，DNS需要更加轻量级的安全模式。</p><h5 id="Mobility-1"><a href="#Mobility-1" class="headerlink" title="Mobility"></a>Mobility</h5><p>对于DNS中的更新协议，当信息发生改变时，数据可能不会立刻更新，但是对于IOT设备来说，如果地址或者名称发生改变，必须尽可能快的更新信息。</p><p>DNS对移动性的支持的另一个限制因素是递归服务器的缓存，移动节点的变化需要将TTL设置为0。</p><p>虽然在DNS中也有一些移动解决方案，如<code>MIPv6</code>，<code>PMIPv6</code>。但是其并没有直接将DNS作为管理IOT设备的名称地址映射的数据库，而是将其用作一个定位管理设备信息数据库的发现服务。</p><h5 id="Infrastructure-Independence-1"><a href="#Infrastructure-Independence-1" class="headerlink" title="Infrastructure Independence"></a>Infrastructure Independence</h5><p>利用<code>Neighbor Discovery Protocol(NDP)</code>和<code>Dynamic Host Configuration Protocol(DHCP)</code>可以实现利用基础参数对设备进行初始化配置。</p><p>在没有有效的DNS基础设施的地区为了扩展名称服务，利用基于<code>Over Multicast DNS(mDNS)</code>的<code>DNS-based Service Discovery(DNS-SD)</code></p><h5 id="Localization-1"><a href="#Localization-1" class="headerlink" title="Localization"></a>Localization</h5><p>通过增强区域性的的递归解析和权威服务器，来提高DNS的性能。</p><p>在基于区域的服务中需要地理信息，存在两种实现方式：在实体配置名称时，将名称与地理信息进行绑定；DNS协议支持维持位置相关的记录<code>LOC RR</code></p><p>在区域性习惯方面，DNS已经支持国际化域名。</p><h5 id="Efficiency-1"><a href="#Efficiency-1" class="headerlink" title="Efficiency"></a>Efficiency</h5><p>DNS是层次结构，在解析时需要层层查询，需要的延时可能较长。</p><p>通过实验，表明随着缓存无法命中的的增加，延时逐渐升高。</p><p>DNS利用本地缓存来降低解析延时，利用任播缩短服务距离，但是仍无法有效的满足IOT对高效，高扩展性的要求。</p><h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>IPv6的地址空间可以支持IOT设备的地址要求，但是如何满足其对可扩展性、可靠性、高效性名称服务的要求，仍然是挑战。</p><p>分析</p><blockquote><ol><li>虽然DNS增强了安全，但是代价太高，不适合IOT设备</li><li>虽然DNS支持动态更新，但是其设计目的并不是面向移动性的，而且名称更新很复杂</li><li>DNS解析没有本地设施的依赖性，可以很好的适应本地连接的的扩展，和一些新出现的技术，如边缘计算</li><li>DNS在服务部署和名称格式的区域性上在发展</li><li>由于层次结构和不可预知的缓存导致的时延，使得高效性仍是一个巨大的挑战</li></ol></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;Is-DNS-Ready-for-Ubiquitous-Internet-of-Things&quot;&gt;&lt;a href=&quot;#Is-DNS-Ready-for-Ubiquitous-Internet-of-Things&quot; class=&quot;headerlink&quot; title=&quot;Is DNS Ready for Ubiquitous Internet of Things&quot;&gt;&lt;/a&gt;Is DNS Ready for Ubiquitous Internet of Things&lt;/h3&gt;&lt;h4 id=&quot;来源&quot;&gt;&lt;a href=&quot;#来源&quot; class=&quot;headerlink&quot; title=&quot;来源&quot;&gt;&lt;/a&gt;来源&lt;/h4&gt;&lt;p&gt;&lt;em&gt;IEEE Access 7: 28835-28846 (2019) Zhiwei Yan, Hongtao Li, Sherali Zeadally, Yu Zeng, Guanggang Geng:&lt;/em&gt;&lt;/p&gt;
+&lt;h4 id=&quot;综述&quot;&gt;&lt;a href=&quot;#综述&quot; class=&quot;headerlink&quot; title=&quot;综述&quot;&gt;&lt;/a&gt;综述&lt;/h4&gt;&lt;p&gt;IOT的意愿不仅仅是覆盖具有完整规则的特定应用，还应该涵盖物理世界中更通用对象或事物或设备的普遍连接和虚拟世界中的相关信息。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="论文选读" scheme="https://sy-yunyi.github.io/categories/%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB/"/>
+    
+    
+      <category term="DNS" scheme="https://sy-yunyi.github.io/tags/DNS/"/>
+    
+      <category term="安全" scheme="https://sy-yunyi.github.io/tags/%E5%AE%89%E5%85%A8/"/>
+    
+      <category term="论文笔记" scheme="https://sy-yunyi.github.io/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="IOT" scheme="https://sy-yunyi.github.io/tags/IOT/"/>
+    
+  </entry>
+  
+  <entry>
     <title>渗透技术基础之XML外部实体注入（XXE）解析</title>
     <link href="https://sy-yunyi.github.io/2019/05/15/%E6%B8%97%E9%80%8F%E6%8A%80%E6%9C%AF%E5%9F%BA%E7%A1%80%E4%B9%8BXML%E5%A4%96%E9%83%A8%E5%AE%9E%E4%BD%93%E6%B3%A8%E5%85%A5%EF%BC%88XXE%EF%BC%89%E8%A7%A3%E6%9E%90/"/>
     <id>https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/</id>
@@ -122,6 +98,30 @@
       <category term="XXE" scheme="https://sy-yunyi.github.io/tags/XXE/"/>
     
       <category term="XML" scheme="https://sy-yunyi.github.io/tags/XML/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>计网实验之静态路由</title>
+    <link href="https://sy-yunyi.github.io/2019/05/15/%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E4%B9%8B%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1/"/>
+    <id>https://sy-yunyi.github.io/2019/05/15/计网实验之静态路由/</id>
+    <published>2019-05-14T16:00:00.000Z</published>
+    <updated>2019-05-15T13:55:48.283Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="路由基本概念"><a href="#路由基本概念" class="headerlink" title="路由基本概念"></a>路由基本概念</h4><h5 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h5><p>指通过相互连接的网络吧信息兄源结点传输到目标结点的活动。一般而言，在路由过程中，信息至少会经过一个或多个中间结点。路由交换发生在OSI参考模型的第三层-网络层。</p><a id="more"></a><p>路由技术的关键点是如何选择某条最佳路径将信息送到目标结点。</p><h5 id="路由器"><a href="#路由器" class="headerlink" title="路由器"></a>路由器</h5><p>路由器是互联网的主要结点设备，通过运行路由算法决定数据的转发。转发策略称为路由选择。</p><p>路由作为不同不同网络之间相互连接的枢纽，构成了基于TCP/IP的国际互联网络的主题脉络，其处理速度是网络通信的主要瓶颈之一，其可靠性则直接影响这网络互连的质量。</p><h5 id="路由表"><a href="#路由表" class="headerlink" title="路由表"></a>路由表</h5><p>路由表记录着到达不同的网络的路线。一个路由信息包括：</p><ul><li>目的网络，用以匹配报文的目的地址进行路由选择</li><li>下一跳地址，指明路由的发送路径</li><li>跳跃数，标识路径的好坏，是进行路由选择的标准</li></ul><p>网络层协议根据目的地址信息查找到响应的路由信息，将报文按照正确的路径转发出去。</p><h5 id="路由器功能"><a href="#路由器功能" class="headerlink" title="路由器功能"></a>路由器功能</h5><p><strong>协议转换</strong></p><blockquote><p>不同的路由器有不同的路由器协议，一般路由器会支持多种网络协议，实现不同协议、不同体系结构网络之间的互连互通。</p></blockquote><p><strong>寻址</strong></p><blockquote><p>路由器中的寻址动作与主机类似，区别在于路由器不止一个出口，所以不能通过简单的配置一个默认网关解决所有数据分组转发，必须根据目的网络的不同选择对应的出口路径。</p></blockquote><p><strong>分组转发</strong></p><blockquote><p>路由器的主要功能是分组转发，在路由协议的支持下，路由器根据分组的目的地址将数据包从最合适的端口转发出去，从而实现互连互通。</p></blockquote><h5 id="路由分类"><a href="#路由分类" class="headerlink" title="路由分类"></a>路由分类</h5><p>典型的路由选择方式有两种：静态路由和动态路由。</p><p><strong>静态路由</strong>在路由器中设置固定的路由表，由管理员负责创建和维护。</p><p><strong>动态路由</strong>是网络中的路由器之间相互通信、传递路由信息、利用收集的路由信息更新路由表。可以实现实时的适应网络结构的变化。动态路由按照区域（自治系统）划分，可分为内部网关协议（Interior Gateway Protocol,IGP）和外部网关协议（Exterior Gateway Protocol, EGP）两大类。</p><p>动态路由网关协议分类：</p><blockquote><p>IGP</p><ul><li>链路状态 - <code>OSPF</code></li><li>距离矢量 - <code>RIPv1</code>、<code>RIPv2</code>、<code>IGRP</code></li><li>混合型 - <code>EIGRP</code>、<code>DEIGRP</code></li></ul><p>EGP</p><ul><li>EGP</li><li>BGP</li></ul></blockquote><h5 id="路由器端口配置原则"><a href="#路由器端口配置原则" class="headerlink" title="路由器端口配置原则"></a>路由器端口配置原则</h5><ol><li>路由器的物理网络端口通常有一个IP地址</li><li>相邻路由器的相邻端口的IP地址必须在同一IP网段上</li><li>同一路由器的不同端口的IP地址必须在不同的IP网段</li></ol><h4 id="静态路由"><a href="#静态路由" class="headerlink" title="静态路由"></a>静态路由</h4><p>静态路由是在路由器中手动配置的固定路由，路由明确的指定了数据包到达目的地必须经过的路径，除非人工干预，否则静态路由不会自动改变。</p><p>静态路由不会队网络的改变做出反应，所以静态路由适用于网络规模不大、拓扑结果相对固定的网络环境。</p><p>一条静态路由的条目通常由三个部分组成：目的IP地址对应的子网、子网掩码、网关。</p><h5 id="静态路由配置"><a href="#静态路由配置" class="headerlink" title="静态路由配置"></a>静态路由配置</h5><ol><li>为路由器每个端口配置IP地址</li><li>确定该路由器有哪些直连网络的路由信息</li><li>确定网络中有哪些非直连网段</li><li>添加该路由器的非直连网段的相关信息</li></ol><h5 id="静态路由配置命令"><a href="#静态路由配置命令" class="headerlink" title="静态路由配置命令"></a>静态路由配置命令</h5><ol><li><p>配置静态路由</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route 目的网段 子网掩码 下一跳路由器IP地址</span><br></pre></td></tr></table></figure></li><li><p>静态路由的删除</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">no ip route 目的网段 子网掩码 下一跳路由器IP地址</span><br></pre></td></tr></table></figure></li><li><p>默认路由</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip rounte 0.0.0.0 0.0.0.0</span><br></pre></td></tr></table></figure></li><li><p>路由器端口IP配置</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip address IP地址 子网掩码</span><br></pre></td></tr></table></figure></li><li><p>查看路由表</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show ip route</span><br></pre></td></tr></table></figure></li><li><p>查看路由器路由表信息</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route</span><br></pre></td></tr></table></figure></li><li><p>查看路由器全部配置</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show running-config</span><br></pre></td></tr></table></figure></li><li><p>查看验证路由器端口的配置</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show ip interface brief</span><br></pre></td></tr></table></figure></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;路由基本概念&quot;&gt;&lt;a href=&quot;#路由基本概念&quot; class=&quot;headerlink&quot; title=&quot;路由基本概念&quot;&gt;&lt;/a&gt;路由基本概念&lt;/h4&gt;&lt;h5 id=&quot;路由&quot;&gt;&lt;a href=&quot;#路由&quot; class=&quot;headerlink&quot; title=&quot;路由&quot;&gt;&lt;/a&gt;路由&lt;/h5&gt;&lt;p&gt;指通过相互连接的网络吧信息兄源结点传输到目标结点的活动。一般而言，在路由过程中，信息至少会经过一个或多个中间结点。路由交换发生在OSI参考模型的第三层-网络层。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="网络实验" scheme="https://sy-yunyi.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+    
+      <category term="计算机网络实验" scheme="https://sy-yunyi.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
+    
+      <category term="静态路由" scheme="https://sy-yunyi.github.io/tags/%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1/"/>
     
   </entry>
   
@@ -153,6 +153,34 @@
   </entry>
   
   <entry>
+    <title>DNS安全论文选读-Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History</title>
+    <link href="https://sy-yunyi.github.io/2019/05/06/DNS%E5%AE%89%E5%85%A8%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB-Detection%20and%20Blocking%20of%20Anomaly%20DNS%20Traffic%20by%20Analyzing%20Achieved%20NS%20Record%20History/"/>
+    <id>https://sy-yunyi.github.io/2019/05/06/DNS安全论文选读-Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History/</id>
+    <published>2019-05-05T16:00:00.000Z</published>
+    <updated>2019-05-06T06:56:41.404Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="Detection-and-Blocking-of-Anomaly-DNS-Traffic-by-Analyzing-Achieved-NS-Record-History"><a href="#Detection-and-Blocking-of-Anomaly-DNS-Traffic-by-Analyzing-Achieved-NS-Record-History" class="headerlink" title="Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History"></a>Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History</h3><h4 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h4><p><em>Ichise H, Jin Y, Iida K, et al. Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History[C]//2018 Asia-Pacific Signal and Information Processing Association Annual Summit and Conference (APSIPA ASC). IEEE, 2018: 1586-1590.</em></p><a id="more"></a><h4 id="关键思想"><a href="#关键思想" class="headerlink" title="关键思想"></a>关键思想</h4><p>名称解析会获得之前发送解析请求的NS记录和A记录，而被僵尸程序感染的机器会直接发送带外查询而不会获得NS和A记录。</p><p><img src="https://i.loli.net/2019/05/06/5ccfda1243f77.png" alt="1.png"></p><p><img src="https://i.loli.net/2019/05/06/5ccfda43483cb.png" alt="2.png"></p><blockquote><p>在组织内部机器通常会经过设置的DNS服务器，被感染主机不会经过内部设置的DNS服务器，直接发送解析请求？</p></blockquote><h4 id="三种基于DNS的Botnet通信"><a href="#三种基于DNS的Botnet通信" class="headerlink" title="三种基于DNS的Botnet通信"></a>三种基于DNS的Botnet通信</h4><ul><li><p>via-resolver DNS query</p><p>依赖于内部DNS服务器，利用DNS查询中的TXT记录进行通信</p></li><li><p>indirect outbound DNS query</p><p><img src="https://i.loli.net/2019/05/06/5ccfda51ad076.png" alt="3.png"></p><p>先通过内部DNS服务器查询获得C2服务器的IP地址，然后向C2服务器进行DNS查询</p></li><li><p>direct outbound DNS query</p><p><img src="https://i.loli.net/2019/05/06/5ccfda6dc3867.png" alt="4.png"></p><p>C2服务器的地址被硬编码在僵尸程序中，可以直接向C2服务器发起查询</p></li></ul><h4 id="系统介绍"><a href="#系统介绍" class="headerlink" title="系统介绍"></a>系统介绍</h4><ol><li><p>NS记录和胶水A记录白名单</p></li><li><p>使用SDN技术实现对DNS包的控制</p><p><img src="https://i.loli.net/2019/05/06/5ccfda830847d.png" alt="5.png"></p></li></ol><h5 id="构建NS历史记录数据库"><a href="#构建NS历史记录数据库" class="headerlink" title="构建NS历史记录数据库"></a>构建NS历史记录数据库</h5><p>收集内部DNS服务器的流量，获取合法的NS记录数据</p><h5 id="系统结构"><a href="#系统结构" class="headerlink" title="系统结构"></a>系统结构</h5><p><img src="https://i.loli.net/2019/05/06/5ccfda97852a6.png" alt="6.png"></p><ol><li>用户通过DNS服务器发送解析请求，用户所有的DNS请求包都被openflow 交换机监测。</li><li>如果流表中没有DNS请求包中的目的IP地址，则openflow 交换机利用openflow 控制器检查目的IP地址</li><li>openflow 控制器针对目的IP地址查询数据库</li><li>数据库回复查询响应</li><li>openflow 控制器根据回应做出决策。如果目的IP地址在数据中，则允许请求包通过，否则将其丢弃。</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;Detection-and-Blocking-of-Anomaly-DNS-Traffic-by-Analyzing-Achieved-NS-Record-History&quot;&gt;&lt;a href=&quot;#Detection-and-Blocking-of-Anomaly-DNS-Traffic-by-Analyzing-Achieved-NS-Record-History&quot; class=&quot;headerlink&quot; title=&quot;Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History&quot;&gt;&lt;/a&gt;Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History&lt;/h3&gt;&lt;h4 id=&quot;来源&quot;&gt;&lt;a href=&quot;#来源&quot; class=&quot;headerlink&quot; title=&quot;来源&quot;&gt;&lt;/a&gt;来源&lt;/h4&gt;&lt;p&gt;&lt;em&gt;Ichise H, Jin Y, Iida K, et al. Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History[C]//2018 Asia-Pacific Signal and Information Processing Association Annual Summit and Conference (APSIPA ASC). IEEE, 2018: 1586-1590.&lt;/em&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="论文选读" scheme="https://sy-yunyi.github.io/categories/%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB/"/>
+    
+    
+      <category term="DNS" scheme="https://sy-yunyi.github.io/tags/DNS/"/>
+    
+      <category term="安全" scheme="https://sy-yunyi.github.io/tags/%E5%AE%89%E5%85%A8/"/>
+    
+      <category term="僵尸网络" scheme="https://sy-yunyi.github.io/tags/%E5%83%B5%E5%B0%B8%E7%BD%91%E7%BB%9C/"/>
+    
+      <category term="论文笔记" scheme="https://sy-yunyi.github.io/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Commando VM 第一个发行版Windows攻击平台[翻译]</title>
     <link href="https://sy-yunyi.github.io/2019/05/06/Commando%20VM%20%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8F%91%E8%A1%8C%E7%89%88Windows%E6%94%BB%E5%87%BB%E5%B9%B3%E5%8F%B0%5B%E7%BF%BB%E8%AF%91%5D/"/>
     <id>https://sy-yunyi.github.io/2019/05/06/Commando VM 第一个发行版Windows攻击平台[翻译]/</id>
@@ -180,30 +208,27 @@
   </entry>
   
   <entry>
-    <title>DNS安全论文选读-Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History</title>
-    <link href="https://sy-yunyi.github.io/2019/05/06/DNS%E5%AE%89%E5%85%A8%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB-Detection%20and%20Blocking%20of%20Anomaly%20DNS%20Traffic%20by%20Analyzing%20Achieved%20NS%20Record%20History/"/>
-    <id>https://sy-yunyi.github.io/2019/05/06/DNS安全论文选读-Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History/</id>
-    <published>2019-05-05T16:00:00.000Z</published>
-    <updated>2019-05-06T06:56:41.404Z</updated>
+    <title>计网实验之生成树协议</title>
+    <link href="https://sy-yunyi.github.io/2019/04/17/%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E4%B9%8B%E7%94%9F%E6%88%90%E6%A0%91%E5%8D%8F%E8%AE%AE/"/>
+    <id>https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/</id>
+    <published>2019-04-16T16:00:00.000Z</published>
+    <updated>2019-04-17T07:22:19.148Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="Detection-and-Blocking-of-Anomaly-DNS-Traffic-by-Analyzing-Achieved-NS-Record-History"><a href="#Detection-and-Blocking-of-Anomaly-DNS-Traffic-by-Analyzing-Achieved-NS-Record-History" class="headerlink" title="Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History"></a>Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History</h3><h4 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h4><p><em>Ichise H, Jin Y, Iida K, et al. Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History[C]//2018 Asia-Pacific Signal and Information Processing Association Annual Summit and Conference (APSIPA ASC). IEEE, 2018: 1586-1590.</em></p><a id="more"></a><h4 id="关键思想"><a href="#关键思想" class="headerlink" title="关键思想"></a>关键思想</h4><p>名称解析会获得之前发送解析请求的NS记录和A记录，而被僵尸程序感染的机器会直接发送带外查询而不会获得NS和A记录。</p><p><img src="https://i.loli.net/2019/05/06/5ccfda1243f77.png" alt="1.png"></p><p><img src="https://i.loli.net/2019/05/06/5ccfda43483cb.png" alt="2.png"></p><blockquote><p>在组织内部机器通常会经过设置的DNS服务器，被感染主机不会经过内部设置的DNS服务器，直接发送解析请求？</p></blockquote><h4 id="三种基于DNS的Botnet通信"><a href="#三种基于DNS的Botnet通信" class="headerlink" title="三种基于DNS的Botnet通信"></a>三种基于DNS的Botnet通信</h4><ul><li><p>via-resolver DNS query</p><p>依赖于内部DNS服务器，利用DNS查询中的TXT记录进行通信</p></li><li><p>indirect outbound DNS query</p><p><img src="https://i.loli.net/2019/05/06/5ccfda51ad076.png" alt="3.png"></p><p>先通过内部DNS服务器查询获得C2服务器的IP地址，然后向C2服务器进行DNS查询</p></li><li><p>direct outbound DNS query</p><p><img src="https://i.loli.net/2019/05/06/5ccfda6dc3867.png" alt="4.png"></p><p>C2服务器的地址被硬编码在僵尸程序中，可以直接向C2服务器发起查询</p></li></ul><h4 id="系统介绍"><a href="#系统介绍" class="headerlink" title="系统介绍"></a>系统介绍</h4><ol><li><p>NS记录和胶水A记录白名单</p></li><li><p>使用SDN技术实现对DNS包的控制</p><p><img src="https://i.loli.net/2019/05/06/5ccfda830847d.png" alt="5.png"></p></li></ol><h5 id="构建NS历史记录数据库"><a href="#构建NS历史记录数据库" class="headerlink" title="构建NS历史记录数据库"></a>构建NS历史记录数据库</h5><p>收集内部DNS服务器的流量，获取合法的NS记录数据</p><h5 id="系统结构"><a href="#系统结构" class="headerlink" title="系统结构"></a>系统结构</h5><p><img src="https://i.loli.net/2019/05/06/5ccfda97852a6.png" alt="6.png"></p><ol><li>用户通过DNS服务器发送解析请求，用户所有的DNS请求包都被openflow 交换机监测。</li><li>如果流表中没有DNS请求包中的目的IP地址，则openflow 交换机利用openflow 控制器检查目的IP地址</li><li>openflow 控制器针对目的IP地址查询数据库</li><li>数据库回复查询响应</li><li>openflow 控制器根据回应做出决策。如果目的IP地址在数据中，则允许请求包通过，否则将其丢弃。</li></ol>]]></content>
+    <content type="html"><![CDATA[<h3 id="STP介绍"><a href="#STP介绍" class="headerlink" title="STP介绍"></a>STP介绍</h3><p>对于二层以太网而言，两个局域网间只能有一条活动的通路，否则就会产生广播风暴。</p><p>但为了加强一个局域网的可靠性，又需要建立冗余链路，其中一些通路必须处于备份状态。</p><a id="more"></a><p><img src="C:\Users\sky_y\AppData\Roaming\Typora\typora-user-images\1555481604188.png" alt="1555481604188"></p><p>若网络发生故障导致一条链路失效，相应的冗余链路就会提升至活动状态。</p><p>生成树协议(Spanning Tree Protocol,STP)是为了解决冗余网络中的广播风暴问题而产生的，是一种网桥嵌套协议。</p><h4 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h4><p>STP定义了网桥协议数据单元(Bridge Protocol Data Unit, BPDU), 网桥利用BPDU进行通信，并用BPDU的相关机制动态的选择根网桥和备份网桥。从而打破物理环路，建立一个无循环的逻辑拓扑。</p><h4 id="相关术语"><a href="#相关术语" class="headerlink" title="相关术语"></a>相关术语</h4><p><strong>根端口</strong>：提供最短路径到根网桥的端口。每台非根交换机都必须选取一个根端口。</p><p><strong>指派端口</strong>：每个网段通过该端口连接到根网桥。根网桥上的端口。</p><p><strong>替换端口</strong>：根端口的替换端口，一旦根端口失效，该端口立刻成为根端口。</p><p><strong>备份端口</strong>：指派端口的备份端口，但过一个网桥有两个端口都连在一个网段上时，优先级高的为指派端口，优先级低的为备份端口。</p><p><strong>非活动端口</strong>：当前不处在活动状态的端口。</p><p><strong>端口优先级</strong>：默认为根端口、指派端口、替换端口、备份端口。</p><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><ul><li>STP避免了当网络中存在环路时产生广播风暴</li><li>环路消失时，自动开启原来切断的端口，提高了网络可靠性</li></ul><h3 id="生成树形成过程"><a href="#生成树形成过程" class="headerlink" title="生成树形成过程"></a>生成树形成过程</h3><ol><li>通过比较交换机优先级选取根交换机</li><li>其余非根交换机只有一个通向根交换机的端口，称为根端口</li><li>认定网段的指派交换机</li><li>每个网段只有一个转发端口，根交换机所有端口均为转发端口</li></ol><blockquote><p>给定广播域内只有一台根交换机</p></blockquote><p>生成树协议使用IEEE 802.1d 标准中的生成树算法(Spanning Tree Algorithm,STA)，在一个具有冗余的容错网络中计算出一个无环路路径。</p><p>一部分端口处于转发状态，一部分处于阻塞状态，保证网络中任何一点到另一点的路径有且只有一条。</p><p>除了根端口和指派端口外的端口都处于阻塞状态。所以在确定了根交换机、交换机的根端口以及每个网段的指派交换机和指派端口后，一个生成树的拓扑结构就确定了。</p><p>当某台交换机发现拓扑发生变化后，向根交换机定时发送拓扑变化BPDU，在根交换机接收到消息后，根交换机发送给配置BPDU，重新进行生成树配置。</p><h3 id="BPDU格式"><a href="#BPDU格式" class="headerlink" title="BPDU格式"></a>BPDU格式</h3><p><img src="C:\Users\sky_y\AppData\Roaming\Typora\typora-user-images\1555483717951.png" alt="1555483717951"></p><p>DMA是目的MAC地址，配置消息的目的地址是一个固定的网桥组播地址（0x0180c2000000）；</p><p>SMA是源MAC地址，即发送该配置消息的网桥的MAC地址；</p><p>L/T是帧长；</p><p>LLC Header 是配置消息固定的链路头；</p><p>Playload是BPDU数据，具体字段为</p><table><thead><tr><th>字段名称</th><th>字节</th></tr></thead><tbody><tr><td>协议ID</td><td>2</td></tr><tr><td>版本号</td><td>1</td></tr><tr><td>报文类型</td><td>1</td></tr><tr><td>标记域</td><td>1</td></tr><tr><td>根网桥ID</td><td>8</td></tr><tr><td>根路径成本</td><td>4</td></tr><tr><td>发送网桥ID</td><td>8</td></tr><tr><td>端口ID</td><td>2</td></tr><tr><td>报文老化时间</td><td>2</td></tr><tr><td>最大老化时间</td><td>2</td></tr><tr><td>访问时间</td><td>2</td></tr><tr><td>转发延迟</td><td>2</td></tr></tbody></table><h3 id="端口状态学习"><a href="#端口状态学习" class="headerlink" title="端口状态学习"></a>端口状态学习</h3><p>生成树协议工作时，所有端口都要经过一个端口状态建立的过程。</p><p><img src="C:\Users\sky_y\AppData\Roaming\Typora\typora-user-images\1555484539931.png" alt="1555484539931"></p><p>生成树协议通过BPDU广播，确定各交换机及其端口的工作状态和角色。交换机上的端口状态分别有关闭、阻塞、侦听、学习和转发。</p><ol><li>关闭状态(Disable)：不收发任何报文，当端口空连接或人为关闭时的状态。</li><li>阻塞状态(Blocking)：在机器刚启动时，端口处于阻塞状态，但可以接收BPDU信息。</li><li>侦听状态(Listening)：不接受用户数据，收发BPDU，确定网桥及端口角色。</li><li>学习状态(Learing)：不接受用户数据，收发BPDU，进行地址学习。</li><li>转发状态(Forwarding)：收发用户数据。继续收发BPDU和进行地址学习，维护STP。</li></ol><p>端口由阻塞状态进入转发状态要经过一定时间的延迟，延迟时间至少是是配置消息传播到整个网络所需最大时间的两倍。</p><h3 id="快速生成树协议"><a href="#快速生成树协议" class="headerlink" title="快速生成树协议"></a>快速生成树协议</h3><p>生成树协议虽然避免了广播风暴的发生，但是也存在一些不足。网络链路故障的恢复时间是两倍的转发时延，如果网络拓扑频繁变化，则会导致网络通信质量降低。</p><p>快速生成树协议(Rapid Spanning Tree Protocol,RSTP)是从STP发展来的，在IEEE 802.1w中描述了其规范。</p><p>RSTP主要是在网络拓扑发生变化时做了改进。</p><ol><li>若旧根端口处于阻塞状态，若其替换端口连接的对端交换机的指定端口处于转发状态，则替换端口立即转换为转发状态。</li><li>指定端口可以通过于相连的网桥进行一次握手而快速进入转发状态。</li><li>网络边缘的端口可以直接进入转发状态。</li></ol><p>RSTP与STP的主要区别在于：</p><ul><li>消息报文格式不同</li><li>拓扑改变消息传播方式不同</li></ul>]]></content>
     
     <summary type="html">
     
-      &lt;h3 id=&quot;Detection-and-Blocking-of-Anomaly-DNS-Traffic-by-Analyzing-Achieved-NS-Record-History&quot;&gt;&lt;a href=&quot;#Detection-and-Blocking-of-Anomaly-DNS-Traffic-by-Analyzing-Achieved-NS-Record-History&quot; class=&quot;headerlink&quot; title=&quot;Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History&quot;&gt;&lt;/a&gt;Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History&lt;/h3&gt;&lt;h4 id=&quot;来源&quot;&gt;&lt;a href=&quot;#来源&quot; class=&quot;headerlink&quot; title=&quot;来源&quot;&gt;&lt;/a&gt;来源&lt;/h4&gt;&lt;p&gt;&lt;em&gt;Ichise H, Jin Y, Iida K, et al. Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History[C]//2018 Asia-Pacific Signal and Information Processing Association Annual Summit and Conference (APSIPA ASC). IEEE, 2018: 1586-1590.&lt;/em&gt;&lt;/p&gt;
+      &lt;h3 id=&quot;STP介绍&quot;&gt;&lt;a href=&quot;#STP介绍&quot; class=&quot;headerlink&quot; title=&quot;STP介绍&quot;&gt;&lt;/a&gt;STP介绍&lt;/h3&gt;&lt;p&gt;对于二层以太网而言，两个局域网间只能有一条活动的通路，否则就会产生广播风暴。&lt;/p&gt;
+&lt;p&gt;但为了加强一个局域网的可靠性，又需要建立冗余链路，其中一些通路必须处于备份状态。&lt;/p&gt;
     
     </summary>
     
-      <category term="论文选读" scheme="https://sy-yunyi.github.io/categories/%E8%AE%BA%E6%96%87%E9%80%89%E8%AF%BB/"/>
+      <category term="网络实验" scheme="https://sy-yunyi.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
     
     
-      <category term="DNS" scheme="https://sy-yunyi.github.io/tags/DNS/"/>
+      <category term="计算机网络实验" scheme="https://sy-yunyi.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
     
-      <category term="安全" scheme="https://sy-yunyi.github.io/tags/%E5%AE%89%E5%85%A8/"/>
-    
-      <category term="论文笔记" scheme="https://sy-yunyi.github.io/tags/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"/>
-    
-      <category term="僵尸网络" scheme="https://sy-yunyi.github.io/tags/%E5%83%B5%E5%B0%B8%E7%BD%91%E7%BB%9C/"/>
+      <category term="生成树" scheme="https://sy-yunyi.github.io/tags/%E7%94%9F%E6%88%90%E6%A0%91/"/>
     
   </entry>
   
@@ -229,31 +254,6 @@
       <category term="计算机网络实验" scheme="https://sy-yunyi.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
     
       <category term="端口聚合" scheme="https://sy-yunyi.github.io/tags/%E7%AB%AF%E5%8F%A3%E8%81%9A%E5%90%88/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>计网实验之生成树协议</title>
-    <link href="https://sy-yunyi.github.io/2019/04/17/%E8%AE%A1%E7%BD%91%E5%AE%9E%E9%AA%8C%E4%B9%8B%E7%94%9F%E6%88%90%E6%A0%91%E5%8D%8F%E8%AE%AE/"/>
-    <id>https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/</id>
-    <published>2019-04-16T16:00:00.000Z</published>
-    <updated>2019-04-17T07:22:19.148Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="STP介绍"><a href="#STP介绍" class="headerlink" title="STP介绍"></a>STP介绍</h3><p>对于二层以太网而言，两个局域网间只能有一条活动的通路，否则就会产生广播风暴。</p><p>但为了加强一个局域网的可靠性，又需要建立冗余链路，其中一些通路必须处于备份状态。</p><a id="more"></a><p><img src="C:\Users\sky_y\AppData\Roaming\Typora\typora-user-images\1555481604188.png" alt="1555481604188"></p><p>若网络发生故障导致一条链路失效，相应的冗余链路就会提升至活动状态。</p><p>生成树协议(Spanning Tree Protocol,STP)是为了解决冗余网络中的广播风暴问题而产生的，是一种网桥嵌套协议。</p><h4 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h4><p>STP定义了网桥协议数据单元(Bridge Protocol Data Unit, BPDU), 网桥利用BPDU进行通信，并用BPDU的相关机制动态的选择根网桥和备份网桥。从而打破物理环路，建立一个无循环的逻辑拓扑。</p><h4 id="相关术语"><a href="#相关术语" class="headerlink" title="相关术语"></a>相关术语</h4><p><strong>根端口</strong>：提供最短路径到根网桥的端口。每台非根交换机都必须选取一个根端口。</p><p><strong>指派端口</strong>：每个网段通过该端口连接到根网桥。根网桥上的端口。</p><p><strong>替换端口</strong>：根端口的替换端口，一旦根端口失效，该端口立刻成为根端口。</p><p><strong>备份端口</strong>：指派端口的备份端口，但过一个网桥有两个端口都连在一个网段上时，优先级高的为指派端口，优先级低的为备份端口。</p><p><strong>非活动端口</strong>：当前不处在活动状态的端口。</p><p><strong>端口优先级</strong>：默认为根端口、指派端口、替换端口、备份端口。</p><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><ul><li>STP避免了当网络中存在环路时产生广播风暴</li><li>环路消失时，自动开启原来切断的端口，提高了网络可靠性</li></ul><h3 id="生成树形成过程"><a href="#生成树形成过程" class="headerlink" title="生成树形成过程"></a>生成树形成过程</h3><ol><li>通过比较交换机优先级选取根交换机</li><li>其余非根交换机只有一个通向根交换机的端口，称为根端口</li><li>认定网段的指派交换机</li><li>每个网段只有一个转发端口，根交换机所有端口均为转发端口</li></ol><blockquote><p>给定广播域内只有一台根交换机</p></blockquote><p>生成树协议使用IEEE 802.1d 标准中的生成树算法(Spanning Tree Algorithm,STA)，在一个具有冗余的容错网络中计算出一个无环路路径。</p><p>一部分端口处于转发状态，一部分处于阻塞状态，保证网络中任何一点到另一点的路径有且只有一条。</p><p>除了根端口和指派端口外的端口都处于阻塞状态。所以在确定了根交换机、交换机的根端口以及每个网段的指派交换机和指派端口后，一个生成树的拓扑结构就确定了。</p><p>当某台交换机发现拓扑发生变化后，向根交换机定时发送拓扑变化BPDU，在根交换机接收到消息后，根交换机发送给配置BPDU，重新进行生成树配置。</p><h3 id="BPDU格式"><a href="#BPDU格式" class="headerlink" title="BPDU格式"></a>BPDU格式</h3><p><img src="C:\Users\sky_y\AppData\Roaming\Typora\typora-user-images\1555483717951.png" alt="1555483717951"></p><p>DMA是目的MAC地址，配置消息的目的地址是一个固定的网桥组播地址（0x0180c2000000）；</p><p>SMA是源MAC地址，即发送该配置消息的网桥的MAC地址；</p><p>L/T是帧长；</p><p>LLC Header 是配置消息固定的链路头；</p><p>Playload是BPDU数据，具体字段为</p><table><thead><tr><th>字段名称</th><th>字节</th></tr></thead><tbody><tr><td>协议ID</td><td>2</td></tr><tr><td>版本号</td><td>1</td></tr><tr><td>报文类型</td><td>1</td></tr><tr><td>标记域</td><td>1</td></tr><tr><td>根网桥ID</td><td>8</td></tr><tr><td>根路径成本</td><td>4</td></tr><tr><td>发送网桥ID</td><td>8</td></tr><tr><td>端口ID</td><td>2</td></tr><tr><td>报文老化时间</td><td>2</td></tr><tr><td>最大老化时间</td><td>2</td></tr><tr><td>访问时间</td><td>2</td></tr><tr><td>转发延迟</td><td>2</td></tr></tbody></table><h3 id="端口状态学习"><a href="#端口状态学习" class="headerlink" title="端口状态学习"></a>端口状态学习</h3><p>生成树协议工作时，所有端口都要经过一个端口状态建立的过程。</p><p><img src="C:\Users\sky_y\AppData\Roaming\Typora\typora-user-images\1555484539931.png" alt="1555484539931"></p><p>生成树协议通过BPDU广播，确定各交换机及其端口的工作状态和角色。交换机上的端口状态分别有关闭、阻塞、侦听、学习和转发。</p><ol><li>关闭状态(Disable)：不收发任何报文，当端口空连接或人为关闭时的状态。</li><li>阻塞状态(Blocking)：在机器刚启动时，端口处于阻塞状态，但可以接收BPDU信息。</li><li>侦听状态(Listening)：不接受用户数据，收发BPDU，确定网桥及端口角色。</li><li>学习状态(Learing)：不接受用户数据，收发BPDU，进行地址学习。</li><li>转发状态(Forwarding)：收发用户数据。继续收发BPDU和进行地址学习，维护STP。</li></ol><p>端口由阻塞状态进入转发状态要经过一定时间的延迟，延迟时间至少是是配置消息传播到整个网络所需最大时间的两倍。</p><h3 id="快速生成树协议"><a href="#快速生成树协议" class="headerlink" title="快速生成树协议"></a>快速生成树协议</h3><p>生成树协议虽然避免了广播风暴的发生，但是也存在一些不足。网络链路故障的恢复时间是两倍的转发时延，如果网络拓扑频繁变化，则会导致网络通信质量降低。</p><p>快速生成树协议(Rapid Spanning Tree Protocol,RSTP)是从STP发展来的，在IEEE 802.1w中描述了其规范。</p><p>RSTP主要是在网络拓扑发生变化时做了改进。</p><ol><li>若旧根端口处于阻塞状态，若其替换端口连接的对端交换机的指定端口处于转发状态，则替换端口立即转换为转发状态。</li><li>指定端口可以通过于相连的网桥进行一次握手而快速进入转发状态。</li><li>网络边缘的端口可以直接进入转发状态。</li></ol><p>RSTP与STP的主要区别在于：</p><ul><li>消息报文格式不同</li><li>拓扑改变消息传播方式不同</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;STP介绍&quot;&gt;&lt;a href=&quot;#STP介绍&quot; class=&quot;headerlink&quot; title=&quot;STP介绍&quot;&gt;&lt;/a&gt;STP介绍&lt;/h3&gt;&lt;p&gt;对于二层以太网而言，两个局域网间只能有一条活动的通路，否则就会产生广播风暴。&lt;/p&gt;
-&lt;p&gt;但为了加强一个局域网的可靠性，又需要建立冗余链路，其中一些通路必须处于备份状态。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="网络实验" scheme="https://sy-yunyi.github.io/categories/%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
-    
-    
-      <category term="计算机网络实验" scheme="https://sy-yunyi.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C/"/>
-    
-      <category term="生成树" scheme="https://sy-yunyi.github.io/tags/%E7%94%9F%E6%88%90%E6%A0%91/"/>
     
   </entry>
   
