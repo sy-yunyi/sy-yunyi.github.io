@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans,en,default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="安全,大数据,DataCon,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Six's Blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="题目一 DNS恶意流量检测">
+<meta name="keywords" content="安全,大数据,DataCon">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DataCon大赛DNS方向writeup及总结反思">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/05/31/DataCon大赛DNS方向writeup及总结反思/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="题目一 DNS恶意流量检测">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2019/04/07/5ca9e70ebdeda.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/07/5ca9ff50e124c.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/07/5caa0a7fdae30.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/07/5caa0c282ceb6.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/08/5caa99068c7cc.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/08/5caaa222b33a0.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/08/5caaa54bdfcbb.png">
+<meta property="og:updated_time" content="2019-05-31T02:41:39.079Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DataCon大赛DNS方向writeup及总结反思">
+<meta name="twitter:description" content="题目一 DNS恶意流量检测">
+<meta name="twitter:image" content="https://i.loli.net/2019/04/07/5ca9e70ebdeda.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://sy-yunyi.github.io/2019/05/31/DataCon大赛DNS方向writeup及总结反思/">
+
+
+
+
+
+  <title>DataCon大赛DNS方向writeup及总结反思 | Six's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Six's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Don't Be Evil</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-网络实验">
+          <a href="/categories/网络实验/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            网络实验
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-论文选读">
+          <a href="/categories/论文选读/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br>
+            
+            论文选读
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-安全笔记">
+          <a href="/categories/安全笔记/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sticky-note"></i> <br>
+            
+            安全笔记
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-非标准美食">
+          <a href="/categories/非标准美食" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-salad"></i> <br>
+            
+            非标准美食
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-six不言">
+          <a href="/categories/SIX不言/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-quote-right"></i> <br>
+            
+            SIX不言
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/05/31/DataCon大赛DNS方向writeup及总结反思/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Six">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Six's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">DataCon大赛DNS方向writeup及总结反思</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-31T00:00:00+08:00">
+                2019-05-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">安全笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/31/DataCon大赛DNS方向writeup及总结反思/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/05/31/DataCon大赛DNS方向writeup及总结反思/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  9.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  34
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="题目一-DNS恶意流量检测"><a href="#题目一-DNS恶意流量检测" class="headerlink" title="题目一 DNS恶意流量检测"></a>题目一 DNS恶意流量检测</h3><a id="more"></a>
+<h4 id="0x00-题目解读"><a href="#0x00-题目解读" class="headerlink" title="0x00 题目解读"></a>0x00 题目解读</h4><p>题目介绍是在赛前就给出的，从介绍中我们可以了解到</p>
+<ul>
+<li><p>目标</p>
+<blockquote>
+<p>找出五种攻击流量，并将其进行分类</p>
+<p>意味着首先需要了解DNS攻击的种类及其特点</p>
+</blockquote>
+</li>
+<li><p>数据</p>
+<blockquote>
+<p>描述中并没有讲太多，仅仅提到<code>给定的DNS流量</code>,对这个流量的形式没有说明，猜测应该是pcap文件或者是处理过的数据文件。</p>
+<p>如果是pcap文件则需要由数据包分析的知识，可能需要利用程序对数据包进行处理，如果是后者，便简单许多，不用再进行数据处理。</p>
+<p>因为数据包再赛前也提供下载，设置了密码，无法提前获得数据。但是虽然不能获取数据但是解压后可以看到文件夹或文件的的名字，这样基本验证了提供的数据文件pcap文件。</p>
+</blockquote>
+</li>
+<li><p>提交</p>
+<blockquote>
+<p>提交提供了精简版的提交格式，详细要求会提供一个文档，在上一步已经看到这个文件名。着重强调提交的文件类型，应该是和之后的得分计算有关。类型或格式不当，计算得分的程序会无法计算。</p>
+</blockquote>
+</li>
+<li><p>评分</p>
+<blockquote>
+<p>评分开始并没有讲的很明白，只是说明在4号会有一次评分。但是可以知道在赛程中间会有评分，可以通过评分调整自己的答案结构。</p>
+</blockquote>
+</li>
+</ul>
+<p>比赛开始，获得压缩包密码，解压文件后，得到</p>
+<ul>
+<li><p><code>example_dns1.zip</code>：zip压缩文件，打开后发现应该是提交的样本实例。</p>
+</li>
+<li><p><code>q1_final.pcap</code>：pcap文件，看下大小，是这次的数据文件无疑了。</p>
+</li>
+<li><p><code>Readme-第一题.pdf</code>：赛题详细介绍。</p>
+<blockquote>
+<p>确定最终题目：准确判断出五种DNS攻击，并说明PCAP文件中哪些数据包是攻击流量。</p>
+<p>提交：2个csv文件(攻击分类和数据包序号)，writeup，解题代码，zip格式打包。不要添加密码，不要打包文件夹。writeup影响最终得分，未详细说明，应该是想了解选手对DNS攻击的了解程度。</p>
+<p>最终得分取最后提交的得分，不是取最高分。猜测可能是因为赛程过程中有多次提交，如果保存中间文件比较复杂，而最终评测还需要提交文件做判定。</p>
+<p>重点：</p>
+<ul>
+<li>数据包仅包含为五类攻击，确定数据包的攻击时可以使用。</li>
+<li>评分与选手攻击编号无关，不需要关心攻击类型的排序。</li>
+<li>提交攻击的请求包，那么是否可以理解，如果某种DNS攻击并不能在请求中体现出来或者不需要攻击者进行请求，应该不存在于这个数据包中，缩减攻击类型判定的范围。</li>
+<li>评分规则：得分由每一类得分累加而得，每类攻击占比20%。</li>
+</ul>
+<p>$$Score_{i,j} = max(\frac{1}{N}<em>w</em>\sum_{k=1}^m([P_k\in FTrue_j]),0) $$ </p>
+<p>通过计算规则我们可以知道，每类攻击有固定的占比，所以不会因为某种攻击数量多而占去大部分分数，解题过程中就可以单独提交某种类型，进行测试；计算不是简单按照提交中正确数据包个数，如果出现误判会进行扣分，所以在提交后扣分的原因会有两个，一是提交数据包太少，攻击数据包没有找全，二是提交数据包太多，其中包含了太多错误分类，当然也会同时存在数据包不全并且包括错误分类的情况。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="0x01-解题思路"><a href="#0x01-解题思路" class="headerlink" title="0x01 解题思路"></a>0x01 解题思路</h4><p>在初步查看数据包后，我们队决定从两个方面入手，一利用聚类算法对数据包进行聚类，再对聚类的后的每个分类进行校验；二是对数据包进行手工查验。当然这两个方法是同步进行的。无论使用哪个方法，首先要做的第一步就是确定DNS攻击的类别。</p>
+<h5 id="DNS攻击类别分析"><a href="#DNS攻击类别分析" class="headerlink" title="DNS攻击类别分析"></a>DNS攻击类别分析</h5><p>我们的思路是想把所有的攻击分类先列出来，在根据攻击特征进行查找，但后来发现，题目中出现的攻击并不在我们最初列出的攻击中，说明我们对攻击理解的还不够全面。接下来对攻击类型进行简单介绍。</p>
+<ol>
+<li><p>拒绝服务攻击</p>
+<p>拒绝服务攻击分为两种，一是面向DNS服务器的，可以称为洪泛攻击，目的是使得DNS服务器无法提供服务；二是面向客户机的，称为DNS反射放大攻击，通过伪造数据包，伪装客户机发送解析请求，使得DNS回应包阻塞指定客户机的网络通路，目的是使得客户机无法正常工作。</p>
+<p>分析攻击的特征：对第一种情况，可能会存在某一或某些主机短时间内向同一DNS服务器发送大量解析请求，造成目标DNS服务器的拒绝服务</p>
+<blockquote>
+<p>【攻击可能存在，使用某时间段内是否存在大量向同一服务器的解析请求，且造成了服务器不正常工作】</p>
+</blockquote>
+<p>第二种情况，是存在一个主机向DNS服务器发送大量解析请求，且请求字段为<code>ANY</code>，而服务器返回的数据包远远大于平常的返回包</p>
+<blockquote>
+<p>【攻击可能存在，查看是否存在单一主机非常集中的请求<code>ANY</code>解析，其<code>transaction ID</code>可能会出现重复，且服务器返回的数据包远远大于正常数据包】</p>
+</blockquote>
+</li>
+<li><p>DNS欺骗攻击</p>
+<p>欺骗攻击同样包含很多类别，这里将DNS劫持和中间人攻击放在这里，同时还有DNS缓存注入。</p>
+<p>DNS劫持一般的操作是在服务器的层次进行攻击。</p>
+<blockquote>
+<p>【攻击存在可能性不大，判定难度较大】</p>
+</blockquote>
+<p>中间人攻击同样也多发生在服务器层次。</p>
+<blockquote>
+<p>【攻击存在可能性不大，判定难度较大】</p>
+</blockquote>
+<p>缓存注入攻击有两种方式，一种是传统的对客户机的解析请求直接进行伪造响应包，将目标IP直接注入。另一种是Kaminsky缓存投毒，这种攻击方式是攻击者首先伪装客户机解析一个服务器一定不存在的域名，然后在服务器进行递归解析时，攻击者向服务器发送伪造的响应包，同时将域名的权威服务器加入额外字段，一旦服务器将其缓存，则被投毒。</p>
+<blockquote>
+<p>【结合题目要求，kaminsky攻击可能存在，判定条件为某一主机向服务器解析大量不存在域名，且存在大量返回<code>不存在域名</code>的响应，其额外字段为相同的值】</p>
+</blockquote>
+</li>
+<li><p>DNS隐通道</p>
+<p>利用DNS数据包越过防火墙规则，进行传输数据。</p>
+<blockquote>
+<p>【攻击存在可能性不大，若攻击存在可能存在明显的构造的特殊的解析请求】</p>
+</blockquote>
+</li>
+<li><p>DNS区域传送</p>
+<p>区域传送是将某台服务器的区域文件传送至另一台服务器，主要目的是实现快速的服务器更换。但若设置不当，可能造成区域文件泄露。</p>
+<blockquote>
+<p>【攻击可能存在，关注区域文件传送的数据包】</p>
+</blockquote>
+</li>
+<li><p>NSEC枚举</p>
+<p>这是针对DNSSEC的一种攻击，在未使用NSEC3的DNSSEC中，若查询区文件中不存在的域名，会以NSEC记录的形式提供靠近其的最近的下一条域名，这就造成了可能构造特殊请求，来遍历区文件，造成区文件的泄露。</p>
+<blockquote>
+<p>【攻击可能存在，关注NSEC记录】</p>
+</blockquote>
+</li>
+</ol>
+<p>以上就是最初的攻击分类，类别不够完整，在之后的分析过程中在再补充。</p>
+<h5 id="流量聚类分析"><a href="#流量聚类分析" class="headerlink" title="流量聚类分析"></a>流量聚类分析</h5><h6 id="数据基本特征提取"><a href="#数据基本特征提取" class="headerlink" title="数据基本特征提取"></a>数据基本特征提取</h6><p>通过 wireshark 查看 q1_final.pcap 数据，查看数据中的可用字段，分析后选择如下 28 个字段:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">字段</th>
+<th>描述</th>
+<th>字段</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">frame.len</td>
+<td>数据长度</td>
+<td>dns.flags.authenticated</td>
+<td>服务器是否为域权威服务器</td>
+</tr>
+<tr>
+<td style="text-align:left">ip.src</td>
+<td>源 ip</td>
+<td>dns.flags.checkdisable</td>
+<td>非认证数据是否可接收</td>
+</tr>
+<tr>
+<td style="text-align:left">ip.dst</td>
+<td>目的 ip</td>
+<td>dns.flags.rcode</td>
+<td>DNS reply code</td>
+</tr>
+<tr>
+<td style="text-align:left">udp.srcport</td>
+<td>源 udp 端口号</td>
+<td>dns.count.queries</td>
+<td>s数据包中 DNS 请求数</td>
+</tr>
+<tr>
+<td style="text-align:left">udp.dstport</td>
+<td>目的 udp 端口号</td>
+<td>dns.count.answers</td>
+<td>数据包中的应答数</td>
+</tr>
+<tr>
+<td style="text-align:left">eth.src</td>
+<td>源 MAC 地址</td>
+<td>dns.count.auth_rr</td>
+<td>数据包中权威记录数</td>
+</tr>
+<tr>
+<td style="text-align:left">eth.dst</td>
+<td>目的 MAC 地址</td>
+<td>dns.count.add_rr</td>
+<td>数据包中额外记录数</td>
+</tr>
+<tr>
+<td style="text-align:left">dns.id</td>
+<td>DNS Transaction ID</td>
+<td>dns.qry.name</td>
+<td>DNS 请求名</td>
+</tr>
+<tr>
+<td style="text-align:left">dns.flags.response</td>
+<td>DNS请求/响应标志</td>
+<td>dns.qry.class</td>
+<td>DNS 请求类型</td>
+</tr>
+<tr>
+<td style="text-align:left">dns.flags.opcode</td>
+<td>DNS opcode</td>
+<td>dns.resp.name</td>
+<td>DNS 响应名</td>
+</tr>
+<tr>
+<td style="text-align:left">dns.flags.authoritative</td>
+<td>应答是否被服务器认证</td>
+<td>dns.resp.type</td>
+<td>DNS 回复类型</td>
+</tr>
+<tr>
+<td style="text-align:left">dns.flags.truncated</td>
+<td>消息是否剪裁</td>
+<td>dns.resp.ttl</td>
+<td>DNS 响应生存时间</td>
+</tr>
+<tr>
+<td style="text-align:left">dns.flags.recdesired</td>
+<td>是否递归查询</td>
+<td>dns.resp.z.do</td>
+<td>DNS 是否支持 DNSSEC</td>
+</tr>
+<tr>
+<td style="text-align:left">dns.flags.reavail</td>
+<td>服务器是否能递归查询</td>
+<td>frame.time_relative</td>
+<td>frame 的相对时间</td>
+</tr>
+</tbody>
+</table>
+<p>使用 tshark 命令从 pcap 数据抽取上述字段，保存到 csv 文件中:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tshark.exe -r q1_final.pcap -T fields -e frame.number -e frame.time_relative -e ip.src -e ip.dst -e frame.len -e eth.src -e eth.dst -e udp.srcport -e udp.dstport -e dns.id -e dns.flags.response -e dns.flags.opcode -e dns.flags.authoritative -e dns.flags.truncated -e dns.flags.recdesired -e dns.flags.recavail -e dns.flags.authenticated -e dns.flags.checkdisable -e dns.flags.rcode -e dns.count.queries -e dns.count.answers -e dns.count.auth_rr -e dns.count.add_rr -e dns.qry.name -e dns.qry.type -e dns.qry.class -e dns.resp.name -e dns.resp.type -e dns.resp.ttl -e dns.resp.z.do -E separator=<span class="string">","</span> -E aggregator=<span class="string">" "</span> -E header=y -E occurrence=f -E quote=d &gt; q1_final.csv</span><br></pre></td></tr></table></figure>
+<h6 id="数据特征分析"><a href="#数据特征分析" class="headerlink" title="数据特征分析"></a>数据特征分析</h6><p>使用 jupyter notebook 分析数据：</p>
+<ol>
+<li><p>导入必要的库</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment"># show plot in jupyter notebook</span></span><br><span class="line">%matplotlib inline</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>读取数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># read data</span></span><br><span class="line">file_name = <span class="string">'q1_final.csv'</span></span><br><span class="line">data = pd.read_csv(file_name,index_col=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>分析数据基本特征的分布，选择值分布较为分散的特征，如果只有一个值的特征则直接删除：</p>
+</li>
+</ol>
+<ul>
+<li>eth.src 和 eth.dst 只有两个值，不能很好的作为可区分特征，故删除；</li>
+<li>dns.qry.class 只有一个值，根本没有区分度，故删除；</li>
+<li>dns.srcport 和 dns.dstport 的值相当分散，这是由于客户端可以随机生成端口号所致，故作用不大，删除</li>
+<li>ip.src 和 ip.dst 以及 dns.id 分布随机，可以用于标识一个 frame，但不能反映 frame 的行为，故不使用；同时发现主要的 ip 地址为 <code>45.80.170.1</code> ，该地址相关的 frames 占总 frames 数的 98% 左右，故猜测为正常数据诸多，构建模型时可以先不使用该部分数据，观察聚类的效果；</li>
+</ul>
+<h6 id="特征设计"><a href="#特征设计" class="headerlink" title="特征设计"></a>特征设计</h6><p>根据已经得出的每种攻击类型的特征进行特征设计，初步设想以一个 frame 作为基本处理单元，但是一个 frame只能为 DNS 请求或者 DNS 响应，并不能完整的反映 DNS 会话的整个流程，因此使用集合 <code>{ip.src, ip.dst, udp.srcport, udp.dstprot, dns.id}</code> 标识一个 DNS 流， 故一个 DNS 流中至少包含一个请求的 frame ，但实际中绝大部分 DNS 流都包含 DNS 请求和响应两个 frame。那么 DNS 流 的特征如何构造才能区分正常的和异常的的 DNS 流呢？考虑到可能的攻击方式，异常的情况分析如下：</p>
+<ul>
+<li>对于放大攻击, DNS 流中的响应的长度应该会很大, 同时响应长度和请求长度之比会很大;</li>
+<li>对于 DNS 缓存投毒攻击, DNS 流中 DNS 请求 frame 的源地址可能和很多不同的服务器进行DNS会话;</li>
+<li>对于区域传送攻击, DNS 流中 请求类型 <code>dns.qry.type</code>字段为255;</li>
+<li>其它异常情况还可能有 DNS 流中只有请求没有响应, DNS 持续时间异常, DNS 流中的权威记录和额外记录过少等;</li>
+</ul>
+<p>根据分析,得到如下特征：</p>
+<table>
+<thead>
+<tr>
+<th>特征名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>#frames</td>
+<td>DNS 流 中的 frame 数</td>
+</tr>
+<tr>
+<td>qry.len</td>
+<td>请求长度</td>
+</tr>
+<tr>
+<td>resp.len</td>
+<td>请求相对应的响应长度</td>
+</tr>
+<tr>
+<td>len.ratio</td>
+<td>响应长度和请求长度的比值</td>
+</tr>
+<tr>
+<td>duration</td>
+<td>会话持续时间</td>
+</tr>
+<tr>
+<td>servers</td>
+<td>某一主机连接的不同服务器数量</td>
+</tr>
+<tr>
+<td>flags.resp</td>
+<td>标记区分请求和响应</td>
+</tr>
+<tr>
+<td>flags.opcode</td>
+<td>请求执行的操作</td>
+</tr>
+<tr>
+<td>flags.rcode</td>
+<td>DNS 流中是否有响应标</td>
+</tr>
+<tr>
+<td>qry.type</td>
+<td>解析请求类型</td>
+</tr>
+<tr>
+<td>resp.type</td>
+<td>响应类型</td>
+</tr>
+<tr>
+<td>#auth_rr</td>
+<td>数据包中权威记录数</td>
+</tr>
+<tr>
+<td>#add_rr</td>
+<td>数据包中额外记录数</td>
+</tr>
+</tbody>
+</table>
+<h6 id="聚类"><a href="#聚类" class="headerlink" title="聚类"></a>聚类</h6><p>使用 <code>Python scikit-learn 库中 sklearn.cluster</code> 模块中的聚类算法进行聚类，首先考虑使用小的数据集上进行特征抽取和聚类,验证特征的有效性, 因为根据对数据基本特征分析时发现的主要 ip地址为 <code>45.80.170.1</code> , 与该地址相关的数据占 98% 左右, 所以可以先过滤调这部分数据构造一个小数据集上进行实验性验证。</p>
+<ol>
+<li>在 jupyter notebook 中完成数据中缺失值的处理</li>
+<li>编写 python 脚本完成数据特征的抽取, 保存成 hdf 文件</li>
+<li>在 jupyter notebook 中完成聚类模型的构建</li>
+</ol>
+<p>最终分类结果如下:</p>
+<p>类别 0: DNS cache pullution</p>
+<table>
+<thead>
+<tr>
+<th>ip</th>
+<th>frame 数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>144.202.64.226</td>
+<td>33903</td>
+</tr>
+<tr>
+<td>18.100.48.86</td>
+<td>8</td>
+</tr>
+<tr>
+<td>6.116.183.244</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>类别 1: DNS zone transfer</p>
+<table>
+<thead>
+<tr>
+<th>ip</th>
+<th>frame 数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>18.100.48.86</td>
+<td>3655</td>
+</tr>
+</tbody>
+</table>
+<p>类别 2: DNS dynamic update</p>
+<table>
+<thead>
+<tr>
+<th>ip</th>
+<th>frame 数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>18.100.48.86</td>
+<td>3655</td>
+</tr>
+</tbody>
+</table>
+<p>类别 3: DNS Amplification Attack</p>
+<table>
+<thead>
+<tr>
+<th>ip</th>
+<th>frame 数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>105.191.150.205</td>
+<td>4150</td>
+</tr>
+<tr>
+<td>127.130.104.152</td>
+<td>11868</td>
+</tr>
+<tr>
+<td>175.222.102.169</td>
+<td>17182</td>
+</tr>
+<tr>
+<td>6.116.183.244</td>
+<td>72  （实际为NSEC)</td>
+</tr>
+</tbody>
+</table>
+<p>类别 4: Misclassificaiton</p>
+<table>
+<thead>
+<tr>
+<th>ip</th>
+<th>frame 数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>144.202.64.226</td>
+<td>291</td>
+</tr>
+<tr>
+<td>18.100.48.86</td>
+<td>428</td>
+</tr>
+</tbody>
+</table>
+<p>在小数据上,使用 KMeans 算法聚类, 聚类效果很好，分类结果和手工分析结果基本相同, 除了 NSEC 枚举攻击被分类成放大, 其它4个类型基本正确, 进一步可以说明攻击类型基本确定。</p>
+<p>NSEC 分类错误的主要原因是, 没有添加和 NSEC 攻击相关的特征, 从手动分析数据中可以看出, NSEC 枚举攻击的 frame 存在相应的标志位. 此外还有可能的原因是 NSEC这个类的数量很少 KMeans 算法适用于各类数量均匀的情况，进一步尝试使用 DBSCAN 算法进行聚类，调整 <code>eps</code> 和 <code>min_samples</code> 参数，直到分类结果为 5 类或 6 类. 分类结果和使用 KMeans 差不多，NSEC 枚举依旧误分类，因此可能的原因就是所用特征不能很好区分 NSEC 枚举攻击类型。</p>
+<h5 id="流量查验"><a href="#流量查验" class="headerlink" title="流量查验"></a>流量查验</h5><p>使用<code>wireshark</code>进行数据包<code>q1_final.pcap</code>分析。</p>
+<h6 id="初步分析"><a href="#初步分析" class="headerlink" title="初步分析"></a>初步分析</h6><p>数据包较大，共有<code>10736020</code>个数据包，打开比较费时，考虑将数据包进行切割，但是切割后存在一个问题，就是数据包的序号会改变对之后提取数据包的序号造成了困难，所以并没有首先对数据包进行盲目的切割，决定分析后再进行切割。</p>
+<p>粗略浏览数据包，发现数据包结尾部分出现一部分异常流量，在并没有发现特别明显的异常。</p>
+<h6 id="流量分析"><a href="#流量分析" class="headerlink" title="流量分析"></a>流量分析</h6><p>在数据包最后一部分，出现的流量全部都是解析请求，且请求的类型为<code>ANY</code>，怀疑为<code>DNS反射放大攻击</code>。</p>
+<p>那么就用这类攻击的特征首先进行筛选，<code>解析请求为ANY</code>、<code>返回数据包很大</code>。</p>
+<p>设置过滤器，利用解析请求<code>ANY</code> 做为条件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dns.qry.type == 255</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2019/04/07/5ca9e70ebdeda.png" alt="tyep_any.png"></p>
+<p>果然存在异常的数据包，但是还有很多正常的流量，还需要添加条件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dns.qry.type == 255 &amp;&amp; frame.len &gt; 2000</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2019/04/07/5ca9ff50e124c.png" alt="放大.png"></p>
+<p>确定为放大攻击。但这是响应包，需要找到其请求包。</p>
+<p>首先确定服务器IP和客户机IP</p>
+<table>
+<thead>
+<tr>
+<th>dns servers</th>
+<th>victim ip</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>187.199.129.12</td>
+<td>127.130.104.152</td>
+</tr>
+<tr>
+<td>188.141.167.218</td>
+<td>175.222.102.169</td>
+</tr>
+<tr>
+<td>70.85.232.160</td>
+<td>105.191.150.205</td>
+</tr>
+</tbody>
+</table>
+<p>这里其实还有一台服务器<code>45.80.170.1</code>,在第一步检查时出现但这一步并没有出现，之后检查发现，其实是有两台机器<code>22.203.191.72</code>和<code>223.168.98.1</code>向<code>45.80.170.1</code>发送了解析且类型为<code>ANY</code>，但是服务器回应为拒绝，并没有返回数据包，这部分攻击未确定。</p>
+<p>将确定的攻击筛选出来，取出请求包。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(ip.addr == 127.130.104.152 || ip.addr == 175.222.102.169 || ip.addr == 105.191.150.205) &amp;&amp; dns.flags.response == 0</span><br></pre></td></tr></table></figure>
+<p>得到<code>DNS反射放大攻击</code>请求数据包，取出其序号，获得第一类攻击流量。</p>
+<p>在上面的筛选过程中就发现，其实服务器<code>45.80.170.1</code>是主要的DNS服务器，大部分流量是这台服务器的，那么就有一个问题，除了主要服务器<code>45.80.170.1</code>，还剩下多少服务器，多少数据包？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip.src !=45.80.170.1 &amp;&amp; ip.dst != 45.80.170.1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>我用的wireshark版本有点问题，不支持ip.addr 的不等查询，只好分开写</p>
+</blockquote>
+<p>发现剩下的数据包仅仅剩下<code>141213</code>个，结合上面的放大攻击，猜测是否攻击流量大部分在这里面。</p>
+<p>对这些流量进行分析，发现异常流量。</p>
+<p><img src="https://i.loli.net/2019/04/07/5caa0a7fdae30.png" alt="投毒.png"></p>
+<p>出现大量返回<code>no such name</code>的响应包，且响应包中包含相同的<code>SOA</code>记录，推测为<code>kaminsky投毒攻击</code>。</p>
+<p>请求主机为<code>144.202.64.226</code>，获得第二类攻击流量。</p>
+<p>排查是否存在区域传送。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dns.qry.type == 252</span><br></pre></td></tr></table></figure>
+<p>发现区域传送数据包</p>
+<p><img src="https://i.loli.net/2019/04/07/5caa0c282ceb6.png" alt="区域传送.png"></p>
+<p>请求主机ip仅有一个，为<code>96.199.230.176</code>,确定为区域传送攻击。获得第三类攻击流量。</p>
+<h6 id="第一次提交"><a href="#第一次提交" class="headerlink" title="第一次提交"></a>第一次提交</h6><p>上面三种类型形成第一次提交的答案。</p>
+<p>攻击分类为</p>
+<table>
+<thead>
+<tr>
+<th>attackid</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>DNS zone transfer</td>
+</tr>
+<tr>
+<td>2</td>
+<td>DNS Amplification Attack</td>
+</tr>
+<tr>
+<td>3</td>
+<td>DNS cache pollution</td>
+</tr>
+</tbody>
+</table>
+<p>其中<code>DNS zone transfer</code>攻击请求包5297条，<code>DNS Amplification Attack</code>攻击请求包40990条，<code>DNS cache pollution</code>攻击请求包34194条。</p>
+<p><strong>得分</strong>：55.279</p>
+<p>从得分上看，三种分类正确且基本上每一分类的大部分攻击流量被找到，扣分原因可能是因为有一部分错误流量，之后再做筛选。</p>
+<h6 id="确定最后两种攻击"><a href="#确定最后两种攻击" class="headerlink" title="确定最后两种攻击"></a>确定最后两种攻击</h6><p>刚开始就列出的攻击类型，在分析过程中又找到了一种攻击向量，<code>PTR反查</code>，利用<code>PTR记录</code>的特性可以遍历保留地址来获取内网的域名信息，造成内网信息泄露。</p>
+<p>在数据包中查找是否存在这种记录。</p>
+<p><img src="https://i.loli.net/2019/04/08/5caa99068c7cc.png" alt="PTR.png"></p>
+<p>从查询结果看，数据包中确实存在<code>PTR</code>查询，但是查询并不具备攻击特征，其查询的是域名而不是大量的查询保留IP地址，可能不是攻击，保留，之后再做判断。</p>
+<p>沿着之前找出的三种攻击的思路，继续在非<code>45.80.170.1</code>的流量上进行分析。</p>
+<p>针对<code>NSEC</code>记录进行分析，发现大部分流量是存在<code>NSEC3</code>记录的，说明已经做了防护，那么是否存在<code>NSEC</code>记录呢？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dns.resp.type == 47</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2019/04/08/5caaa222b33a0.png" alt="NSEC_ALL.png"></p>
+<p>仅仅利用类型筛选发现被<code>反射攻击</code>利用的服务器也存在这个问题，需要进一步筛选。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dns.resp.type == 47 &amp;&amp; frame.len &lt;2000</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2019/04/08/5caaa54bdfcbb.png" alt="NSEC.png"></p>
+<p>发现异常流量，确定为攻击，攻击类型为<code>NSEC枚举</code>。对应的服务器和客户机为</p>
+<table>
+<thead>
+<tr>
+<th>server</th>
+<th>client</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>185.25.160.3</td>
+<td>6.116.183.244</td>
+</tr>
+</tbody>
+</table>
+<p>对其流量进行分析发现存在一种奇怪的流量，DNS动态更新记录，感觉可能存在问题。</p>
+<p>这部分流量在主要服务器<code>45.80.170.1</code>和其他服务器上都存在，对其解析请求和回应进行分析，没有确定具体的攻击类型。综合考虑，目前已经找出四种攻击，疑似攻击的<code>PTR</code>记录并具备攻击特征，那么这个有很大可能是攻击。主要的查询主机为<code>18.100.48.86</code>。</p>
+<p>通过对RFC的解读，发现在DNS更新时是有先决条件的，但这部分流量大部分是不具备的，那么可能是攻击者利用DNS的更新机制，将目标IP进行更换，形成攻击。</p>
+<h5 id="第二次提交"><a href="#第二次提交" class="headerlink" title="第二次提交"></a>第二次提交</h5><p>现在再次确认的攻击有<code>NSEC枚举</code>，<code>PTR反查</code>不具有攻击特征，那么选择<code>DNS dynamic  update</code>进行提交，提交非主要服务器的流量。</p>
+<p>则目前确认的攻击为</p>
+<table>
+<thead>
+<tr>
+<th>attackid</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>DNS zone transfer</td>
+</tr>
+<tr>
+<td>2</td>
+<td>DNS Amplification Attack</td>
+</tr>
+<tr>
+<td>3</td>
+<td>DNS cache pollution</td>
+</tr>
+<tr>
+<td>4</td>
+<td>DNS dynamic  update</td>
+</tr>
+<tr>
+<td>5</td>
+<td>NSEC enumeration</td>
+</tr>
+</tbody>
+</table>
+<p>前3种攻击流量不变，增加后两种，其中<code>DNS dynamic  update</code>具有4091条，<code>NSEC enumeration</code>具有74条。</p>
+<p><strong>得分</strong>：90.909</p>
+<p>结合第一次提交，说明攻击类型确定为这五种，且两次提交每次的扣分在5分左右，说明攻击流量已经大部分被找出，接下来进行进一步的筛选。</p>
+<h6 id="第三次提交"><a href="#第三次提交" class="headerlink" title="第三次提交"></a>第三次提交</h6><p>对3种攻击进行筛选，<code>DNS zone transfer</code>和<code>DNS cache pollution</code>数量较少，且特征较明显，应该不会错选或遗漏。对于<code>DNS Amplification Attack</code>，存在一个问题，就是在主要服务器<code>45.80.170.1</code>也有一部分疑似攻击流量，第一次提交仅仅是将其种一部分加入答案，现在将主要服务的全部疑似流量加入。</p>
+<p>则现在的<code>DNS Amplification Attack</code>攻击流量有41551条，其余攻击流量不变。</p>
+<p><strong>得分</strong>：90.57</p>
+<p>分数下降，说明加入的流量是错误的，并且由两次的分差和本次增加的流量条数，结合得分计算公式，可以估算<code>DNS Amplification Attack</code>流量的总条数在32000条左右，数字并不确切，但也有一定的参考依据。</p>
+<h6 id="最终的攻击流量确定"><a href="#最终的攻击流量确定" class="headerlink" title="最终的攻击流量确定"></a>最终的攻击流量确定</h6><p>第三次提交确定主要服务器的放大流量是误判流量，则将放大流量中主要服务器相关流量删除，提交3种攻击分类。</p>
+<p>第四次提交得分为：59.97。确定前三种攻击的主要攻击流量。</p>
+<p>对后两种攻击，<code>NSEC枚举</code>的数量较少，且特征明显，不容易误判。但<code>DNS dynamic  update</code>情况比较复杂，第一，仅对主机<code>18.100.48.86</code>的响应的种类就有很多；第二，也存在主要服务器的响应。首先考虑不同类型的响应的区分度。</p>
+<p>在分析时发现请求数大于响应数，可能存在某些请求没有接收到响应。响应的类型一共有五种，数量最多的为拒绝，根据得分情况，保留占比大的拒绝响应，将其他的响应的请求包删除，进行提交。此时<code>DNS dynamic  update</code>攻击流量数量为3381条。</p>
+<p>第五次提交得分为：93.35。分析得分后发现得分降低，说明删除的流量中正确流量占大部分，且扣分达到了7分，说明这种攻击存在较大部分流量没有找到。</p>
+<p>考虑主要服务器上的更新流量，经过分析，发现其对应的主机有两台<code>237.205.156.233</code>和<code>19.220.251.87</code>,并且请求流量数量不同，前者具有535条，后者414条，决定将其共同提交，可以根据分数变化，确定最终的攻击流量。此时<code>DNS dynamic  update</code>攻击流量数量为4345条。</p>
+<p>在第五次提交的基础上，第六次提交得分为：97.1，得分提高4分，确定新增加的全部为攻击流量。</p>
+<p>修改最终结果，将第五次提交中删除的部分添加至第六次提交答案中，最终攻击流量确定。</p>
+<p>攻击类型为</p>
+<table>
+<thead>
+<tr>
+<th>attackid</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>DNS zone transfer</td>
+</tr>
+<tr>
+<td>2</td>
+<td>DNS Amplification Attack</td>
+</tr>
+<tr>
+<td>3</td>
+<td>DNS cache pollution</td>
+</tr>
+<tr>
+<td>4</td>
+<td>DNS dynamic  update</td>
+</tr>
+<tr>
+<td>5</td>
+<td>NSEC enumeration</td>
+</tr>
+</tbody>
+</table>
+<p>其中，<code>DNS zone transfer</code>包括5298条，<code>DNS Amplification Attack</code>包括33200条，<code>DNS cache pollution</code>包括34194条，<code>DNS dynamic  update</code>包括5055条，<code>NSEC enumeration</code>包括72条。</p>
+<h3 id="题目二-DGA域名家族聚类"><a href="#题目二-DGA域名家族聚类" class="headerlink" title="题目二 DGA域名家族聚类"></a>题目二 DGA域名家族聚类</h3><h4 id="0x00-题目解读-1"><a href="#0x00-题目解读-1" class="headerlink" title="0x00 题目解读"></a>0x00 题目解读</h4><p>从官网给出的信息是对DNS流量中的DGA域名进行识别并且进行家族聚类，给出的数据包依然是pcap文件，粗略观察可以看出，数据包中存在明显的<code>NXDomain</code>的响应，确定目标。</p>
+<p>实验方法在实验过程中逐步完善，但局限于比赛提交次数，一部分实验方法的结果并没有经过验证，这里尽可能介绍实验中使用的方法，希望赛后可能得到进一步的确定。</p>
+<p>实验使用环境参数：</p>
+<ul>
+<li>python3</li>
+<li>sklearn</li>
+<li>keras2.2.4</li>
+<li>pands 0.22</li>
+<li>numpy 1.15</li>
+</ul>
+<h4 id="0x01-DGA域名识别"><a href="#0x01-DGA域名识别" class="headerlink" title="0x01 DGA域名识别"></a>0x01 DGA域名识别</h4><p>首先将提供的pcap数据包进行处理，使其比较方便进行下一步的操作，这里进行的操作是选取数据包中有用的数据，将其保存为csv文件。采用和题目一类似的方式将数据提取出来。</p>
+<p>在进行DGA域名识别时，从两个方面进行考虑：特征分类和先验经验。</p>
+<h5 id="特征分类"><a href="#特征分类" class="headerlink" title="特征分类"></a>特征分类</h5><p>确定区分DGA域名与正常域名的原则：</p>
+<p>DGA域名的特点是是大部分是随机生成的字符串，所以其可读性非常差，为了确定其可读性，我们这采用元音或辅音字母比例，在正常的单词中，为了更好的发音，元音和辅音存在配合关系，不会出现非常多的连续辅音或元音的情况；隐马尔科夫模型（HMM）计算字符串的转移概率；香农熵计算字符串的混乱程度。</p>
+<p>考虑到域名避免与现有域名产生较多的碰撞，DGA域名选取的长度较长。</p>
+<p>从DGA解析的角度出发，当感染主机运行DGA算法，并且尝试连接DAG域名时，其解析流量中会出现大量的<code>NXDomain</code>的解析响应，因为大部分的DGA域名都不会被解析到，之后攻击者在展开攻击后注册了某个域名，才会出现解析成功的响应。所以这里从解析主机和域名解析关联两方面入手分析，对于解析主机的解析行为特征，从主机解析的域名分布及解析类型考虑。对于域名解析关联，出发点是考虑该域名的解析情况，关注域名解析总数，解析该域名的ip总数，对应每个IP解析的数量，在解析过程中的响应类型，还包括流量中的transaction id的数量，用于判断是否是重传。这里计算域名解析失败率，记录该域名在解析中失败的比例。</p>
+<p>从上面的原则中最终确定的特征包括</p>
+<table>
+<thead>
+<tr>
+<th>特征名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>domain_len</td>
+<td>域名长度</td>
+</tr>
+<tr>
+<td>domain_entropy</td>
+<td>域名香农熵</td>
+</tr>
+<tr>
+<td>domain_consonants_ratio</td>
+<td>域名辅音比例</td>
+</tr>
+<tr>
+<td>domain_number_ratio</td>
+<td>域名数字比例</td>
+</tr>
+<tr>
+<td>hmm</td>
+<td>域名中字符的转移概率</td>
+</tr>
+<tr>
+<td>r_code</td>
+<td>响应类型</td>
+</tr>
+<tr>
+<td>domain_tld</td>
+<td>域名顶级域</td>
+</tr>
+<tr>
+<td>domain_ip_dal</td>
+<td>解析该域名的IP地址解析域名的平均长度</td>
+</tr>
+<tr>
+<td>number_qry</td>
+<td>解析该域名的IP解析域名总数</td>
+</tr>
+<tr>
+<td>number_res_a</td>
+<td>该IP解析请求中记录A的数量比例</td>
+</tr>
+<tr>
+<td>domain_ip_more</td>
+<td>该IP地址解析域名中大于平均长度的数量比例</td>
+</tr>
+<tr>
+<td>failed_ratio</td>
+<td>域名解析失败率</td>
+</tr>
+<tr>
+<td>max_consonants_ratio</td>
+<td>最长连续辅音比例</td>
+</tr>
+<tr>
+<td>vowel_ratio</td>
+<td>域名中元音比例</td>
+</tr>
+<tr>
+<td>hyphen_ratio</td>
+<td>域名中连字符比例</td>
+</tr>
+<tr>
+<td>unique_char</td>
+<td>域名唯一字符数</td>
+</tr>
+<tr>
+<td>ngrams_statics</td>
+<td>域名 n-gram 频率分布的统计特征，包括 均值，标准差，中位数，25% percentile，75% percentile，最小值，最大值，n 取 1，2，3，故该特征最终为长度为21的向量</td>
+</tr>
+</tbody>
+</table>
+<p>在获取特征后，使用机器学习算法进行识别，这里采用<code>kmeans</code>聚类算法。</p>
+<h5 id="先验经验"><a href="#先验经验" class="headerlink" title="先验经验"></a>先验经验</h5><p>对实验数据进行人工分析，利用已有知识进行数据筛选。</p>
+<p>在对未响应域名的分析过程中，发现在未响应中存在一部分非DGA域名。如果存在一台主机反复请求一个域名，但该域名解析不成功，但从行为上看，其并不是DGA域名。另外还存在一些域名，在形式上与DGA域名非常相似，但其解析模式令人费解。如 <code>xmbdgkqvlbnrx.co.uk</code>,怀疑其并非是DGA域名，而是某IOT设备的域名。</p>
+<p>对分类结果进行查看，发现其中存在一部分仅仅是字符串而不存在顶级域的解析域名，这明显并非是DGA域名。</p>
+<p>根据观察发现和已有经验对识别结果做进一步的筛选。</p>
+<h4 id="0x02-DGA域名家族聚类"><a href="#0x02-DGA域名家族聚类" class="headerlink" title="0x02 DGA域名家族聚类"></a>0x02 DGA域名家族聚类</h4><p>在通过第一步的识别获得DGA域名后，对其进行家族分类。</p>
+<p>对于家族聚类，思路是利用主机关联性和域名特征相似性两方面综合考虑。</p>
+<p>如果利用主机相似性进行聚类，不得不考虑的问题是：<code>在获得数据中，一台主机仅仅产生一种DGA还是会产生多中DGA</code>，这会影响到后面的聚类效果。</p>
+<h5 id="域名字符串特征聚类"><a href="#域名字符串特征聚类" class="headerlink" title="域名字符串特征聚类"></a>域名字符串特征聚类</h5><p>仅利用域名本身存在的字符串特征进行聚类。</p>
+<p><strong>基本思路</strong>：</p>
+<blockquote>
+<ul>
+<li>同一家族的DGA域名在字符串特征上存在一定的相似性</li>
+<li>直接聚类可能导致类内方差太大</li>
+</ul>
+</blockquote>
+<p>考虑到如果直接聚合成大类效果可能不好，方法考虑先聚合成小类，再根据一些指标进行小类间的聚合，指标在下面介绍。</p>
+<p>聚类算法采用的是<code>kmeans</code>算法，采用了47个特征。这里还利用<code>Xmeans</code>进行实验，以获得较好的初步聚类。</p>
+<p>在合并指标的选择上首先考虑经常作为聚类评判标准的<code>silhouette_score</code>和<code>calinski_harabaz_score</code>,但是其是从数据的角度上进行考虑，可能对特定的问题的表现并不好。</p>
+<p>考虑自定义的指标，首先对单个类别的评价，计算每类的方差，类内的IP重合度[对类内的每个ip计算其解析的域名，计算n个IP的解析重合度]，IP聚合程度[主要IP所占比例]。</p>
+<p>考虑类合并的指标，两类的重合IP重要度[两类中重合IP部分在各自类比中所占的比重]，IP重合度[两种中重合IP的比重]，合并方差波动率[先考虑将两类进行合并，查看合并前和合并后的方差波动水平]。</p>
+<p>缺乏实验依据，在类别合并方面没有找到可以有效表示其效果的显著性指标。</p>
+<p>计算两类IP重合度，示例代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 计算两类之间的相关程度</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">correlation_ip_cluster</span><span class="params">(c1,c2)</span>:</span></span><br><span class="line">    <span class="comment">#两类的ip重合度：</span></span><br><span class="line">    <span class="comment"># 重合ip域名重合度：从重合ip中其解析的域名数量，计算比例</span></span><br><span class="line">    <span class="comment"># 输入c1,c2为两个类别的数据</span></span><br><span class="line">    <span class="comment"># 输出为c1，c2中重合ip与ip并集的比例</span></span><br><span class="line">    c1_ip_list = ip_list[c1.index]</span><br><span class="line">    c1_list =  [i <span class="keyword">for</span> inner <span class="keyword">in</span> c1_ip_list.values <span class="keyword">for</span> i <span class="keyword">in</span> inner <span class="keyword">if</span> type(i) != list]</span><br><span class="line">    c1_list_sup =  [j <span class="keyword">for</span> inner <span class="keyword">in</span> c1_ip_list.values <span class="keyword">for</span> i <span class="keyword">in</span> inner <span class="keyword">if</span> type(i) == list <span class="keyword">for</span> j <span class="keyword">in</span> i]</span><br><span class="line">    c1_list.extend(c1_list_sup)</span><br><span class="line">    c2_ip_list = ip_list[c2.index]</span><br><span class="line">    c2_list =  [i <span class="keyword">for</span> inner <span class="keyword">in</span> c2_ip_list.values <span class="keyword">for</span> i <span class="keyword">in</span> inner <span class="keyword">if</span> type(i) != list]</span><br><span class="line">    c2_list_sup =  [j <span class="keyword">for</span> inner <span class="keyword">in</span> c2_ip_list.values <span class="keyword">for</span> i <span class="keyword">in</span> inner <span class="keyword">if</span> type(i) == list <span class="keyword">for</span> j <span class="keyword">in</span> i]</span><br><span class="line">    c2_list.extend(c2_list_sup)</span><br><span class="line">    corr_ip = len(set(c1_list).intersection(set(c2_list)))/len((set(c1_list).union(set(c2_list))))</span><br><span class="line">    <span class="keyword">return</span> corr_ip</span><br></pre></td></tr></table></figure>
+<h5 id="基于主机关联性聚类"><a href="#基于主机关联性聚类" class="headerlink" title="基于主机关联性聚类"></a>基于主机关联性聚类</h5><p><strong>基本思路：</strong></p>
+<blockquote>
+<ul>
+<li>不同主机请求相同的可疑域名，说明主机产生同类型的 DGA</li>
+<li>一个域名集 被 一个主机集所共同查询，说明域名集属于同一类的可能性大<br><strong>步骤：</strong></li>
+</ul>
+</blockquote>
+<ol>
+<li><p>生成无响应域名 NXDomains 和产生无响应域名主机 NXHosts 的关联矩阵 M，矩阵行表示主机，列表示域名，矩阵的值 $M_{i,j} $ 计算如下：<br>$$<br>M_{i,j} = \left{\begin{array}{cc}</p>
+<pre><code>0,  &amp; 主机 h_i 没有请求了域名 n_j\\
+1,&amp; 主机 h_i 请求了域名 n_j
+\end{array}\right.
+</code></pre><p>$$</p>
+</li>
+<li><p>计算相似矩阵 S</p>
+<ul>
+<li>$S = M^T * M$</li>
+<li>矩阵 $S_{i,j}$ 表示 $NXDomains_i$ 和 $NXDomains_j$ 共同连接的主机数</li>
+</ul>
+</li>
+<li><p>使用 PCA  对相似矩阵，进行降维</p>
+</li>
+<li><p>基于相似性矩阵，使用 KMeans，XMeans 算法进行聚类</p>
+</li>
+</ol>
+<p><strong>结果分析：</strong></p>
+<p>使用 XMeans 算法，分成了40个类，很多类别数目过少，和仅使用域名字符特征进行 XMeans 算法进行聚类的结果一样，结果并不理想。因此进一步，考虑结合两种方法。</p>
+<h5 id="强主机关联性聚类"><a href="#强主机关联性聚类" class="headerlink" title="强主机关联性聚类"></a>强主机关联性聚类</h5><p>本方法考虑的首要因素是主机之间的关联性，假设一台主机只产生一种DGA，那么可以将某一台主机产生的域名分为同一个家族，同时在出现一个域名被多个主机解析的情况下，那么将另一台主机解析的域名同样归入此家族。</p>
+<p>首先计算获得所有有关联的主机及其解析的域名，发现存在大部分主机之间是没有关联的，即没有与其他主机的域名产生重合。这种情况需要利用其他手段对单个主机的类别进行合并。</p>
+<h6 id="利用kmeans聚类计算类别相似性"><a href="#利用kmeans聚类计算类别相似性" class="headerlink" title="利用kmeans聚类计算类别相似性"></a>利用<code>kmeans</code>聚类计算类别相似性</h6><p>在仅仅利用主机关联进行家族分类后，得到37个类别，其中大部分是单个主机的类别，需要将其合并至其他类别中。本方法利用<code>kmeans</code>产生的域名相似性进行二次聚类。</p>
+<p>利用<code>kmeans</code>算法，使用域名字符串特征，对DGA域名进行不同类别数的多次聚类，这里选取的类别数是[3,20]。这样可以获得18个聚类结果，然后将之前进行主机关联获得的37个类别与18个分类结果中的每一个类别进行对比，计算每个类别的域名重合度，选取最大的域名重合定义为相关类别，然后将相关类别中的IP取出，得出相关IP。</p>
+<p>例如：当n 取5时，<code>kmeans</code>得到5类，将主机关联获得的37个类别中的域名分别与5类中的域名进行比较，如果前者的第一类与后者的第三类的域名重合度最高，则将后者第三类的ip与前者第一类的ip记作为相关ip。</p>
+<p>在获得了37类的每类的相关ip集合后，利用相关ip集合与原有类别的ip集合的重合度，将重合度高的类别聚合在一起。</p>
+<p>例如，A类的相关ip集合为{1，2，3，4}，B类的ip集合为{3，4，5，6}，C类的ip集合为{2，3，4，8}，则A类和C类的重合度更高，则将A类和C类进行合并。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 计算主机ip关联类别和聚类类别的关联性，输出中具有主机关联类别之间的关联关系</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ip_cluster_kmeans_k</span><span class="params">()</span>:</span></span><br><span class="line">    connected_df = pd.read_hdf(<span class="string">'./input/connected_df_2.h5'</span>)</span><br><span class="line">    connected_df.drop(<span class="number">330</span>,axis = <span class="number">1</span>,inplace = <span class="keyword">True</span>)</span><br><span class="line">    ip_set_list,ip_cluster = ip_cluster_func(connected_df)</span><br><span class="line">    corr_ip_2_ip_pd = pd.DataFrame(np.array(ip_set_list).reshape([<span class="number">37</span>,<span class="number">1</span>]),columns=[<span class="string">"iplist"</span>])</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> tqdm(range(<span class="number">3</span>,<span class="number">22</span>)):</span><br><span class="line">        feat_cluster = feat_cluster_func(i,connected_df)</span><br><span class="line">        corr_ip_2_ip = ip_corr(ip_cluster,feat_cluster)</span><br><span class="line">        corr_ip_2_ip_pd[<span class="string">"cluster_&#123;num&#125;"</span>.format(num =i)] = corr_ip_2_ip</span><br><span class="line">    com_c_list = []</span><br><span class="line">    max_corr_list = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> corr_ip_2_ip_pd.values[:,<span class="number">1</span>:]:</span><br><span class="line">        max_corr = <span class="number">0</span></span><br><span class="line">        com_c = <span class="number">0</span></span><br><span class="line">        ip_c = pd.Series([k <span class="keyword">for</span> j <span class="keyword">in</span> i <span class="keyword">for</span> k <span class="keyword">in</span> j])</span><br><span class="line">        ip_ser = ip_c.value_counts()</span><br><span class="line">        ip_c_corr = set(ip_ser.index[ip_ser == ip_ser.max()])</span><br><span class="line">        <span class="keyword">for</span> j,ip_c_list <span class="keyword">in</span> enumerate(ip_set_list):</span><br><span class="line">            re_corr = len(ip_c_corr.intersection(ip_c_list)) / len(ip_c_list)</span><br><span class="line">            <span class="keyword">if</span> re_corr &gt; max_corr:</span><br><span class="line">                max_corr = re_corr</span><br><span class="line">                com_c = j</span><br><span class="line">        com_c_list.append(com_c)</span><br><span class="line">        max_corr_list.append(max_corr)</span><br><span class="line">    corr_ip_2_ip_pd[<span class="string">"combination"</span>] = com_c_list</span><br><span class="line">    corr_ip_2_ip_pd.to_csv(<span class="string">"combination_ip_feat_more_cluster.csv"</span>)</span><br><span class="line">    <span class="keyword">return</span> corr_ip_2_ip_pd</span><br></pre></td></tr></table></figure>
+<p>方向二最终得分：75</p>
+<h3 id="赛后反思"><a href="#赛后反思" class="headerlink" title="赛后反思"></a>赛后反思</h3><p>整体开来，能力建设团队专业性非常强，真正的做到应用数据说话，从数据中确定异常，而THUteam1和DeepDeer及我们本身都是利用足够的知识，针对性的对局部数据进行分析。</p>
+<p>赛后看了前三名的writeup后，发现在大赛中的不足之处：</p>
+<ul>
+<li><p>某些点的分析不够透彻</p>
+<blockquote>
+<p>比赛中为脱敏数据可能对字符分布、语义、信息熵等造成影响</p>
+<p>题目一和二中的攻击流量为人为构造，是纯净的攻击流量，在第二题的解题过程中忽视了这一点，导致开始方向出错</p>
+</blockquote>
+</li>
+<li><p>对数据流量的整体认识不足</p>
+<blockquote>
+<p>在获得数据后，总是有主观的考虑，在这一点上，阿里云团队展现了非常强的专业性，从数据本身出发的方法更具泛化性</p>
+</blockquote>
+</li>
+<li><p>对机器学习的认识太浅薄</p>
+<blockquote>
+<p>机器学习是一个工具，但并不是某个算法就可以解决全部问题，还需要增加对算法本质和广度的认识</p>
+</blockquote>
+</li>
+<li><p>利用现有资源能力不足</p>
+<blockquote>
+<p>在题目二中，由于前期方向错误，浪费时间。但最大的问题其实是没有利用找到的公开数据。</p>
+</blockquote>
+</li>
+</ul>
+<p>by six</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/安全/" rel="tag"><i class="fa fa-tag"></i> 安全</a>
+          
+            <a href="/tags/大数据/" rel="tag"><i class="fa fa-tag"></i> 大数据</a>
+          
+            <a href="/tags/DataCon/" rel="tag"><i class="fa fa-tag"></i> DataCon</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/31/一路向前/" rel="next" title="一路向前">
+                <i class="fa fa-chevron-left"></i> 一路向前
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/31/美食地图/" rel="prev" title="美食地图">
+                美食地图 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Six</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sy-yunyi" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="sky_yunyi@hotmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目一-DNS恶意流量检测"><span class="nav-number">1.</span> <span class="nav-text">题目一 DNS恶意流量检测</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x00-题目解读"><span class="nav-number">1.1.</span> <span class="nav-text">0x00 题目解读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-解题思路"><span class="nav-number">1.2.</span> <span class="nav-text">0x01 解题思路</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#DNS攻击类别分析"><span class="nav-number">1.2.1.</span> <span class="nav-text">DNS攻击类别分析</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#流量聚类分析"><span class="nav-number">1.2.2.</span> <span class="nav-text">流量聚类分析</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#数据基本特征提取"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">数据基本特征提取</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#数据特征分析"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">数据特征分析</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#特征设计"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">特征设计</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#聚类"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">聚类</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#流量查验"><span class="nav-number">1.2.3.</span> <span class="nav-text">流量查验</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#初步分析"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">初步分析</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#流量分析"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">流量分析</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第一次提交"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">第一次提交</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#确定最后两种攻击"><span class="nav-number">1.2.3.4.</span> <span class="nav-text">确定最后两种攻击</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二次提交"><span class="nav-number">1.2.4.</span> <span class="nav-text">第二次提交</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#第三次提交"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">第三次提交</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#最终的攻击流量确定"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">最终的攻击流量确定</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#题目二-DGA域名家族聚类"><span class="nav-number">2.</span> <span class="nav-text">题目二 DGA域名家族聚类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x00-题目解读-1"><span class="nav-number">2.1.</span> <span class="nav-text">0x00 题目解读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-DGA域名识别"><span class="nav-number">2.2.</span> <span class="nav-text">0x01 DGA域名识别</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#特征分类"><span class="nav-number">2.2.1.</span> <span class="nav-text">特征分类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#先验经验"><span class="nav-number">2.2.2.</span> <span class="nav-text">先验经验</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-DGA域名家族聚类"><span class="nav-number">2.3.</span> <span class="nav-text">0x02 DGA域名家族聚类</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#域名字符串特征聚类"><span class="nav-number">2.3.1.</span> <span class="nav-text">域名字符串特征聚类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#基于主机关联性聚类"><span class="nav-number">2.3.2.</span> <span class="nav-text">基于主机关联性聚类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#强主机关联性聚类"><span class="nav-number">2.3.3.</span> <span class="nav-text">强主机关联性聚类</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#利用kmeans聚类计算类别相似性"><span class="nav-number">2.3.3.1.</span> <span class="nav-text">利用kmeans聚类计算类别相似性</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#赛后反思"><span class="nav-number">3.</span> <span class="nav-text">赛后反思</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Six</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1275813462'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1275813462%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'dIoFImKfwRTGKnNvmvMB4ukn-gzGzoHsz',
+        appKey: 'I8zDh9Pv5SxLpr0e3gQ86gQx',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
