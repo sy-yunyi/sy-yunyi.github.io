@@ -333,206 +333,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/06/04/渗透技术基础之XSS原理分析/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Six">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Six's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/04/渗透技术基础之XSS原理分析/" itemprop="url">渗透技术基础之XSS原理分析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-04T00:00:00+08:00">
-                2019-06-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/安全笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">安全笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/06/04/渗透技术基础之XSS原理分析/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/06/04/渗透技术基础之XSS原理分析/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  3.5k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  13
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote class="blockquote-center"><p>用户是上帝，但传话的可能是撒旦。</p>
-</blockquote>
-<h3 id="XSS介绍"><a href="#XSS介绍" class="headerlink" title="XSS介绍"></a>XSS介绍</h3><p>Cross-Site Scripting(跨站脚本攻击)简称XSS，是一种代码注入攻击。为了和CSS区分，这里将其缩写的第一个字母改成了X，于是叫做XSS。恶意攻击者在web页面里插入恶意JavaScript代码，当浏览者浏览网页时就会触发恶意代码，从而导致用户数据的泄露如Cookie、SessionID等，及造成其他类型的攻击。</p>
-<p>XSS的本质是：恶意代码未经过滤，与网站正常代码混在一起，浏览器无法分辨哪些脚本是可信的，导致恶意脚本被执行。从源头上讲，就是代码和数据被攻击混淆，导致浏览器将攻击者输入的数据解释为代码。  </p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/06/04/渗透技术基础之XSS原理分析/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-	
-	
-	
-		<div>    
-		 
-		 
-		</div>
-	
-	
-      
-	  
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/06/04/渗透技术基础之DVWA中XSS漏洞利用与源码分析/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -732,7 +532,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/05/31/DataCon大赛DNS方向writeup及总结反思/">
+    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/06/04/渗透技术基础之XSS原理分析/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Six">
@@ -751,7 +551,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/05/31/DataCon大赛DNS方向writeup及总结反思/" itemprop="url">DataCon大赛DNS方向writeup及总结反思</a></h1>
+                <a class="post-title-link" href="/2019/06/04/渗透技术基础之XSS原理分析/" itemprop="url">渗透技术基础之XSS原理分析</a></h1>
         
 
         <div class="post-meta">
@@ -763,8 +563,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-31T00:00:00+08:00">
-                2019-05-31
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-04T00:00:00+08:00">
+                2019-06-04
               </time>
             
 
@@ -804,8 +604,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/05/31/DataCon大赛DNS方向writeup及总结反思/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/05/31/DataCon大赛DNS方向writeup及总结反思/" itemprop="commentCount"></span>
+                <a href="/2019/06/04/渗透技术基础之XSS原理分析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/06/04/渗透技术基础之XSS原理分析/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -827,7 +627,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  9.3k
+                  3.5k
                 </span>
               
 
@@ -843,7 +643,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  34
+                  13
                 </span>
               
             </div>
@@ -865,10 +665,13 @@
 
       
         
-          <h3 id="题目一-DNS恶意流量检测"><a href="#题目一-DNS恶意流量检测" class="headerlink" title="题目一 DNS恶意流量检测"></a>题目一 DNS恶意流量检测</h3>
+          <blockquote class="blockquote-center"><p>用户是上帝，但传话的可能是撒旦。</p>
+</blockquote>
+<h3 id="XSS介绍"><a href="#XSS介绍" class="headerlink" title="XSS介绍"></a>XSS介绍</h3><p>Cross-Site Scripting(跨站脚本攻击)简称XSS，是一种代码注入攻击。为了和CSS区分，这里将其缩写的第一个字母改成了X，于是叫做XSS。恶意攻击者在web页面里插入恶意JavaScript代码，当浏览者浏览网页时就会触发恶意代码，从而导致用户数据的泄露如Cookie、SessionID等，及造成其他类型的攻击。</p>
+<p>XSS的本质是：恶意代码未经过滤，与网站正常代码混在一起，浏览器无法分辨哪些脚本是可信的，导致恶意脚本被执行。从源头上讲，就是代码和数据被攻击混淆，导致浏览器将攻击者输入的数据解释为代码。  </p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019/05/31/DataCon大赛DNS方向writeup及总结反思/#more" rel="contents">
+            <a class="btn" href="/2019/06/04/渗透技术基础之XSS原理分析/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1322,203 +1125,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Six">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Six's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/" itemprop="url">渗透技术基础之XML外部实体注入（XXE）解析</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-15T00:00:00+08:00">
-                2019-05-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/安全笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">安全笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2.4k
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  10
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>XXE漏洞(XML External Entity Injection)，XML外部实体注入漏洞，XXE漏洞发生在应用程序解析XML输入时，没有禁止外部实体的加载，攻击者可以通过 XML 实体传递自己构造的恶意值，通过加载恶意外部文件，造成文件读取、命令执行、内网端口扫描、攻击内部网站、发起dos攻击等危害。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-	
-	
-	
-		<div>    
-		 
-		 
-		</div>
-	
-	
-      
-	  
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/05/15/DNS安全论文选读-Is DNS Ready for Ubiquitous Internet of Things/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1657,6 +1263,203 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/05/15/DNS安全论文选读-Is DNS Ready for Ubiquitous Internet of Things/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+	
+	
+	
+		<div>    
+		 
+		 
+		</div>
+	
+	
+      
+	  
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Six">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Six's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/" itemprop="url">渗透技术基础之XML外部实体注入（XXE）解析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-15T00:00:00+08:00">
+                2019-05-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">安全笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.4k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>XXE漏洞(XML External Entity Injection)，XML外部实体注入漏洞，XXE漏洞发生在应用程序解析XML输入时，没有禁止外部实体的加载，攻击者可以通过 XML 实体传递自己构造的恶意值，通过加载恶意外部文件，造成文件读取、命令执行、内网端口扫描、攻击内部网站、发起dos攻击等危害。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2298,6 +2101,204 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/05/06/Commando VM 第一个发行版Windows攻击平台[翻译]/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Six">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Six's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/06/Commando VM 第一个发行版Windows攻击平台[翻译]/" itemprop="url">Commando VM 第一个发行版Windows攻击平台[翻译]</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-06T00:00:00+08:00">
+                2019-05-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/安全笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">安全笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/06/Commando VM 第一个发行版Windows攻击平台[翻译]/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/05/06/Commando VM 第一个发行版Windows攻击平台[翻译]/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.5k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="Commando-VM-第一个发行版Windows攻击平台"><a href="#Commando-VM-第一个发行版Windows攻击平台" class="headerlink" title="Commando VM: 第一个发行版Windows攻击平台"></a>Commando VM: 第一个发行版Windows攻击平台</h3><p><img src="https://www.fireeye.com/content/dam/fireeye-www/blog/images/CommandoVM/CVM%20logo.png" alt="img"></p>
+<p>对于寻找稳定且受支持的Linux测试平台的渗透测试人员来说，业界一致认为Kali是首选平台。但是如果使用Windows操作系统，你会发现并没有这样一个令人满意的平台。对于安全研究人员来说，我们每个人可能都至少需要花几个小时定制一个Windows工作环境，即使我们在客户要求中使用相同的工具、程序和技术。因此，在保持所有工具集都是最新的同时维护自定义环境对所有人来说都是单调乏味的工作。认识到这些，我们创建了一个Windows发行版，主要支持渗透测试人员和红队。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/05/06/Commando VM 第一个发行版Windows攻击平台[翻译]/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+	
+	
+	
+		<div>    
+		 
+		 
+		</div>
+	
+	
+      
+	  
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -2348,7 +2349,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2370,7 +2371,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
