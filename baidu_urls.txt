@@ -1,5 +1,5 @@
-https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/
-https://sy-yunyi.github.io/2019/06/04/渗透技术基础之XSS原理分析/
-https://sy-yunyi.github.io/2019/05/31/美食地图/
-https://sy-yunyi.github.io/2019/05/31/一路向前/
-https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/
+https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/
+https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/
+https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/
+https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/
+https://sy-yunyi.github.io/2019/09/12/自回归移动平均模型/
