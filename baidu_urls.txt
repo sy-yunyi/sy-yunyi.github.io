@@ -1,5 +1,5 @@
-https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/
-https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/
-https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/
+https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/
+https://sy-yunyi.github.io/2019/10/08/CSE-CIC-IDS2018 on AWS[翻译]/
+https://sy-yunyi.github.io/2019/10/08/Handshake：利用分布式的DNS增强互联网的安全[翻译]/
+https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/
 https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/
-https://sy-yunyi.github.io/2019/09/12/自回归移动平均模型/
