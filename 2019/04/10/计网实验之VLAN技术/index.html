@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="基本概念虚拟局域网（Virtual Local Area Network,VLAN）是一种通过将局域网内的设备逻辑的划分成一个个网段，从而实现虚拟工作组的技术。VLAN很好的解决传统网络存在的网络结构、安全性、冗余路径等诸多问题。 利用交换机可以实现VLAN，但并不是所有交换机都具有VLAN功能。">
+<meta name="keywords" content="计算机网络实验,VLAN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网实验之VLAN技术">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="基本概念虚拟局域网（Virtual Local Area Network,VLAN）是一种通过将局域网内的设备逻辑的划分成一个个网段，从而实现虚拟工作组的技术。VLAN很好的解决传统网络存在的网络结构、安全性、冗余路径等诸多问题。 利用交换机可以实现VLAN，但并不是所有交换机都具有VLAN功能。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-05T14:10:25.805Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计网实验之VLAN技术">
+<meta name="twitter:description" content="基本概念虚拟局域网（Virtual Local Area Network,VLAN）是一种通过将局域网内的设备逻辑的划分成一个个网段，从而实现虚拟工作组的技术。VLAN很好的解决传统网络存在的网络结构、安全性、冗余路径等诸多问题。 利用交换机可以实现VLAN，但并不是所有交换机都具有VLAN功能。">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>计网实验之VLAN技术</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/04/17/计网实验之生成树协议/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/04/03/计网实验之交换机技术/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&text=计网实验之VLAN技术"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&title=计网实验之VLAN技术"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&is_video=false&description=计网实验之VLAN技术"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验之VLAN技术&body=Check out this article: https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&title=计网实验之VLAN技术"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&title=计网实验之VLAN技术"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&title=计网实验之VLAN技术"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&title=计网实验之VLAN技术"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&name=计网实验之VLAN技术&description=&lt;h3 id=&#34;基本概念&#34;&gt;&lt;a href=&#34;#基本概念&#34; class=&#34;headerlink&#34; title=&#34;基本概念&#34;&gt;&lt;/a&gt;基本概念&lt;/h3&gt;&lt;p&gt;虚拟局域网（Virtual Local Area Network,VLAN）是一种通过将局域网内的设备逻辑的划分成一个个网段，从而实现虚拟工作组的技术。VLAN很好的解决传统网络存在的网络结构、安全性、冗余路径等诸多问题。&lt;/p&gt;
+&lt;p&gt;利用交换机可以实现VLAN，但并不是所有交换机都具有VLAN功能。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&t=计网实验之VLAN技术"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本概念"><span class="toc-number">1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VLAN分类"><span class="toc-number">2.</span> <span class="toc-text">VLAN分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基于端口划分VLAN-静态VLAN"><span class="toc-number">2.1.</span> <span class="toc-text">基于端口划分VLAN  -   静态VLAN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基于MAC地址划分VLAN-动态VLAN"><span class="toc-number">2.2.</span> <span class="toc-text">基于MAC地址划分VLAN  -   动态VLAN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基于网络层协议划分VLAN-动态VLAN"><span class="toc-number">2.3.</span> <span class="toc-text">基于网络层协议划分VLAN  -   动态VLAN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#根据IP组播划分VLAN-动态VLAN"><span class="toc-number">2.4.</span> <span class="toc-text">根据IP组播划分VLAN  -   动态VLAN</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VLAN数据帧标识"><span class="toc-number">3.</span> <span class="toc-text">VLAN数据帧标识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VLAN中的端口"><span class="toc-number">4.</span> <span class="toc-text">VLAN中的端口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VLAN基本配置"><span class="toc-number">5.</span> <span class="toc-text">VLAN基本配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#建立和修改VLAN"><span class="toc-number">5.1.</span> <span class="toc-text">建立和修改VLAN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#删除VLAN"><span class="toc-number">5.2.</span> <span class="toc-text">删除VLAN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#将Access端口分配给VLAN"><span class="toc-number">5.3.</span> <span class="toc-text">将Access端口分配给VLAN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#将端口移除"><span class="toc-number">5.4.</span> <span class="toc-text">将端口移除</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#显示VLAN信息"><span class="toc-number">5.5.</span> <span class="toc-text">显示VLAN信息</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        计网实验之VLAN技术
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-04-09T16:00:00.000Z" itemprop="datePublished">2019-04-10</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/手稿/">手稿</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/VLAN/">VLAN</a>, <a class="tag-link" href="/tags/计算机网络实验/">计算机网络实验</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>虚拟局域网（Virtual Local Area Network,VLAN）是一种通过将局域网内的设备逻辑的划分成一个个网段，从而实现虚拟工作组的技术。VLAN很好的解决传统网络存在的网络结构、安全性、冗余路径等诸多问题。</p>
+<p>利用交换机可以实现VLAN，但并不是所有交换机都具有VLAN功能。</p>
+<a id="more"></a>
+<p>一个VLAN组成一个逻辑子网，即一个逻辑广播域，可以覆盖多个网络设备，允许处于不同网络位置的网络用户加入到同一个逻辑子网中。IEEE与1999年颁布了用以标准化VLAN实现方案的IEEE 802.1q协议标准草案。</p>
+<p>VLAN是为来解决以太网的广播问题和安全性问题而提出的一种协议，它在以太网帧的基础上增加了VLAN首部，用VLAN ID 把用户划分为更小的工作组，限制不同工作组之间的二层访问，每个工作组就形成了一个虚拟的局域网。</p>
+<p>虚拟局域网的主要特点是可以限制广播范围，形成虚拟工作组，动态管理网络。</p>
+<p>每个VLAN都包含一组有相同需求的工作站，与物理上形成的LAN有相同的属性。但由于其是逻辑上划分而不是物理划分，所以这些工作站不一定属于同一个物理网段。</p>
+<p>一个VLAN内部的广播和单播流量都不会转发到其他VLAN中，从而有助于控制流量、减少设备投资、简化网络管理和提高网络的安全性。</p>
+<p>VLAN的特征：</p>
+<ul>
+<li><p>不受网络物理位置的限制，可跨越多个物理网络和多台交换机。</p>
+</li>
+<li><p>可隔离广播信息，每个VLAN为一个广播域，可以有效防止广播风暴的发生。</p>
+<blockquote>
+<p>如果要实现不同VLAN之间的主机通信，则必须通过一台路由器或者三层交换机实现。</p>
+</blockquote>
+</li>
+<li><p>可有效提升带宽，将网络上的用户按业务功能划分多个逻辑工作组，那么大部分通信交流将被限制在一个VLAN中，使带宽得到有效提升。</p>
+</li>
+<li><p>VLAN由软件实现定义和划分，建立和重组灵活。</p>
+</li>
+</ul>
+<h3 id="VLAN分类"><a href="#VLAN分类" class="headerlink" title="VLAN分类"></a>VLAN分类</h3><ol>
+<li><h4 id="基于端口划分VLAN-静态VLAN"><a href="#基于端口划分VLAN-静态VLAN" class="headerlink" title="基于端口划分VLAN  -   静态VLAN"></a>基于端口划分VLAN  -   <em>静态VLAN</em></h4><p>优点在于在定义VLAN成员时非常简单，只需将所有端口都定义为相应的VLAN即可，且适用于任何大小的网络。例如可以指定交换机1的端口1~ 6和交换机2的端口1~4端口为同一VLAN，即实现了跨越多台交换机的VLAN。</p>
+<p>缺点在于用户从一个端口迁移至另一个端口时需要重新定义。</p>
+</li>
+<li><h4 id="基于MAC地址划分VLAN-动态VLAN"><a href="#基于MAC地址划分VLAN-动态VLAN" class="headerlink" title="基于MAC地址划分VLAN  -   动态VLAN"></a>基于MAC地址划分VLAN  -   <em>动态VLAN</em></h4><p>利用MAC地址区分不用的用户，根据规则将不同的用户划分至不同的VLAN。</p>
+<p>优点在于用户物理移动不用重新配置VLAN。</p>
+<p>缺点是初始化时，所有用户都必须进行配置，如果用户较多，则配置繁琐，适用于小型的局域网。</p>
+</li>
+<li><h4 id="基于网络层协议划分VLAN-动态VLAN"><a href="#基于网络层协议划分VLAN-动态VLAN" class="headerlink" title="基于网络层协议划分VLAN  -   动态VLAN"></a>基于网络层协议划分VLAN  -   <em>动态VLAN</em></h4><p>可分为IP、IPX、AppleTalk等，根据不同的协议类型进行流量控制。</p>
+<p>优点是用户的物理位置改变时，既不需要重新配置所属VLAN，也不需要附件帧标签，可以减少网络的通信量。</p>
+<p>缺点是效率低，检查IP帧头增加了延时时间。</p>
+</li>
+<li><h4 id="根据IP组播划分VLAN-动态VLAN"><a href="#根据IP组播划分VLAN-动态VLAN" class="headerlink" title="根据IP组播划分VLAN  -   动态VLAN"></a>根据IP组播划分VLAN  -   <em>动态VLAN</em></h4><p>此方法将一个IP组播组划分为一个VLAN，主要适用于将不在同一地理范围内的局域网组成一个VLAN。</p>
+</li>
+</ol>
+<h3 id="VLAN数据帧标识"><a href="#VLAN数据帧标识" class="headerlink" title="VLAN数据帧标识"></a>VLAN数据帧标识</h3><p>最具代表性的VLAN数据帧标识方法时虚拟桥接局域网标准IEEE 802.1q。此协议定义了同一VLAN跨越交换机通信桥接的规则以及正确的标识VLAN的帧格式。IEEE 802.1q标准使用一种内部标记tag机制，该机制将标记插入到帧内，重新计算帧校验序列。每个标记包含4B，其中VPID是2B的控制信息，包含3位用户优先级，1位规范格式指示（默认为0，表示以太网）和12位的VLAN标识符。</p>
+<p>基于IEEE 802.1q标准的tagVLAN用VID划分不同的VLAN，当数据帧通过交换机时，交换机根据数据帧中的tag的VID信息，标识特面所在的VLAN，这使得所有属于该VLAN的数据帧，都被限制在该逻辑VLAN中传输。</p>
+<p>数据帧的格式如下：</p>
+<table>
+<thead>
+<tr>
+<th>前导帧</th>
+<th>隔符</th>
+<th>目的MAC地址</th>
+<th>源MAC地址</th>
+<th>类型</th>
+<th>数据部分</th>
+<th>帧检测序列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7B</td>
+<td>1B</td>
+<td>6B</td>
+<td>6B</td>
+<td>2B</td>
+<td>46~1500B</td>
+<td>4B</td>
+</tr>
+</tbody>
+</table>
+<p>采用IEEE 802.1q方法标识的数据帧格式如下：</p>
+<table>
+<thead>
+<tr>
+<th>前导帧</th>
+<th>隔符</th>
+<th>目的MAC地址</th>
+<th>源MAC地址</th>
+<th>VPID</th>
+<th>VCI</th>
+<th>类型</th>
+<th>数据部分</th>
+<th>帧检测序列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7B</td>
+<td>1B</td>
+<td>6B</td>
+<td>6B</td>
+<td>2B</td>
+<td>2B</td>
+<td>2B</td>
+<td>46~1500B</td>
+<td>4B</td>
+</tr>
+</tbody>
+</table>
+<p>以太网数据帧最大长度为1518B，加上VPID和VCI字段后长度增加至1522B。</p>
+<h3 id="VLAN中的端口"><a href="#VLAN中的端口" class="headerlink" title="VLAN中的端口"></a>VLAN中的端口</h3><p>VLAN以VLAN ID 标识，ID 的取值范围为1~4096。一台交换机最多支持250个VLAN，其中，VLAN 1 是出厂默认设置的VLAN，如果不另行配置，所有交换机连接的设备都是VLAN1。VLAN1是不可删除的VLAN。</p>
+<p>VLAN端口分为两种：Access端口和Trunk端口。</p>
+<p><strong>Access端口</strong>只能属于一个VLAN，并且可以通过手工设置指定VLAN。此端口既不能直接从另一个VLAN接收信息，也不能像其他VLAN发送信息，只能传输属于此VLAN的帧。</p>
+<p><strong>Trunk端口</strong>默认属于本交换机所有VLAN，通常位于交换机之间的来连接，以保证在跨越多台交换机上建立的同一个VLAN的成员可以通信。交换机之间互连用的即为Trunk端口，可以承载带VLAN和不带VLAN的报文。</p>
+<p>交换机的Trunk端口不属于某个VLAN，而是承载所有VLAN的帧，帧的格式是IEEE 802.1q。Trunk端口基于OSI第二层。</p>
+<h3 id="VLAN基本配置"><a href="#VLAN基本配置" class="headerlink" title="VLAN基本配置"></a>VLAN基本配置</h3><p>基于端口的VLAN配置包括两步：建立VLAN和配置VLAN端口。</p>
+<h4 id="建立和修改VLAN"><a href="#建立和修改VLAN" class="headerlink" title="建立和修改VLAN"></a>建立和修改VLAN</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vlan valn-id</span><br></pre></td></tr></table></figure>
+<p>vlan_id为输入的VLAN ID ，范围为1~4096。如果输入为新的vlan-id，则会创建VLAN；如果是已经存在的则修改VLAN。</p>
+<p>这条命令执行于全局配置模式下[^若不了解全局配置，可看前一篇文章]，是进入VLAN配置模式的导航命令。</p>
+<h4 id="删除VLAN"><a href="#删除VLAN" class="headerlink" title="删除VLAN"></a>删除VLAN</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">no vlan vlan-id</span><br></pre></td></tr></table></figure>
+<h4 id="将Access端口分配给VLAN"><a href="#将Access端口分配给VLAN" class="headerlink" title="将Access端口分配给VLAN"></a>将Access端口分配给VLAN</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">switchport access vlan vlan-id</span><br></pre></td></tr></table></figure>
+<p>VLAN不存在则先创建VLAN。</p>
+<blockquote>
+<p>将交换机端口0/5指定到VLAN  10</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span> Switch(config) interface gigabiternet 0/5</span><br><span class="line"><span class="meta">&gt;</span> Switch(config-if) switchport access vlan 10</span><br><span class="line"><span class="meta">&gt;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h4 id="将端口移除"><a href="#将端口移除" class="headerlink" title="将端口移除"></a>将端口移除</h4><blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; Switch(config) interface gigabiternet 0/5</span><br><span class="line">&gt; Switch(config-if) switchport trunk allowed vlan remove 2</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h4 id="显示VLAN信息"><a href="#显示VLAN信息" class="headerlink" title="显示VLAN信息"></a>显示VLAN信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show vlan</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本概念"><span class="toc-number">1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VLAN分类"><span class="toc-number">2.</span> <span class="toc-text">VLAN分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基于端口划分VLAN-静态VLAN"><span class="toc-number">2.1.</span> <span class="toc-text">基于端口划分VLAN  -   静态VLAN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基于MAC地址划分VLAN-动态VLAN"><span class="toc-number">2.2.</span> <span class="toc-text">基于MAC地址划分VLAN  -   动态VLAN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基于网络层协议划分VLAN-动态VLAN"><span class="toc-number">2.3.</span> <span class="toc-text">基于网络层协议划分VLAN  -   动态VLAN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#根据IP组播划分VLAN-动态VLAN"><span class="toc-number">2.4.</span> <span class="toc-text">根据IP组播划分VLAN  -   动态VLAN</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VLAN数据帧标识"><span class="toc-number">3.</span> <span class="toc-text">VLAN数据帧标识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VLAN中的端口"><span class="toc-number">4.</span> <span class="toc-text">VLAN中的端口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VLAN基本配置"><span class="toc-number">5.</span> <span class="toc-text">VLAN基本配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#建立和修改VLAN"><span class="toc-number">5.1.</span> <span class="toc-text">建立和修改VLAN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#删除VLAN"><span class="toc-number">5.2.</span> <span class="toc-text">删除VLAN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#将Access端口分配给VLAN"><span class="toc-number">5.3.</span> <span class="toc-text">将Access端口分配给VLAN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#将端口移除"><span class="toc-number">5.4.</span> <span class="toc-text">将端口移除</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#显示VLAN信息"><span class="toc-number">5.5.</span> <span class="toc-text">显示VLAN信息</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&text=计网实验之VLAN技术"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&title=计网实验之VLAN技术"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&is_video=false&description=计网实验之VLAN技术"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验之VLAN技术&body=Check out this article: https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&title=计网实验之VLAN技术"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&title=计网实验之VLAN技术"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&title=计网实验之VLAN技术"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&title=计网实验之VLAN技术"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&name=计网实验之VLAN技术&description=&lt;h3 id=&#34;基本概念&#34;&gt;&lt;a href=&#34;#基本概念&#34; class=&#34;headerlink&#34; title=&#34;基本概念&#34;&gt;&lt;/a&gt;基本概念&lt;/h3&gt;&lt;p&gt;虚拟局域网（Virtual Local Area Network,VLAN）是一种通过将局域网内的设备逻辑的划分成一个个网段，从而实现虚拟工作组的技术。VLAN很好的解决传统网络存在的网络结构、安全性、冗余路径等诸多问题。&lt;/p&gt;
+&lt;p&gt;利用交换机可以实现VLAN，但并不是所有交换机都具有VLAN功能。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/04/10/计网实验之VLAN技术/&t=计网实验之VLAN技术"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

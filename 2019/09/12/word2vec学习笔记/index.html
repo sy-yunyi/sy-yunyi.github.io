@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="word2vecword2vec 就是通过学习文本然后用词向量的方式表征词的语义信息，即通过Embedding把原先词所在的空间映射到一个新的空间中，使得语义相似的单词在该空间内距离相近。 传统神经网络的神经概率语言模型的缺点是计算量大：隐含层和输出层之间的矩阵计算和输出层上的softmax归一化运算。">
+<meta name="keywords" content="nlp,word2vec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="word2vec学习笔记">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="word2vecword2vec 就是通过学习文本然后用词向量的方式表征词的语义信息，即通过Embedding把原先词所在的空间映射到一个新的空间中，使得语义相似的单词在该空间内距离相近。 传统神经网络的神经概率语言模型的缺点是计算量大：隐含层和输出层之间的矩阵计算和输出层上的softmax归一化运算。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/8VOiack4f29en0TcSsZFOFStaXM1UvggDgb5y5Rf0x7UnXkMMWbYlagXUR7VX3jtnJcMDyzAUBm2w2X0bicVskZA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/8VOiack4f29en0TcSsZFOFStaXM1UvggDDAcoog8mywHgqXpMIy5tokKWibS2UZkMa1H09icicCter1IPCNRasIqXw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://i.loli.net/2019/09/12/3fUTtaRqps1Y2Mm.png">
+<meta property="og:image" content="https://i.loli.net/2019/09/12/hXQNpV1UIeoBqO5.png">
+<meta property="og:updated_time" content="2019-12-06T07:26:00.476Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="word2vec学习笔记">
+<meta name="twitter:description" content="word2vecword2vec 就是通过学习文本然后用词向量的方式表征词的语义信息，即通过Embedding把原先词所在的空间映射到一个新的空间中，使得语义相似的单词在该空间内距离相近。 传统神经网络的神经概率语言模型的缺点是计算量大：隐含层和输出层之间的矩阵计算和输出层上的softmax归一化运算。">
+<meta name="twitter:image" content="https://mmbiz.qpic.cn/mmbiz_png/8VOiack4f29en0TcSsZFOFStaXM1UvggDgb5y5Rf0x7UnXkMMWbYlagXUR7VX3jtnJcMDyzAUBm2w2X0bicVskZA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>word2vec学习笔记</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/09/12/redpwn-writeup/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/09/12/node2vec学习笔记/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&text=word2vec学习笔记"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&title=word2vec学习笔记"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&is_video=false&description=word2vec学习笔记"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=word2vec学习笔记&body=Check out this article: https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&title=word2vec学习笔记"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&title=word2vec学习笔记"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&title=word2vec学习笔记"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&title=word2vec学习笔记"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&name=word2vec学习笔记&description=&lt;h2 id=&#34;word2vec&#34;&gt;&lt;a href=&#34;#word2vec&#34; class=&#34;headerlink&#34; title=&#34;word2vec&#34;&gt;&lt;/a&gt;word2vec&lt;/h2&gt;&lt;p&gt;word2vec 就是通过学习文本然后用词向量的方式表征词的语义信息，即通过Embedding把原先词所在的空间映射到一个新的空间中，使得语义相似的单词在该空间内距离相近。&lt;/p&gt;
+&lt;p&gt;传统神经网络的神经概率语言模型的缺点是计算量大：隐含层和输出层之间的矩阵计算和输出层上的softmax归一化运算。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&t=word2vec学习笔记"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#word2vec"><span class="toc-number">1.</span> <span class="toc-text">word2vec</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基于Hierarchichal-Softmax模型的网络结构"><span class="toc-number">1.0.1.</span> <span class="toc-text">基于Hierarchichal Softmax模型的网络结构</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Hierarchical-softmax-思想"><span class="toc-number">1.0.1.1.</span> <span class="toc-text">Hierarchical softmax 思想</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#CBOW模型"><span class="toc-number">1.0.1.2.</span> <span class="toc-text">CBOW模型</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#skip-gram模型"><span class="toc-number">1.0.1.3.</span> <span class="toc-text">skip-gram模型</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基于Negative-Sampling的结构"><span class="toc-number">1.0.2.</span> <span class="toc-text">基于Negative Sampling的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#负采样算法"><span class="toc-number">1.0.2.1.</span> <span class="toc-text">负采样算法</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        word2vec学习笔记
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-11T16:00:00.000Z" itemprop="datePublished">2019-09-12</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/算法/">算法</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/nlp/">nlp</a>, <a class="tag-link" href="/tags/word2vec/">word2vec</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="word2vec"><a href="#word2vec" class="headerlink" title="word2vec"></a>word2vec</h2><p>word2vec 就是通过学习文本然后用词向量的方式表征词的语义信息，即通过Embedding把原先词所在的空间映射到一个新的空间中，使得语义相似的单词在该空间内距离相近。</p>
+<p>传统神经网络的神经概率语言模型的缺点是计算量大：隐含层和输出层之间的矩阵计算和输出层上的softmax归一化运算。</p>
+<a id="more"></a>
+<p>而word2vec也正是通过这两点来优化神经概率语言模型。word2vec中两个重要模型<code>CBOW模型</code>和<code>skip-gram模型</code>。<br><img src="https://mmbiz.qpic.cn/mmbiz_png/8VOiack4f29en0TcSsZFOFStaXM1UvggDgb5y5Rf0x7UnXkMMWbYlagXUR7VX3jtnJcMDyzAUBm2w2X0bicVskZA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="graph"></p>
+<p>word2vec给出两套框架，分别基于<code>Hierarchichal Softmax</code>和<code>Negative Sampling</code></p>
+<h4 id="基于Hierarchichal-Softmax模型的网络结构"><a href="#基于Hierarchichal-Softmax模型的网络结构" class="headerlink" title="基于Hierarchichal Softmax模型的网络结构"></a>基于Hierarchichal Softmax模型的网络结构</h4><h5 id="Hierarchical-softmax-思想"><a href="#Hierarchical-softmax-思想" class="headerlink" title="Hierarchical softmax 思想"></a>Hierarchical softmax 思想</h5><p>在层次Huffman树中，对于词典中的任意词w，必存在一条唯一的从根节点到词w对应节点的路径pw。路径pw上存在lw-1个分支（lw为路径上节点的个数），将每个分支看作一次二分类，每一次分类就产生一个概率，这些概率的乘积就是所需要的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p(w|Context(w))。</span><br></pre></td></tr></table></figure>
+<h5 id="CBOW模型"><a href="#CBOW模型" class="headerlink" title="CBOW模型"></a>CBOW模型</h5><p>CBOW模型的全称是<code>Continous bag-of-words</code>，包括三层结构：输入层、投影层和输出层。<br>下面以样本(Context(w),w)为例，这里Context(w)由w的前后各c个单词组成。</p>
+<ol>
+<li>输入层：包含Context(w)中的2c个词的向量<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v(Context(w)_1),v(Context(w)_2),...,v(Context(w)_&#123;2c&#125; \in \Bbb R^m</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>m为词向量长度。</p>
+<ol start="2">
+<li>投影层，将输入层的2c个向量做求和累加处理。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X_w = \sum^&#123;2c&#125;_&#123;i=1&#125;v(Context(w)_i)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/8VOiack4f29en0TcSsZFOFStaXM1UvggDDAcoog8mywHgqXpMIy5tokKWibS2UZkMa1H09icicCter1IPCNRasIqXw/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="2c"></p>
+<ol start="3">
+<li>输出层：输出层对应以可二叉树，以语料种出现的词当叶子节点，以各词在语料中出现的次数做为权值构造的Huffman树。其中，共包含N个叶子节点，表示词典中的词，N-1个非叶子节点，图中黄色的点。</li>
+</ol>
+<p>与神经概率语言模型对比，主要有3点不同：</p>
+<ul>
+<li>从输入层到投影层的操作，前者是累加求和，而后者是通过拼接</li>
+<li>隐藏层，前者无隐藏层，后者则有</li>
+<li>输出层，前者是树状结构，而后者是线性结构</li>
+</ul>
+<p>利用Hierarchical softmax的思想，可得<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p(w|Context(w))= \prod_&#123;j=2&#125;^&#123;l^w&#125;p(d_w^j|x_w,\theta_&#123;j-1&#125;^w)</span><br><span class="line"></span><br><span class="line">其中p(d_j^u|x_w,\theta_&#123;j-1&#125;^w) = [\sigma(x^&#123;T&#125;\theta_&#123;j-1&#125;^w)]^&#123;1-d_j^w&#125; * [1-\sigma(x^T\theta_&#123;j-1&#125;^w)]^&#123;d_j^w&#125;</span><br></pre></td></tr></table></figure></p>
+<p>得到对数似然函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">L = \sum_&#123;w\in C&#125;\sum_&#123;j=2&#125;^&#123;l^w&#125;\&#123;(1-d_j^w)*log[\sigma(x_w^T\theta_&#123;j-1&#125;^w)]+d_j^w*log[1-\sigma(x_w^T\theta_&#123;j-1&#125;^w)]\&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将其视为(w,j)的函数，利用随机梯度上升法进行函数最大化。<br>在计算梯度时，计算<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">L(w,j)关于\theta_&#123;j-1&#125;^w 和x_w的梯度，他们是对称的，在结果中交换位置即可。</span><br></pre></td></tr></table></figure></p>
+<h5 id="skip-gram模型"><a href="#skip-gram模型" class="headerlink" title="skip-gram模型"></a>skip-gram模型</h5><p>skip-gram模型的不同点在于其输入层仅仅是当前样本的中心词w的词向量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v(w) \in \Bbb R^m</span><br></pre></td></tr></table></figure></p>
+<p>而投影层做的是恒等投影，没有变化。</p>
+<p>输出层同样是一棵Huffman树。</p>
+<p>这里的条件概率函数为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p(Context(w)|w) = \prod_&#123;u\in Context(w)&#125;p(u|w)</span><br></pre></td></tr></table></figure></p>
+<p>应用Hierarchical softmax的思想，可以转化为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p(u|w) = \prod_&#123;j=2&#125;^&#123;l^u&#125;p(d_j^u|v(w),\theta_&#123;j-1&#125;^u)</span><br><span class="line"></span><br><span class="line">其中p(d_j^u|v(w),\theta_&#123;j-1&#125;^u) = [\sigma(v(w)^&#123;T&#125;\theta_&#123;j-1&#125;^u)]^&#123;1-d_j^u&#125; * [1-\sigma(v(w)^T\theta_&#123;j-1&#125;^u)]^&#123;d_j^u&#125;</span><br></pre></td></tr></table></figure></p>
+<p>之后计算过程于CBOW类似。</p>
+<h4 id="基于Negative-Sampling的结构"><a href="#基于Negative-Sampling的结构" class="headerlink" title="基于Negative Sampling的结构"></a>基于Negative Sampling的结构</h4><p>Negative Sampling 简称NEG，是NCE(Noise Contrastive Estimation)的简化版本，目的是用来提高训练速度并改善所得词向量的质量。</p>
+<blockquote>
+<p>NCE的本质是利用已知的概率密度函数估计未知的概率密度函数。简单来说，假设未知的概率密度函数为X，已知的概率密度函数为Y，如果我们可以得到X和Y的关系，那么我们也就可以求出X。</p>
+</blockquote>
+<p>不再使用复杂的Huffman，而是利用随机负采样。</p>
+<p>具体内容可以参考引文[2]中的内容。</p>
+<h5 id="负采样算法"><a href="#负采样算法" class="headerlink" title="负采样算法"></a>负采样算法</h5><p>在word2vec中本质上是一个带权负采样问题，词典D中的词在语料C中出现的次数有高有低，对于高频词，被选为负样本的概率就大，低频词被选中的概率就小。 <img src="https://i.loli.net/2019/09/12/3fUTtaRqps1Y2Mm.png" alt="负采样.png"></p>
+<p>在word2vec中的具体做法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">l_0 = 0,l_k = \sum_&#123;j=1&#125;^klen(w_j),k=1,2,...,N,这里w_j表示词典D中第j个词，则以\&#123;l_j\&#125;_&#123;j=0&#125;^N为剖分节点可得区间[0,1]上的一个非等距剖分，I_i=[l_&#123;i_1&#125;,l+i],i=1,2,...,N为其N个剖分区间。进一步引入区间[0,1]上的一个等距剖分，剖分节点为\&#123;m_j\&#125;_&#123;j=0&#125;^M,其中M&gt;&gt;N。</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2019/09/12/hXQNpV1UIeoBqO5.png" alt="剖分.png"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">将内部剖分节点\&#123;m_j\&#125;_&#123;j=1&#125;^&#123;M-1&#125;投影到非等距剖分上，如上图的红色虚线所示，则可建立\&#123;m_j\&#125;_&#123;j=1&#125;^&#123;M-1&#125;与区间&#123;I_j&#125;_&#123;j=1&#125;^N(\&#123;w_j\&#125;_&#123;j=1&#125;^N)的映射关系</span><br><span class="line"></span><br><span class="line">Table(i) = w_k , where m_i \in I_k, i = 1,2,...,M-1</span><br></pre></td></tr></table></figure></p>
+<p>得到这个映射后，采样过程就十分简单了：每次生成一个[1,M-1]间的随机数r，则Table(r)就是一个样本。</p>
+<p>在word2vec的源码中，为词典D中的词设置权值时，并没有直接使用counter(w)，而是对其做了α次幂，其中α=3/4。</p>
+<blockquote>
+<p>这里有一个解释，通过观察y=x^(3/4)-x的图像，我们得知，使用3/4次幂的目的是增加了数量处于中间水平的单词的权重。这里与RNN中使用的1/2次幂作用相同。</p>
+</blockquote>
+<p>Ref:</p>
+<p>[1] <a href="https://blog.csdn.net/itplus/article/details/37969979" target="_blank" rel="noopener">https://blog.csdn.net/itplus/article/details/37969979</a></p>
+<p>[2] <a href="https://blog.csdn.net/itplus/article/details/37998797" target="_blank" rel="noopener">https://blog.csdn.net/itplus/article/details/37998797</a></p>
+<p>[3] <a href="https://mp.weixin.qq.com/s/vzXel_WjNgtzoQ-qHGS9lg" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/vzXel_WjNgtzoQ-qHGS9lg</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#word2vec"><span class="toc-number">1.</span> <span class="toc-text">word2vec</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#基于Hierarchichal-Softmax模型的网络结构"><span class="toc-number">1.0.1.</span> <span class="toc-text">基于Hierarchichal Softmax模型的网络结构</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Hierarchical-softmax-思想"><span class="toc-number">1.0.1.1.</span> <span class="toc-text">Hierarchical softmax 思想</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#CBOW模型"><span class="toc-number">1.0.1.2.</span> <span class="toc-text">CBOW模型</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#skip-gram模型"><span class="toc-number">1.0.1.3.</span> <span class="toc-text">skip-gram模型</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基于Negative-Sampling的结构"><span class="toc-number">1.0.2.</span> <span class="toc-text">基于Negative Sampling的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#负采样算法"><span class="toc-number">1.0.2.1.</span> <span class="toc-text">负采样算法</span></a></li></ol></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&text=word2vec学习笔记"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&title=word2vec学习笔记"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&is_video=false&description=word2vec学习笔记"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=word2vec学习笔记&body=Check out this article: https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&title=word2vec学习笔记"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&title=word2vec学习笔记"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&title=word2vec学习笔记"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&title=word2vec学习笔记"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&name=word2vec学习笔记&description=&lt;h2 id=&#34;word2vec&#34;&gt;&lt;a href=&#34;#word2vec&#34; class=&#34;headerlink&#34; title=&#34;word2vec&#34;&gt;&lt;/a&gt;word2vec&lt;/h2&gt;&lt;p&gt;word2vec 就是通过学习文本然后用词向量的方式表征词的语义信息，即通过Embedding把原先词所在的空间映射到一个新的空间中，使得语义相似的单词在该空间内距离相近。&lt;/p&gt;
+&lt;p&gt;传统神经网络的神经概率语言模型的缺点是计算量大：隐含层和输出层之间的矩阵计算和输出层上的softmax归一化运算。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/09/12/word2vec学习笔记/&t=word2vec学习笔记"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

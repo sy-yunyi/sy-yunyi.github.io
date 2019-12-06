@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="端口聚合端口聚合(Aggregating Port,AP)又称端口绑定，链路聚合，遵循IEEE 802.3ad协议的标准。 端口聚合是指将多个端口聚合在一起形成一个聚合组，以实现将输入\输出的负荷分担在各成员端口中，同时也提供了更高的连接可靠性。">
+<meta name="keywords" content="计算机网络实验,端口聚合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网实验之端口聚合">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="端口聚合端口聚合(Aggregating Port,AP)又称端口绑定，链路聚合，遵循IEEE 802.3ad协议的标准。 端口聚合是指将多个端口聚合在一起形成一个聚合组，以实现将输入\输出的负荷分担在各成员端口中，同时也提供了更高的连接可靠性。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-05T14:10:41.423Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计网实验之端口聚合">
+<meta name="twitter:description" content="端口聚合端口聚合(Aggregating Port,AP)又称端口绑定，链路聚合，遵循IEEE 802.3ad协议的标准。 端口聚合是指将多个端口聚合在一起形成一个聚合组，以实现将输入\输出的负荷分担在各成员端口中，同时也提供了更高的连接可靠性。">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>计网实验之端口聚合</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/05/06/DNS安全论文选读-Detection and Blocking of Anomaly DNS Traffic by Analyzing Achieved NS Record History/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/04/17/计网实验之生成树协议/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&text=计网实验之端口聚合"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&title=计网实验之端口聚合"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&is_video=false&description=计网实验之端口聚合"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验之端口聚合&body=Check out this article: https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&title=计网实验之端口聚合"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&title=计网实验之端口聚合"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&title=计网实验之端口聚合"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&title=计网实验之端口聚合"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&name=计网实验之端口聚合&description=&lt;h3 id=&#34;端口聚合&#34;&gt;&lt;a href=&#34;#端口聚合&#34; class=&#34;headerlink&#34; title=&#34;端口聚合&#34;&gt;&lt;/a&gt;端口聚合&lt;/h3&gt;&lt;p&gt;端口聚合(Aggregating Port,AP)又称端口绑定，链路聚合，遵循IEEE 802.3ad协议的标准。&lt;/p&gt;
+&lt;p&gt;端口聚合是指将多个端口聚合在一起形成一个聚合组，以实现将输入\输出的负荷分担在各成员端口中，同时也提供了更高的连接可靠性。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&t=计网实验之端口聚合"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#端口聚合"><span class="toc-number">1.</span> <span class="toc-text">端口聚合</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#端口聚合的特点"><span class="toc-number">1.1.</span> <span class="toc-text">端口聚合的特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#端口聚合限制条件"><span class="toc-number">1.2.</span> <span class="toc-text">端口聚合限制条件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置流量平衡"><span class="toc-number">2.</span> <span class="toc-text">配置流量平衡</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#流量平衡模式"><span class="toc-number">2.1.</span> <span class="toc-text">流量平衡模式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#端聚合配置命令"><span class="toc-number">3.</span> <span class="toc-text">端聚合配置命令</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        计网实验之端口聚合
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-04-16T16:00:00.000Z" itemprop="datePublished">2019-04-17</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/手稿/">手稿</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/端口聚合/">端口聚合</a>, <a class="tag-link" href="/tags/计算机网络实验/">计算机网络实验</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="端口聚合"><a href="#端口聚合" class="headerlink" title="端口聚合"></a>端口聚合</h3><p>端口聚合(Aggregating Port,AP)又称端口绑定，链路聚合，遵循IEEE 802.3ad协议的标准。</p>
+<p>端口聚合是指将多个端口聚合在一起形成一个聚合组，以实现将输入\输出的负荷分担在各成员端口中，同时也提供了更高的连接可靠性。</p>
+<a id="more"></a>
+<p>端口聚合服务的上层实体将同一聚合组内的多条物理链路是为一条逻辑链路，从整体上看，一个聚合组形同一个端口。</p>
+<p>端口聚合是在MAC子层和物理层之间的小层次，即数据链路层和物理层之间。</p>
+<p>为了不改变以太网的协议栈，将链路聚合归结为数据链路层，因此端口聚合也成为链路聚合。</p>
+<h4 id="端口聚合的特点"><a href="#端口聚合的特点" class="headerlink" title="端口聚合的特点"></a>端口聚合的特点</h4><ul>
+<li><p>实现了各个聚合端口的符合分担及同组成员之间的动态备份</p>
+</li>
+<li><p>增加了链路带宽，又防止形成环路</p>
+</li>
+<li><p>聚合后的带宽是每个独立端口的带宽总和</p>
+<blockquote>
+<p>当端口上流量增加而成为限制网络性能的瓶颈时，可以通过端口聚合增加带宽</p>
+</blockquote>
+</li>
+<li><p>支持流量平衡，可以把流量均匀的分配至各成员链路</p>
+</li>
+<li><p>链路备份，当聚合组中一条成员链路断开时，将其链路上的流量自动分配至其他成员链路上</p>
+</li>
+</ul>
+<h4 id="端口聚合限制条件"><a href="#端口聚合限制条件" class="headerlink" title="端口聚合限制条件"></a>端口聚合限制条件</h4><ol>
+<li><p>只有同类型端口且双工速率一致才能聚合为一个AG端口。光口和电口不能绑定。</p>
+<blockquote>
+<p>AP成员端口速率要一致</p>
+<p>端口类型要一致，二层端口只能加入二层AP；三层端口只能加入三层AP</p>
+</blockquote>
+</li>
+<li><p>所有物理端口必须属于同一个VLAN。</p>
+</li>
+<li><p>最多支持8个物理端口聚合为一个AG。</p>
+</li>
+<li><p>当一个端口加入AP后,不能在该端口上进行任何配置,直到该端口退出AP。</p>
+</li>
+<li><p>AP不能设置端口安全功能。</p>
+</li>
+<li><p>若端口加入AP，则端口的属性被AP属性取代。</p>
+</li>
+<li><p>若端口从AP中删除，则端口属性恢复至加入AP前的属性。</p>
+</li>
+</ol>
+<h3 id="配置流量平衡"><a href="#配置流量平衡" class="headerlink" title="配置流量平衡"></a>配置流量平衡</h3><p>流量平衡又称负载均衡。其建立在现有网络上，通过一种廉价、有效、透明的方法扩展网络设备和服务器的带宽并增加吞吐量，加强网络数据处理能力，提高网络的灵活性和可用性。</p>
+<p>流量平衡</p>
+<ul>
+<li>将大量并发访问或者数据流量分担到多台节点设别分别处理，减少用户的响应时间</li>
+<li>将单个重负载的运算分担到多个节点设备做并行处理，系统处理能力得到提高</li>
+</ul>
+<h4 id="流量平衡模式"><a href="#流量平衡模式" class="headerlink" title="流量平衡模式"></a>流量平衡模式</h4><p>端口聚合的流量平衡模式有很多，包括根据报文的源 MAC 地址、目的 MAC 地址、源 MAC 地址+目的 MAC 地址、源 IP 地址，目的 IP 地址以及源 IP 地址+目的 IP 地址等特征值把流量平均地分配到 AP 的成员链路中。</p>
+<p><strong>源MAC地址流量平衡</strong>是根据报文的源MAC地址把报文分配至AP的各个成员链路中。不同源MAC地址的报文，其转发链路不同，相同的源MAC地址报文向同一个成员链路转发。</p>
+<p><strong>目的MAC地址流量平衡</strong>是根据报文的目的MAC地址把报文分配至AP的各个成员链路中。相同源目的MAC地址的报文同一个成员链路转发，不同的源MAC地址报文转发链路不同。</p>
+<p><strong>源MAC+目的MAC流量平衡</strong>是根据报文的源MAC地址和目的MAC地址把报文分配至AP的各个成员链路中。不同MAC地址的报文，其转发链路不同，相同的MAC地址报文向同一个成员链路转发。</p>
+<p><strong>源IP地址或目的IP地址流量平衡</strong>是根据报文的源IP地址和目的IP地址进行流量分配。该模式用于三层报文，如果该模式下收到二层报文，则根据报文中的源MAC地址或者目的MAC地址进行转发。</p>
+<p><strong>源IP地址+目的IP地址流量平衡</strong>是根据报文的源IP地址和目的IP地址进行流量分配。该模式用于三层报文，如果该模式下收到二层报文，则根据报文中的源MAC地址或者目的MAC地址进行转发。具有不同的源IP地址+目的IP地址的报文可能会被分配至同一个成员链路中。</p>
+<h3 id="端聚合配置命令"><a href="#端聚合配置命令" class="headerlink" title="端聚合配置命令"></a>端聚合配置命令</h3><p><strong>创建AP</strong></p>
+<p>在全局配置模式下，使用命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">interface aggregateport n  # n为AP号</span><br></pre></td></tr></table></figure>
+<p><strong>将端口加入AP</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(config) # interface gigabitethernet 0/1</span><br><span class="line">(config-if) # port-group port-group-number</span><br></pre></td></tr></table></figure>
+<p><strong>物理端口退出AP</strong></p>
+<p>在端口配置模式下，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">no port-group</span><br></pre></td></tr></table></figure>
+<p><strong>配置三层AP</strong></p>
+<p>默认情况下配置的为二层AP，如果想配置三层AP，则只需要增加IP配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(config)# interface aggretegateport 3</span><br><span class="line">(config-if)# no switchport  !声明三层端口</span><br><span class="line">(config-if)# ip address ip-addr  mask</span><br><span class="line">(config-if)# end</span><br></pre></td></tr></table></figure>
+<p>将端口加入三层AP，需要先创建AP</p>
+<p>将端口加入三层AP</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(config) # interface range gigabitethernet 0/1-3</span><br><span class="line">(config-if)# no switchport</span><br><span class="line">(config-if)# port-group 2</span><br></pre></td></tr></table></figure>
+<p><strong>显示AP</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show aggregateport [port-number]&#123;load-balance | summary&#125;</span><br></pre></td></tr></table></figure>
+<p>显示AP设置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># show aggregateport port-number load-balance</span><br></pre></td></tr></table></figure>
+<p>显示AP汇总信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show aggregateport port-number summary</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#端口聚合"><span class="toc-number">1.</span> <span class="toc-text">端口聚合</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#端口聚合的特点"><span class="toc-number">1.1.</span> <span class="toc-text">端口聚合的特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#端口聚合限制条件"><span class="toc-number">1.2.</span> <span class="toc-text">端口聚合限制条件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置流量平衡"><span class="toc-number">2.</span> <span class="toc-text">配置流量平衡</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#流量平衡模式"><span class="toc-number">2.1.</span> <span class="toc-text">流量平衡模式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#端聚合配置命令"><span class="toc-number">3.</span> <span class="toc-text">端聚合配置命令</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&text=计网实验之端口聚合"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&title=计网实验之端口聚合"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&is_video=false&description=计网实验之端口聚合"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验之端口聚合&body=Check out this article: https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&title=计网实验之端口聚合"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&title=计网实验之端口聚合"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&title=计网实验之端口聚合"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&title=计网实验之端口聚合"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&name=计网实验之端口聚合&description=&lt;h3 id=&#34;端口聚合&#34;&gt;&lt;a href=&#34;#端口聚合&#34; class=&#34;headerlink&#34; title=&#34;端口聚合&#34;&gt;&lt;/a&gt;端口聚合&lt;/h3&gt;&lt;p&gt;端口聚合(Aggregating Port,AP)又称端口绑定，链路聚合，遵循IEEE 802.3ad协议的标准。&lt;/p&gt;
+&lt;p&gt;端口聚合是指将多个端口聚合在一起形成一个聚合组，以实现将输入\输出的负荷分担在各成员端口中，同时也提供了更高的连接可靠性。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/04/17/计网实验之端口聚合/&t=计网实验之端口聚合"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

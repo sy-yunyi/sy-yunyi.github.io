@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="网络编程初见网络编程最主要的工作就是在发送端把信息通过规定好的协议进行包的组装，在接收端按照同样的规定把包进行解析并提取对应的信息，从而达到通信的目的。 中间最重要的就是数据包的组装、过滤、捕获和分析以及其他处理。 套接字即Socket，应用程序通过套接字向网络发出请求或者应答网络请求，Socket实际上是网络应用程序接口（API）。 Socket实际上是在计算机中提供了一个通信端口，可以通过这个">
+<meta name="keywords" content="计算机网络实验,Socket">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网实验之Socket网络编程">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="网络编程初见网络编程最主要的工作就是在发送端把信息通过规定好的协议进行包的组装，在接收端按照同样的规定把包进行解析并提取对应的信息，从而达到通信的目的。 中间最重要的就是数据包的组装、过滤、捕获和分析以及其他处理。 套接字即Socket，应用程序通过套接字向网络发出请求或者应答网络请求，Socket实际上是网络应用程序接口（API）。 Socket实际上是在计算机中提供了一个通信端口，可以通过这个">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/03/27/5c9ad6e6d15f0.png">
+<meta property="og:updated_time" content="2019-12-05T14:10:20.532Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计网实验之Socket网络编程">
+<meta name="twitter:description" content="网络编程初见网络编程最主要的工作就是在发送端把信息通过规定好的协议进行包的组装，在接收端按照同样的规定把包进行解析并提取对应的信息，从而达到通信的目的。 中间最重要的就是数据包的组装、过滤、捕获和分析以及其他处理。 套接字即Socket，应用程序通过套接字向网络发出请求或者应答网络请求，Socket实际上是网络应用程序接口（API）。 Socket实际上是在计算机中提供了一个通信端口，可以通过这个">
+<meta name="twitter:image" content="https://i.loli.net/2019/03/27/5c9ad6e6d15f0.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>计网实验之Socket网络编程</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/03/29/渗透技术基础之反弹shell详解/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/03/26/渗透技术基础之Windows提权/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&text=计网实验之Socket网络编程"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&title=计网实验之Socket网络编程"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&is_video=false&description=计网实验之Socket网络编程"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验之Socket网络编程&body=Check out this article: https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&title=计网实验之Socket网络编程"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&title=计网实验之Socket网络编程"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&title=计网实验之Socket网络编程"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&title=计网实验之Socket网络编程"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&name=计网实验之Socket网络编程&description=&lt;h3 id=&#34;网络编程初见&#34;&gt;&lt;a href=&#34;#网络编程初见&#34; class=&#34;headerlink&#34; title=&#34;网络编程初见&#34;&gt;&lt;/a&gt;网络编程初见&lt;/h3&gt;&lt;p&gt;网络编程最主要的工作就是在发送端把信息通过规定好的协议进行包的组装，在接收端按照同样的规定把包进行解析并提取对应的信息，从而达到通信的目的。&lt;/p&gt;
+&lt;p&gt;中间最重要的就是数据包的组装、过滤、捕获和分析以及其他处理。&lt;/p&gt;
+&lt;p&gt;套接字即Socket，应用程序通过套接字向网络发出请求或者应答网络请求，Socket实际上是网络应用程序接口（API）。&lt;/p&gt;
+&lt;p&gt;Socket实际上是在计算机中提供了一个通信端口，可以通过这个端口与任何一个具有Socket接口的计算机通信。应用程序在网络上传输，接收信息都通过这个Socket接口实现。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&t=计网实验之Socket网络编程"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#网络编程初见"><span class="toc-number">1.</span> <span class="toc-text">网络编程初见</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#建立逻辑信道"><span class="toc-number">2.</span> <span class="toc-text">建立逻辑信道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Client-Server工作模式分类"><span class="toc-number">3.</span> <span class="toc-text">Client/Server工作模式分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#面向连接的Client-Server模式"><span class="toc-number">4.</span> <span class="toc-text">面向连接的Client/Server模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#面向连接的服务器工作流程"><span class="toc-number">4.1.</span> <span class="toc-text">面向连接的服务器工作流程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#创建套接字"><span class="toc-number">4.1.1.</span> <span class="toc-text">创建套接字</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#本地IP和端口与套接字的绑定"><span class="toc-number">4.1.2.</span> <span class="toc-text">本地IP和端口与套接字的绑定</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#服务器开启监听"><span class="toc-number">4.1.3.</span> <span class="toc-text">服务器开启监听</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#接收客户端的请求"><span class="toc-number">4.1.4.</span> <span class="toc-text">接收客户端的请求</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#发送和接收数据"><span class="toc-number">4.1.5.</span> <span class="toc-text">发送和接收数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#关闭连接套接字"><span class="toc-number">4.1.6.</span> <span class="toc-text">关闭连接套接字</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#面向连接的客户端工作流程"><span class="toc-number">4.2.</span> <span class="toc-text">面向连接的客户端工作流程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#创建套接字-1"><span class="toc-number">4.2.1.</span> <span class="toc-text">创建套接字</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#发出连接请求"><span class="toc-number">4.2.2.</span> <span class="toc-text">发出连接请求</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#发送和接收数据-1"><span class="toc-number">4.2.3.</span> <span class="toc-text">发送和接收数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#关闭此连接的套接字"><span class="toc-number">4.2.4.</span> <span class="toc-text">关闭此连接的套接字</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#无连接的Client-Server模式"><span class="toc-number">5.</span> <span class="toc-text">无连接的Client/Server模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UDP编程实践"><span class="toc-number">6.</span> <span class="toc-text">UDP编程实践</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实验要求"><span class="toc-number">6.1.</span> <span class="toc-text">实验要求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#程序实现"><span class="toc-number">6.2.</span> <span class="toc-text">程序实现</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        计网实验之Socket网络编程
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-03-26T16:00:00.000Z" itemprop="datePublished">2019-03-27</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/手稿/">手稿</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Socket/">Socket</a>, <a class="tag-link" href="/tags/计算机网络实验/">计算机网络实验</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="网络编程初见"><a href="#网络编程初见" class="headerlink" title="网络编程初见"></a>网络编程初见</h3><p>网络编程最主要的工作就是在发送端把信息通过规定好的协议进行包的组装，在接收端按照同样的规定把包进行解析并提取对应的信息，从而达到通信的目的。</p>
+<p>中间最重要的就是数据包的组装、过滤、捕获和分析以及其他处理。</p>
+<p>套接字即Socket，应用程序通过套接字向网络发出请求或者应答网络请求，Socket实际上是网络应用程序接口（API）。</p>
+<p>Socket实际上是在计算机中提供了一个通信端口，可以通过这个端口与任何一个具有Socket接口的计算机通信。应用程序在网络上传输，接收信息都通过这个Socket接口实现。</p>
+<a id="more"></a>
+<p>套接字是由传输层提供的应用程序和网络之间的接入点，如下图所示。</p>
+<p><img src="https://i.loli.net/2019/03/27/5c9ad6e6d15f0.png" alt="Socket.png"></p>
+<p>应用程序可以通过套接字访问网络，套接字利用主机的网络层地址和端口号文两个进程建立逻辑连接。</p>
+<p>套接字支持多种协议，包括TCP/IP协议。</p>
+<blockquote>
+<p>20世纪90年代初，微软联合其他公司制定了Windows下的完了过编程接口，即Windows Socket规范。它不是一种网络协议而是一套开放的支持多协议的Windows下的网络编程接口。</p>
+<p>Winsock基本实现了与协议无关，可以调用多种协议的功能。</p>
+</blockquote>
+<h3 id="建立逻辑信道"><a href="#建立逻辑信道" class="headerlink" title="建立逻辑信道"></a>建立逻辑信道</h3><p>一般情况下客户端是发起请求的一端，服务器则在等待并处理客户端发起的请求。</p>
+<p>服务器监听某个端口；客户端向服务器所监听的端口发起请求建立连接。该连接请求包括：服务器IP地址、服务器端口号、客户端IP地址、客户端口号。服务器收到客户端发送的请求，便发出响应建立连接，便建立了逻辑信道。</p>
+<p>客户和服务器通过请求响应方式可以进行双向数据传输。当数据传输结束时，需要关闭连接。</p>
+<p>这种工作模式为有连接的客户端/服务器模式（Client/Server）。</p>
+<p>套接字的连接过程分三步：</p>
+<ol>
+<li>服务器监听：服务器处于等待连接的状态，实时监控网络状态。</li>
+<li>客户端请求：客户端的套接字提出连接请求，连接目标时服务器端的套接字。</li>
+<li>连接确认：当服务器套接字接收到客户端套接字的连接请求，便建立一个新的线程，响应客户端请求，并把服务器端套接字描述发给客户端，当客户端确认后，连接建立。而此时服务器套接字仍处于监听状态。</li>
+</ol>
+<h3 id="Client-Server工作模式分类"><a href="#Client-Server工作模式分类" class="headerlink" title="Client/Server工作模式分类"></a>Client/Server工作模式分类</h3><p>Client/Server工作模式的分类：</p>
+<ol>
+<li>有状态和无状态：服务器是否记录客户端的当前状态。</li>
+<li>有连接（TCP）和无连接（UDP）：客户端和服务器是否先建立连接再进行传输。</li>
+<li>循环和并发：服务器对多客户端请求的服务是采用循环方法还是并法程序方法。</li>
+</ol>
+<blockquote>
+<p>TCP协议面向连接，使用可靠的字节流传送服务，提供高可靠性的传输。</p>
+<p>UDP协议面向非连接，使用非可靠的数据包服务，提供高效传输。</p>
+</blockquote>
+<h3 id="面向连接的Client-Server模式"><a href="#面向连接的Client-Server模式" class="headerlink" title="面向连接的Client/Server模式"></a>面向连接的Client/Server模式</h3><p>在面向连接的Client/Server结构中，服务器先启动，然后根据请求提供相应的服务。</p>
+<ol>
+<li>调用socket()建立套接字</li>
+<li>调用bind()将该套接字和本地网络地址联系在一起</li>
+<li>调用listen()，服务器端进入监听模式</li>
+<li>调用accept()，服务接收连接</li>
+<li>客户端同样调用socket()建立套接字，调用connect()和服务器建立连接</li>
+<li>数据传输</li>
+<li>双方调用close()关闭套接字</li>
+</ol>
+<h4 id="面向连接的服务器工作流程"><a href="#面向连接的服务器工作流程" class="headerlink" title="面向连接的服务器工作流程"></a>面向连接的服务器工作流程</h4><h5 id="创建套接字"><a href="#创建套接字" class="headerlink" title="创建套接字"></a>创建套接字</h5><p>调用socket()函数建立套接字。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">SOCKET <span class="title">socket</span><span class="params">(<span class="keyword">int</span> domain,<span class="keyword">int</span> type,ing protocol)</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数解释：</p>
+<p>domain:指明使用的协议族。<code>AF_INET</code>代表网络通信，<code>AF_UNIX</code>代表用于单一Unix系统中进程间通信。</p>
+<p>type:指明socket类型。<code>SOCK_STREAM</code>表示流式，面向连接的比特流，顺序、可靠、双向，用于TCP通信；<code>SOCK_DGRAM</code>代表数据报式、无连接、定长、不可靠，用于UDP通信。</p>
+<p>protocol：一般取为0。</p>
+<p>函数返回：成功时，返回一个整型的socket描述符，与文件描述符类似。如果失败，返回<code>INVALID_SOCKET</code>,错误信息可通过<code>WSAGetLastError</code>函数获取。</p>
+</blockquote>
+<h5 id="本地IP和端口与套接字的绑定"><a href="#本地IP和端口与套接字的绑定" class="headerlink" title="本地IP和端口与套接字的绑定"></a>本地IP和端口与套接字的绑定</h5><p>bind()将本地地址与套接字绑定，适用于未连接的数据报或者流式类套接字，在connect()或listen()前使用。</p>
+<p>bind()函数通过给一个未命名套接字分配一个本地名字实现套接字与本地地址的绑定。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bind</span><span class="params">(<span class="keyword">int</span> sockfd,<span class="keyword">const</span> struct sockaddr* myaddr,<span class="keyword">socklen_t</span> addrlen)</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数说明：</p>
+<p>sockfd：socket函数返回的套接字文件描述符。</p>
+<p>myaddr: 指定要绑定的IP和端口号，均要使用网络字节序-即大端模式。</p>
+<p>addrlen：地址长度，一般设置为struct sockaddr的长度。</p>
+<p>函数返回：成功，则返回0；否则返回<code>SOCKET_ERROR</code>,错误信息可通过<code>WSAGetLastError</code>函数获取。</p>
+<p>服务器的绑定由程序实现，指定IP和端口，而客户端的绑定一般是由系统实现，自动分配一个端口号其IP结合。</p>
+</blockquote>
+<h5 id="服务器开启监听"><a href="#服务器开启监听" class="headerlink" title="服务器开启监听"></a>服务器开启监听</h5><p>listen()使套接字进入监听状态。从客户端发来的连接请求将首先放入等待队列，等待进程的处理。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">listen</span><span class="params">(<span class="keyword">int</span> sockfd,<span class="keyword">int</span> backlog)</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数说明：</p>
+<p>sockfd：一个已绑定为连接的套接字描述符。</p>
+<p>backlog：队列中允许的连接个数。默认值为20。</p>
+<p>函数返回：成功，返回0；否则返回<code>SOCKET_ERROR</code>。</p>
+</blockquote>
+<h5 id="接收客户端的请求"><a href="#接收客户端的请求" class="headerlink" title="接收客户端的请求"></a>接收客户端的请求</h5><p>accept()的头文件：Windows <code>&lt;winsock.h&gt;</code>,linux <code>&lt;sys/socket.h&gt;</code></p>
+<p>accept()从端口的请求连接的等待队列中抽取第一个连接创建一个与此同类的新套接字并返回句柄。如果队列中无等待连接，且接口为阻塞方式，则accept()阻塞等待；如果接口为非阻塞方式，则返回错误代码。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> sockfd,conststruct sockaddr *addr, <span class="keyword">socklen_t</span> addrlen)</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数说明：</p>
+<p>sockfd：正在监听的套接字文件描述符。</p>
+<p>addr：客户端的socket地址。</p>
+<p>addrlen：socket地址长度。</p>
+<p>函数返回：成功则返回非负描述符，否则返回<code>INVALID_SOCKET</code>。</p>
+</blockquote>
+<h5 id="发送和接收数据"><a href="#发送和接收数据" class="headerlink" title="发送和接收数据"></a>发送和接收数据</h5><p>建立连接后，客户端和服务器便可以进行数据传输。</p>
+<p>调用send()发送数据，调用recv()接收数据。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">send</span><span class="params">(SOCKET socket,<span class="keyword">char</span> *message,<span class="keyword">int</span> msg_len,<span class="keyword">int</span> flags)</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数说明：</p>
+<p>socket：发送数据的套接字描述符。</p>
+<p>message：指向要发送数据的指针。</p>
+<p>msg_len：要发送数据的字节长度。</p>
+<p>flags：标志，一般设为0。</p>
+<p>函数返回：成功返回实际发送的字节数；否则返回<code>SOCKET_ERROR</code>。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">recv</span><span class="params">(SOCKET socket,<span class="keyword">char</span> *message,<span class="keyword">int</span> msg_len,<span class="keyword">int</span> flags)</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数说明：</p>
+<p>socket：要读取的套接字文件描述符。</p>
+<p>message：保存读入信息的缓冲区起始地址。</p>
+<p>msg_len：缓冲区最大长度。</p>
+<p>flags：标志，一般设置为0。</p>
+<p>函数返回：成功则返回实际接收的字节数；否则返回<code>SOCKET_ERROR</code>。</p>
+</blockquote>
+<h5 id="关闭连接套接字"><a href="#关闭连接套接字" class="headerlink" title="关闭连接套接字"></a>关闭连接套接字</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">closesocket</span><span class="params">(SOCKET socket)</span></span></span><br></pre></td></tr></table></figure>
+<p>关闭后，不能再对此套接字进行任何读/写操作。</p>
+<h4 id="面向连接的客户端工作流程"><a href="#面向连接的客户端工作流程" class="headerlink" title="面向连接的客户端工作流程"></a>面向连接的客户端工作流程</h4><h5 id="创建套接字-1"><a href="#创建套接字-1" class="headerlink" title="创建套接字"></a>创建套接字</h5><p>与服务器端相同。</p>
+<h5 id="发出连接请求"><a href="#发出连接请求" class="headerlink" title="发出连接请求"></a>发出连接请求</h5><p>connect()用户建立与指定socket的连接。</p>
+<p>对于流类套接字，利用名字与一个远程主机建立连接，实现收发数据。</p>
+<p>对于数据报类套接字，则设置为一个默认目的地址。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">connect</span><span class="params">(SOCKET socket,struct sockaddr *address,<span class="keyword">int</span> addr_len)</span></span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数说明：</p>
+<p>socket：套接字文件描述符。</p>
+<p>address：数据结构sockaddr的指针，包括目的端口和地址。</p>
+<p>addr_len：地址长度。</p>
+<p>函数返回：成功则返回0；否则返回<code>SOCKET_ERROR</code>。</p>
+</blockquote>
+<h5 id="发送和接收数据-1"><a href="#发送和接收数据-1" class="headerlink" title="发送和接收数据"></a>发送和接收数据</h5><p>与服务器端相同。</p>
+<h5 id="关闭此连接的套接字"><a href="#关闭此连接的套接字" class="headerlink" title="关闭此连接的套接字"></a>关闭此连接的套接字</h5><p>与服务器端相同。</p>
+<h3 id="无连接的Client-Server模式"><a href="#无连接的Client-Server模式" class="headerlink" title="无连接的Client/Server模式"></a>无连接的Client/Server模式</h3><p>在无连接的Client/Server结构中，服务器使用socket()和bind()建立和连接socket。</p>
+<p>由于此时的socket使无连接的，服务器使用recvfrom()函数从socket接收数据。</p>
+<p>客户端也不需要进行accept()，调用sendto()发送数据，调用recvfrom()接收数据。</p>
+<p>recvfrom()是拥塞函数，没有数据就一直拥塞。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ssize_t</span> sendto(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> len, <span class="keyword">int</span> flags,</span><br><span class="line">              <span class="keyword">const</span> struct sockaddr *dest_addr, <span class="keyword">socklen_t</span> addrlen)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数说明：</p>
+<p>sockfd:正在监听端口的套接口文件描述符，通过socket获得。</p>
+<p>buf：发送缓冲区，往往是使用者定义的数组，该数组装有要发送的数据。</p>
+<p>len:发送缓冲区的大小，单位是字节。</p>
+<p>flags:一般设置为0。</p>
+<p>dest_addr:指向接收数据的主机地址信息的结构体，也就是该参数指定数据要发送到哪个主机哪个进程。</p>
+<p>addrlen:表示dest_addr所指向内容的长度。</p>
+<p>函数返回：成功：返回发送成功的数据长度； 失败： -1。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ssize_t</span> recvfrom(<span class="keyword">int</span> sockfd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> len, <span class="keyword">int</span> flags,</span><br><span class="line">                struct sockaddr *src_addr, <span class="keyword">socklen_t</span> *addrlen);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数说明:</p>
+<p>sockfd:正在监听端口的套接口文件描述符，通过socket获得。</p>
+<p>buf：接收缓冲区，往往是使用者定义的数组，该数组装有接收到的数据。</p>
+<p>len:接收缓冲区的大小，单位是字节。</p>
+<p>flags:一般设置为0。</p>
+<p>src_addr:指向发送数据的主机地址信息的结构体，也就是我们可以从该参数获取到数据是谁发出的。</p>
+<p>addrlen:表示src_addr所指向内容的长度。</p>
+<p>函数返回：成功：返回接收成功的数据长度；失败： -1。</p>
+</blockquote>
+<h3 id="UDP编程实践"><a href="#UDP编程实践" class="headerlink" title="UDP编程实践"></a>UDP编程实践</h3><h4 id="实验要求"><a href="#实验要求" class="headerlink" title="实验要求"></a>实验要求</h4><p>客户端连续发送100个数据包；接收端统计接收到的数据包的数量，查看是否有数据包丢失。</p>
+<p>在Windows下编写socket需要注意的一点，使用socket，需要先注册。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">WORD wVersionRequested;</span><br><span class="line">WSADATA wsaData;</span><br><span class="line"><span class="keyword">int</span> err;</span><br><span class="line">wVersionRequested = MAKEWORD(<span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">err = WSAStartup(wVersionRequested, &amp;wsaData);</span><br><span class="line"><span class="keyword">if</span> (err != <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	perror(<span class="string">"WSAStartup error"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="程序实现"><a href="#程序实现" class="headerlink" title="程序实现"></a>程序实现</h4><p>server端</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;winsock.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUFF_LEN 128</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">//windows中要使用socket，需要先注册</span></span><br><span class="line">WORD wVersionRequested;</span><br><span class="line">WSADATA wsaData;</span><br><span class="line"><span class="keyword">int</span> err;</span><br><span class="line">wVersionRequested = MAKEWORD(<span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">err = WSAStartup(wVersionRequested, &amp;wsaData);</span><br><span class="line"><span class="keyword">if</span> (err != <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">	perror(<span class="string">"WSAStartup error"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">SOCKET sockfd;</span><br><span class="line"></span><br><span class="line">sockfd = socket(AF_INET, SOCK_DGRAM, <span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span> (sockfd == <span class="number">-1</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"socket 创建失败!"</span>);</span><br><span class="line">	<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"socket 创建成功!\n"</span>);</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">server_addr</span>;</span></span><br><span class="line">server_addr.sin_family = AF_INET;</span><br><span class="line">server_addr.sin_port = htons(<span class="number">4000</span>);</span><br><span class="line">server_addr.sin_addr.s_addr = htonl(INADDR_ANY);</span><br><span class="line"><span class="keyword">if</span> (bind(sockfd, (<span class="keyword">const</span> struct sockaddr *)(&amp;server_addr), <span class="keyword">sizeof</span>(server_addr)) == <span class="number">-1</span>)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"绑定失败!\n"</span>);</span><br><span class="line">	<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"绑定成功!\n"</span>);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"开始接收消息!\n"</span>);</span><br><span class="line"><span class="keyword">int</span> msg_count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">char</span> msg_end[] = <span class="string">"bye"</span>;</span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">	<span class="keyword">char</span> buf[BUFF_LEN];</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">client_addr</span>;</span></span><br><span class="line">	<span class="keyword">int</span> fromlen = <span class="keyword">sizeof</span>(client_addr);</span><br><span class="line">	recvfrom(sockfd, buf, BUFF_LEN, <span class="number">0</span>, (struct sockaddr *)(&amp;client_addr), &amp;fromlen);</span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">strcmp</span>(buf, <span class="string">"bye"</span>) == <span class="number">0</span> ) <span class="keyword">break</span>;</span><br><span class="line">	msg_count++;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"接收到来自 :%s 的消息,%s\n"</span>, inet_ntoa(client_addr.sin_addr), buf);</span><br><span class="line">	<span class="built_in">memset</span>(buf, <span class="number">0</span>, BUFF_LEN);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"共收到消息%d条."</span>,msg_count);</span><br><span class="line">closesocket(sockfd); <span class="comment">//win下关闭socket与Linux不同</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>client端</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">&lt;winsock.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUFF_LEN 128</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//windows中要使用socket，需要先注册</span></span><br><span class="line">	WORD wVersionRequested;</span><br><span class="line">	WSADATA wsaData;</span><br><span class="line">	<span class="keyword">int</span> err;</span><br><span class="line">	wVersionRequested = MAKEWORD(<span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">	err = WSAStartup(wVersionRequested, &amp;wsaData);</span><br><span class="line">	<span class="keyword">if</span> (err != <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		perror(<span class="string">"WSAStartup error"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//创建socket</span></span><br><span class="line">	<span class="keyword">int</span> sockfd = socket(AF_INET, SOCK_DGRAM, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">if</span> (sockfd == <span class="number">-1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"create socket false"</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"socket 创建成功!\n"</span>);</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">server_addr</span>;</span></span><br><span class="line">	server_addr.sin_family = AF_INET;</span><br><span class="line">	server_addr.sin_port = htons(<span class="number">4000</span>);</span><br><span class="line">	server_addr.sin_addr.s_addr = inet_addr(<span class="string">"172.18.216.46"</span>);</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"开始发送消息!\n"</span>);</span><br><span class="line">	<span class="keyword">while</span> (i&lt;=<span class="number">100</span>) &#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">char</span> buf[BUFF_LEN];</span><br><span class="line">		sprintf_s(buf,<span class="string">"第%d条消息.\n"</span>,i);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"%s"</span>,buf);</span><br><span class="line">		sendto(sockfd, buf, <span class="number">128</span>, <span class="number">0</span>, (<span class="keyword">const</span> struct sockaddr *)(&amp;server_addr), <span class="keyword">sizeof</span>(server_addr));</span><br><span class="line">		<span class="built_in">memset</span>(buf, <span class="number">0</span>, BUFF_LEN);</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//发送终止信息</span></span><br><span class="line">	<span class="keyword">char</span> buf[BUFF_LEN];</span><br><span class="line">	sprintf_s(buf, <span class="string">"bye"</span>);</span><br><span class="line">	sendto(sockfd, buf, <span class="number">128</span>, <span class="number">0</span>, (<span class="keyword">const</span> struct sockaddr *)(&amp;server_addr), <span class="keyword">sizeof</span>(server_addr));</span><br><span class="line">	closesocket(sockfd);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#网络编程初见"><span class="toc-number">1.</span> <span class="toc-text">网络编程初见</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#建立逻辑信道"><span class="toc-number">2.</span> <span class="toc-text">建立逻辑信道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Client-Server工作模式分类"><span class="toc-number">3.</span> <span class="toc-text">Client/Server工作模式分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#面向连接的Client-Server模式"><span class="toc-number">4.</span> <span class="toc-text">面向连接的Client/Server模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#面向连接的服务器工作流程"><span class="toc-number">4.1.</span> <span class="toc-text">面向连接的服务器工作流程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#创建套接字"><span class="toc-number">4.1.1.</span> <span class="toc-text">创建套接字</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#本地IP和端口与套接字的绑定"><span class="toc-number">4.1.2.</span> <span class="toc-text">本地IP和端口与套接字的绑定</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#服务器开启监听"><span class="toc-number">4.1.3.</span> <span class="toc-text">服务器开启监听</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#接收客户端的请求"><span class="toc-number">4.1.4.</span> <span class="toc-text">接收客户端的请求</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#发送和接收数据"><span class="toc-number">4.1.5.</span> <span class="toc-text">发送和接收数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#关闭连接套接字"><span class="toc-number">4.1.6.</span> <span class="toc-text">关闭连接套接字</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#面向连接的客户端工作流程"><span class="toc-number">4.2.</span> <span class="toc-text">面向连接的客户端工作流程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#创建套接字-1"><span class="toc-number">4.2.1.</span> <span class="toc-text">创建套接字</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#发出连接请求"><span class="toc-number">4.2.2.</span> <span class="toc-text">发出连接请求</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#发送和接收数据-1"><span class="toc-number">4.2.3.</span> <span class="toc-text">发送和接收数据</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#关闭此连接的套接字"><span class="toc-number">4.2.4.</span> <span class="toc-text">关闭此连接的套接字</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#无连接的Client-Server模式"><span class="toc-number">5.</span> <span class="toc-text">无连接的Client/Server模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UDP编程实践"><span class="toc-number">6.</span> <span class="toc-text">UDP编程实践</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实验要求"><span class="toc-number">6.1.</span> <span class="toc-text">实验要求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#程序实现"><span class="toc-number">6.2.</span> <span class="toc-text">程序实现</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&text=计网实验之Socket网络编程"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&title=计网实验之Socket网络编程"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&is_video=false&description=计网实验之Socket网络编程"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验之Socket网络编程&body=Check out this article: https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&title=计网实验之Socket网络编程"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&title=计网实验之Socket网络编程"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&title=计网实验之Socket网络编程"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&title=计网实验之Socket网络编程"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&name=计网实验之Socket网络编程&description=&lt;h3 id=&#34;网络编程初见&#34;&gt;&lt;a href=&#34;#网络编程初见&#34; class=&#34;headerlink&#34; title=&#34;网络编程初见&#34;&gt;&lt;/a&gt;网络编程初见&lt;/h3&gt;&lt;p&gt;网络编程最主要的工作就是在发送端把信息通过规定好的协议进行包的组装，在接收端按照同样的规定把包进行解析并提取对应的信息，从而达到通信的目的。&lt;/p&gt;
+&lt;p&gt;中间最重要的就是数据包的组装、过滤、捕获和分析以及其他处理。&lt;/p&gt;
+&lt;p&gt;套接字即Socket，应用程序通过套接字向网络发出请求或者应答网络请求，Socket实际上是网络应用程序接口（API）。&lt;/p&gt;
+&lt;p&gt;Socket实际上是在计算机中提供了一个通信端口，可以通过这个端口与任何一个具有Socket接口的计算机通信。应用程序在网络上传输，接收信息都通过这个Socket接口实现。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/03/27/计网实验之Socket网络编程/&t=计网实验之Socket网络编程"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="route命令 Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。 win 与linux下相同，用法有细微差别。 Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。">
+<meta name="keywords" content="计算机网络实验,网络命令,route">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网实验基础之网络命令-route">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="route命令 Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。 win 与linux下相同，用法有细微差别。 Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/01/26/5c4c258e83a51.png">
+<meta property="og:image" content="https://i.loli.net/2019/01/26/5c4c25e84b267.png">
+<meta property="og:updated_time" content="2019-12-05T14:11:18.727Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计网实验基础之网络命令-route">
+<meta name="twitter:description" content="route命令 Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。 win 与linux下相同，用法有细微差别。 Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。">
+<meta name="twitter:image" content="https://i.loli.net/2019/01/26/5c4c258e83a51.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>计网实验基础之网络命令-route</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/01/26/计网实验基础之网络命令-ipconfigifconfig和netstat/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/01/26/计网实验基础之网络命令-arp/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&text=计网实验基础之网络命令-route"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&title=计网实验基础之网络命令-route"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&is_video=false&description=计网实验基础之网络命令-route"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验基础之网络命令-route&body=Check out this article: https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&title=计网实验基础之网络命令-route"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&title=计网实验基础之网络命令-route"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&title=计网实验基础之网络命令-route"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&title=计网实验基础之网络命令-route"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&name=计网实验基础之网络命令-route&description=&lt;h3 id=&#34;route命令&#34;&gt;&lt;a href=&#34;#route命令&#34; class=&#34;headerlink&#34; title=&#34;route命令&#34;&gt;&lt;/a&gt;route命令&lt;/h3&gt;&lt;p&gt; Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;win&lt;/code&gt; 与&lt;code&gt;linux&lt;/code&gt;下相同，用法有细微差别。&lt;/p&gt;
+&lt;p&gt;Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&t=计网实验基础之网络命令-route"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#route命令"><span class="toc-number">1.</span> <span class="toc-text">route命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用详解"><span class="toc-number">1.1.</span> <span class="toc-text">使用详解</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        计网实验基础之网络命令-route
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-01-25T16:00:00.000Z" itemprop="datePublished">2019-01-26</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/手稿/">手稿</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/route/">route</a>, <a class="tag-link" href="/tags/网络命令/">网络命令</a>, <a class="tag-link" href="/tags/计算机网络实验/">计算机网络实验</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="route命令"><a href="#route命令" class="headerlink" title="route命令"></a>route命令</h3><p> Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。</p>
+<p><code>win</code> 与<code>linux</code>下相同，用法有细微差别。</p>
+<p>Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。</p>
+<a id="more"></a>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 命令格式</span></span><br><span class="line">route [-f] [-p] [Command [Destination] [mask Netmask] [Gateway] [metric Metric]] [if Interface]] </span><br><span class="line"><span class="comment"># 具体格式请按照使用的机器的提示进行，不同机器或许不同</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 命令参数</span></span><br><span class="line">-c 显示更多信息</span><br><span class="line">-n 不解析名字</span><br><span class="line">-v 显示详细的处理信息</span><br><span class="line">-F 显示发送信息</span><br><span class="line">-C 显示路由缓存</span><br><span class="line">-f 清除所有网关入口的路由表。 </span><br><span class="line">-p 与 add 命令一起使用时使路由具有永久性。</span><br><span class="line">add:添加一条新路由。</span><br><span class="line">del:删除一条路由。</span><br><span class="line">-net:目标地址是一个网络。</span><br><span class="line">-host:目标地址是一个主机。</span><br><span class="line">netmask:当添加一个网络路由时，需要使用网络掩码。</span><br><span class="line">gw:路由数据包通过网关。注意，你指定的网关必须能够达到。</span><br><span class="line">metric：设置路由跳数。</span><br><span class="line">Command 指定您想运行的命令 (Add/Change/Delete/Print)。 </span><br><span class="line">Destination 指定该路由的网络目标。 </span><br><span class="line">mask Netmask 指定与网络目标相关的网络掩码（也被称作子网掩码）。 </span><br><span class="line">Gateway 指定网络目标定义的地址集和子网掩码可以到达的前进或下一跃点 IP 地址。 </span><br><span class="line">metric Metric 为路由指定一个整数成本值标（从 <span class="number">1</span> 至 <span class="number">9999</span>），当在路由表(与转发的数据包目标地址最匹配)的多个路由中进行选择时可以使用。 </span><br><span class="line"><span class="keyword">if</span> Interface 为可以访问目标的接口指定接口索引。若要获得一个接口列表和它们相应的接口索引，使用 route print 命令的显示功能。可以使用十进制或十六进制值进行接口索引。</span><br></pre></td></tr></table></figure>
+<h4 id="使用详解"><a href="#使用详解" class="headerlink" title="使用详解"></a>使用详解</h4><ol>
+<li><p>显示当前路由</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">route print <span class="comment"># win</span></span><br><span class="line">route print <span class="number">157</span>* <span class="comment"># win 打印匹配的项</span></span><br><span class="line">route       <span class="comment"># ubuntu</span></span><br></pre></td></tr></table></figure>
+<center><img src="https://i.loli.net/2019/01/26/5c4c258e83a51.png" alt="route.png"></center>
+
+<center><img src="https://i.loli.net/2019/01/26/5c4c25e84b267.png" alt="route_linux.png"></center>
+
+<p>上面是win和linux下显示的不同的路由表。</p>
+<blockquote>
+<p>Flags标志说明：</p>
+<p>U Up表示此路由当前为启动状态</p>
+<p>H Host，表示此网关为一主机</p>
+<p>G Gateway，表示此网关为一路由器</p>
+<p>R Reinstate Route，使用动态路由重新初始化的路由</p>
+<p>D Dynamically,此路由是动态性地写入</p>
+<p>M Modified，此路由是由路由守护程序或导向器动态修改</p>
+<p>! 表示此路由当前为关闭状态</p>
+</blockquote>
+</li>
+<li><p>添加网关/设置网关</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">route ADD <span class="number">3</span>ffe::/<span class="number">32</span> <span class="number">3</span>ffe::<span class="number">1</span></span><br><span class="line">route ADD <span class="number">157.0</span>.<span class="number">0.0</span> MASK <span class="number">255.0</span>.<span class="number">0.0</span>  <span class="number">157.55</span>.<span class="number">80.1</span> METRIC <span class="number">3</span> <span class="keyword">IF</span> <span class="number">2</span></span><br><span class="line">       destination^      ^mask      ^gateway     metric^    ^</span><br><span class="line">                                                        Interface</span><br><span class="line">     <span class="comment"># 如果未给出 IF，它将尝试查找给定网关的最佳接口。</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改网关</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">route CHANGE <span class="number">157.0</span>.<span class="number">0.0</span> MASK <span class="number">255.0</span>.<span class="number">0.0</span> <span class="number">157.55</span>.<span class="number">80.5</span> METRIC <span class="number">2</span> <span class="keyword">IF</span> <span class="number">2</span></span><br><span class="line">      <span class="comment"># CHANGE 只用于修改网关和/或跃点数。</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>屏蔽路由</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add -net <span class="number">224.0</span>.<span class="number">0.0</span> netmask <span class="number">240.0</span>.<span class="number">0.0</span> reject</span><br></pre></td></tr></table></figure>
+<p>增加一条屏蔽的路由，目的地址为 224.x.x.x 将被拒绝</p>
+</li>
+<li><p>删除路由记录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">route DELETE 157.0.0.0</span><br><span class="line">route del -net 224.0.0.0 netmask 240.0.0.0  # linux</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>清除路由表</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route -f</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加永久性路由</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">route add addr -p</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#route命令"><span class="toc-number">1.</span> <span class="toc-text">route命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用详解"><span class="toc-number">1.1.</span> <span class="toc-text">使用详解</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&text=计网实验基础之网络命令-route"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&title=计网实验基础之网络命令-route"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&is_video=false&description=计网实验基础之网络命令-route"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验基础之网络命令-route&body=Check out this article: https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&title=计网实验基础之网络命令-route"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&title=计网实验基础之网络命令-route"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&title=计网实验基础之网络命令-route"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&title=计网实验基础之网络命令-route"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&name=计网实验基础之网络命令-route&description=&lt;h3 id=&#34;route命令&#34;&gt;&lt;a href=&#34;#route命令&#34; class=&#34;headerlink&#34; title=&#34;route命令&#34;&gt;&lt;/a&gt;route命令&lt;/h3&gt;&lt;p&gt; Route命令用于在本地IP路由表中显示和修改条目。在排除网络故障时常会用到。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;win&lt;/code&gt; 与&lt;code&gt;linux&lt;/code&gt;下相同，用法有细微差别。&lt;/p&gt;
+&lt;p&gt;Route命令是用于操作基于内核ip路由表，它的主要作用是创建一个静态路由让指定一个主机或者一个网络通过一个网络接口，如eth0。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/01/26/计网实验基础之网络命令-route/&t=计网实验基础之网络命令-route"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

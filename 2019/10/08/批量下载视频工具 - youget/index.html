@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="一个可以在命令行批量下载网页资源的小工具。项目地址：https://github.com/soimort/you-get 中文介绍地址：https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E">
+<meta name="keywords" content="批量下载,youget">
+<meta property="og:type" content="article">
+<meta property="og:title" content="批量下载视频工具 - youget">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="一个可以在命令行批量下载网页资源的小工具。项目地址：https://github.com/soimort/you-get 中文介绍地址：https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-05T14:19:31.013Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="批量下载视频工具 - youget">
+<meta name="twitter:description" content="一个可以在命令行批量下载网页资源的小工具。项目地址：https://github.com/soimort/you-get 中文介绍地址：https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>批量下载视频工具 - youget</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/10/08/Handshake：利用分布式的DNS增强互联网的安全[翻译]/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/09/12/自回归移动平均模型/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&text=批量下载视频工具 - youget"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&title=批量下载视频工具 - youget"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&is_video=false&description=批量下载视频工具 - youget"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=批量下载视频工具 - youget&body=Check out this article: https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&title=批量下载视频工具 - youget"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&title=批量下载视频工具 - youget"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&title=批量下载视频工具 - youget"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&title=批量下载视频工具 - youget"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&name=批量下载视频工具 - youget&description=&lt;p&gt;一个可以在命令行批量下载网页资源的小工具。项目地址：&lt;a href=&#34;https://github.com/soimort/you-get&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://github.com/soimort/you-get&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;中文介绍地址：&lt;a href=&#34;https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&t=批量下载视频工具 - youget"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#安装要求"><span class="toc-number">1.</span> <span class="toc-text">安装要求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#安装"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#简单使用教程"><span class="toc-number">3.</span> <span class="toc-text">简单使用教程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#下载其他内容"><span class="toc-number">4.</span> <span class="toc-text">下载其他内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#支持网站"><span class="toc-number">5.</span> <span class="toc-text">支持网站</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        批量下载视频工具 - youget
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-10-07T16:00:00.000Z" itemprop="datePublished">2019-10-08</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/杂项/">杂项</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/youget/">youget</a>, <a class="tag-link" href="/tags/批量下载/">批量下载</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>一个可以在命令行批量下载网页资源的小工具。项目地址：<a href="https://github.com/soimort/you-get" target="_blank" rel="noopener">https://github.com/soimort/you-get</a></p>
+<p>中文介绍地址：<a href="https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E" target="_blank" rel="noopener">https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E</a></p>
+<a id="more"></a>
+<h4 id="安装要求"><a href="#安装要求" class="headerlink" title="安装要求"></a>安装要求</h4><ul>
+<li><strong>Python 3</strong></li>
+<li><a href="https://www.ffmpeg.org/" target="_blank" rel="noopener">FFmpeg</a>(强烈推荐) or <a href="https://libav.org/" target="_blank" rel="noopener">Libav</a></li>
+<li>(可选) <a href="https://rtmpdump.mplayerhq.hu/" target="_blank" rel="noopener">RTMPDump</a></li>
+</ul>
+<p>使用简单方便：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">usage: you-get [OPTION]... URL...</span><br><span class="line"></span><br><span class="line">A tiny downloader that scrapes the web</span><br><span class="line"></span><br><span class="line">optional arguments:</span><br><span class="line">  -V, --version         Print version and exit</span><br><span class="line">  -h, --help            Print this help message and exit</span><br><span class="line"></span><br><span class="line">Dry-run options:</span><br><span class="line">  (no actual downloading)</span><br><span class="line"></span><br><span class="line">  -i, --info            Print extracted information</span><br><span class="line">  -u, --url             Print extracted information with URLs</span><br><span class="line">  --json                Print extracted URLs in JSON format</span><br><span class="line"></span><br><span class="line">Download options:</span><br><span class="line">  -n, --no-merge        Do not merge video parts</span><br><span class="line">  --no-caption          Do not download captions (subtitles, lyrics, danmaku,</span><br><span class="line">                        ...)</span><br><span class="line">  -f, --force           Force overwriting existing files</span><br><span class="line">  --skip-existing-file-size-check</span><br><span class="line">                        Skip existing file without checking file size</span><br><span class="line">  -F STREAM_ID, --format STREAM_ID</span><br><span class="line">                        Set video format to STREAM_ID</span><br><span class="line">  -O FILE, --output-filename FILE</span><br><span class="line">                        Set output filename</span><br><span class="line">  -o DIR, --output-dir DIR</span><br><span class="line">                        Set output directory</span><br><span class="line">  -p PLAYER, --player PLAYER</span><br><span class="line">                        Stream extracted URL to a PLAYER</span><br><span class="line">  -c COOKIES_FILE, --cookies COOKIES_FILE</span><br><span class="line">                        Load cookies.txt or cookies.sqlite</span><br><span class="line">  -t SECONDS, --timeout SECONDS</span><br><span class="line">                        Set socket timeout</span><br><span class="line">  -d, --debug           Show traceback and other debug info</span><br><span class="line">  -I FILE, --input-file FILE</span><br><span class="line">                        Read non-playlist URLs from FILE</span><br><span class="line">  -P PASSWORD, --password PASSWORD</span><br><span class="line">                        Set video visit password to PASSWORD</span><br><span class="line">  -l, --playlist        Prefer to download a playlist</span><br><span class="line">  -a, --auto-rename     Auto rename same name different files</span><br><span class="line">  -k, --insecure        ignore ssl errors</span><br><span class="line"></span><br><span class="line">Proxy options:</span><br><span class="line">  -x HOST:PORT, --http-proxy HOST:PORT</span><br><span class="line">                        Use an HTTP proxy for downloading</span><br><span class="line">  -y HOST:PORT, --extractor-proxy HOST:PORT</span><br><span class="line">                        Use an HTTP proxy for extracting only</span><br><span class="line">  --no-proxy            Never use a proxy</span><br><span class="line">  -s HOST:PORT, --socks-proxy HOST:PORT</span><br><span class="line">                        Use an SOCKS5 proxy for downloading</span><br></pre></td></tr></table></figure>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>安装方法，官方提供了6种安装方式，这里只介绍两种最方便的方式</p>
+<ol>
+<li><p>使用pip安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install you-get</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用安装包（Windows）</p>
+<p><code>exe</code> (单独文件) 或 <code>7z</code> (包括所有依赖) 可从<a href="https://github.com/soimort/you-get/releases/latest" target="_blank" rel="noopener">https://github.com/soimort/you-get/releases/latest</a> 下载</p>
+<p>下载解压后，找到<code>setup.py</code>，运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python setup.py install</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="简单使用教程"><a href="#简单使用教程" class="headerlink" title="简单使用教程"></a>简单使用教程</h4><ol>
+<li><p>查看网页视频信息<code>--info/-i</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">you-get: This is a multipart video. (use --playlist to download all parts.)</span><br><span class="line">site:                Bilibili</span><br><span class="line">title:               php代码审计 (P1. 课时1  环境准备)</span><br><span class="line">streams:             # Available quality and codecs</span><br><span class="line">    [ DASH ] ____________________________________</span><br><span class="line">    - format:        dash-flv720</span><br><span class="line">      container:     mp4</span><br><span class="line">      quality:       高清 720P</span><br><span class="line">      size:          203.9 MiB (213835955 bytes)</span><br><span class="line">    # download-with: you-get --format=dash-flv720 [URL]</span><br><span class="line"></span><br><span class="line">    - format:        dash-flv</span><br><span class="line">      container:     mp4</span><br><span class="line">      quality:       高清 1080P</span><br><span class="line">      size:          184.1 MiB (193064776 bytes)</span><br><span class="line">    # download-with: you-get --format=dash-flv [URL]</span><br><span class="line"></span><br><span class="line">    - format:        dash-flv480</span><br><span class="line">      container:     mp4</span><br><span class="line">      quality:       清晰 480P</span><br><span class="line">      size:          125.9 MiB (132063136 bytes)</span><br><span class="line">    # download-with: you-get --format=dash-flv480 [URL]</span><br><span class="line"></span><br><span class="line">    - format:        dash-flv360</span><br><span class="line">      container:     mp4</span><br><span class="line">      quality:       流畅 360P</span><br><span class="line">      size:          63.6 MiB (66717698 bytes)</span><br><span class="line">    # download-with: you-get --format=dash-flv360 [URL]</span><br><span class="line"></span><br><span class="line">    [ DEFAULT ] _________________________________</span><br><span class="line">    - format:        flv</span><br><span class="line">      container:     flv</span><br><span class="line">      quality:       高清 1080P</span><br><span class="line">      size:          185.0 MiB (193986851 bytes)</span><br><span class="line">    # download-with: you-get --format=flv [URL]</span><br><span class="line"></span><br><span class="line">    - format:        flv720</span><br><span class="line">      container:     flv</span><br><span class="line">      quality:       高清 720P</span><br><span class="line">      size:          204.8 MiB (214758030 bytes)</span><br><span class="line">    # download-with: you-get --format=flv720 [URL]</span><br><span class="line"></span><br><span class="line">    - format:        flv480</span><br><span class="line">      container:     flv</span><br><span class="line">      quality:       清晰 480P</span><br><span class="line">      size:          126.8 MiB (132985211 bytes)</span><br><span class="line">    # download-with: you-get --format=flv480 [URL]</span><br><span class="line"></span><br><span class="line">    - format:        flv360</span><br><span class="line">      container:     flv</span><br><span class="line">      quality:       流畅 360P</span><br><span class="line">      size:          64.5 MiB (67639773 bytes)</span><br><span class="line">    # download-with: you-get --format=flv360 [URL]</span><br></pre></td></tr></table></figure>
+<p>标有<code>DEFAULT</code> 为默认画质。如果想更换格式，可以使用<code>--itag</code> 选项。下载mp4，设置<code>--itag=18</code>。</p>
+</li>
+<li><p>下载视频</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">you-get [target url]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指定下载输出目录<code>-o/--output-dir</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">you-get -o [target dir] [url]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>指定输出文件名<code>-O/--output-filename</code></p>
+</li>
+<li><p>批量下载<code>-l/--playlist</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">you-get -l [url]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>暂停下载</p>
+<p>使用<code>Ctrl+C</code>暂停下载，下次使用<code>you-get</code>传入相同参数时，下载将从上次继续开始【断点续传】。</p>
+</li>
+<li><p>观看视频<code>-p/--player</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">you-get -p vlc [url]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>加载cookie，<code>--cookies</code>/<code>-c</code> </p>
+</li>
+</ol>
+<h4 id="下载其他内容"><a href="#下载其他内容" class="headerlink" title="下载其他内容"></a>下载其他内容</h4><p><code>you-get</code>不仅可以下载视频，还可以下载网页上的图片等其他内容。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> you-get https://stallman.org/rms.jpg</span><br><span class="line">Site:       stallman.org</span><br><span class="line">Title:      rms</span><br><span class="line">Type:       JPEG Image (image/jpeg)</span><br><span class="line">Size:       0.06 MiB (66482 Bytes)</span><br><span class="line"></span><br><span class="line">Downloading rms.jpg ...</span><br><span class="line">100.0% (  0.1/0.1  MB) ├████████████████████████████████████████┤[1/1]  127 kB/s</span><br></pre></td></tr></table></figure>
+<p>如果只是网页链接，<code>you-get</code>会自动检查网页，下载一切感兴趣的东西。</p>
+<h4 id="支持网站"><a href="#支持网站" class="headerlink" title="支持网站"></a>支持网站</h4><table>
+<thead>
+<tr>
+<th>网站</th>
+<th>URL</th>
+<th>视频?</th>
+<th>图像?</th>
+<th>音频?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>YouTube</strong></td>
+<td><a href="https://www.youtube.com/" target="_blank" rel="noopener">https://www.youtube.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Twitter</strong></td>
+<td><a href="https://twitter.com/" target="_blank" rel="noopener">https://twitter.com/</a></td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>VK</td>
+<td><a href="http://vk.com/" target="_blank" rel="noopener">http://vk.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Vine</td>
+<td><a href="https://vine.co/" target="_blank" rel="noopener">https://vine.co/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Vimeo</td>
+<td><a href="https://vimeo.com/" target="_blank" rel="noopener">https://vimeo.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Vidto</td>
+<td><a href="http://vidto.me/" target="_blank" rel="noopener">http://vidto.me/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Veoh</td>
+<td><a href="http://www.veoh.com/" target="_blank" rel="noopener">http://www.veoh.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Tumblr</strong></td>
+<td><a href="https://www.tumblr.com/" target="_blank" rel="noopener">https://www.tumblr.com/</a></td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>TED</td>
+<td><a href="http://www.ted.com/" target="_blank" rel="noopener">http://www.ted.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>SoundCloud</td>
+<td><a href="https://soundcloud.com/" target="_blank" rel="noopener">https://soundcloud.com/</a></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Pinterest</td>
+<td><a href="https://www.pinterest.com/" target="_blank" rel="noopener">https://www.pinterest.com/</a></td>
+<td></td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>MusicPlayOn</td>
+<td><a href="http://en.musicplayon.com/" target="_blank" rel="noopener">http://en.musicplayon.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>MTV81</td>
+<td><a href="http://www.mtv81.com/" target="_blank" rel="noopener">http://www.mtv81.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Mixcloud</td>
+<td><a href="https://www.mixcloud.com/" target="_blank" rel="noopener">https://www.mixcloud.com/</a></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Metacafe</td>
+<td><a href="http://www.metacafe.com/" target="_blank" rel="noopener">http://www.metacafe.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Magisto</td>
+<td><a href="http://www.magisto.com/" target="_blank" rel="noopener">http://www.magisto.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Khan Academy</td>
+<td><a href="https://www.khanacademy.org/" target="_blank" rel="noopener">https://www.khanacademy.org/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>JPopsuki TV</td>
+<td><a href="http://www.jpopsuki.tv/" target="_blank" rel="noopener">http://www.jpopsuki.tv/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Internet Archive</td>
+<td><a href="https://archive.org/" target="_blank" rel="noopener">https://archive.org/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Instagram</strong></td>
+<td><a href="https://instagram.com/" target="_blank" rel="noopener">https://instagram.com/</a></td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>Heavy Music Archive</td>
+<td><a href="http://www.heavy-music.ru/" target="_blank" rel="noopener">http://www.heavy-music.ru/</a></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td><strong>Google+</strong></td>
+<td><a href="https://plus.google.com/" target="_blank" rel="noopener">https://plus.google.com/</a></td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>Freesound</td>
+<td><a href="http://www.freesound.org/" target="_blank" rel="noopener">http://www.freesound.org/</a></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Flickr</td>
+<td><a href="https://www.flickr.com/" target="_blank" rel="noopener">https://www.flickr.com/</a></td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>Facebook</td>
+<td><a href="https://www.facebook.com/" target="_blank" rel="noopener">https://www.facebook.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>eHow</td>
+<td><a href="http://www.ehow.com/" target="_blank" rel="noopener">http://www.ehow.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Dailymotion</td>
+<td><a href="http://www.dailymotion.com/" target="_blank" rel="noopener">http://www.dailymotion.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CBS</td>
+<td><a href="http://www.cbs.com/" target="_blank" rel="noopener">http://www.cbs.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Bandcamp</td>
+<td><a href="http://bandcamp.com/" target="_blank" rel="noopener">http://bandcamp.com/</a></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td>AliveThai</td>
+<td><a href="http://alive.in.th/" target="_blank" rel="noopener">http://alive.in.th/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>interest.me</td>
+<td><a href="http://ch.interest.me/tvn" target="_blank" rel="noopener">http://ch.interest.me/tvn</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>755ナナゴーゴー</strong></td>
+<td><a href="http://7gogo.jp/" target="_blank" rel="noopener">http://7gogo.jp/</a></td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>niconicoニコニコ動画</strong></td>
+<td><a href="http://www.nicovideo.jp/" target="_blank" rel="noopener">http://www.nicovideo.jp/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>163网易视频网易云音乐</strong></td>
+<td><a href="http://v.163.com/" target="_blank" rel="noopener">http://v.163.com/</a> <a href="http://music.163.com/" target="_blank" rel="noopener">http://music.163.com/</a></td>
+<td>✓</td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td>56网</td>
+<td><a href="http://www.56.com/" target="_blank" rel="noopener">http://www.56.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>AcFun</strong></td>
+<td><a href="http://www.acfun.tv/" target="_blank" rel="noopener">http://www.acfun.tv/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Baidu百度贴吧</strong></td>
+<td><a href="http://tieba.baidu.com/" target="_blank" rel="noopener">http://tieba.baidu.com/</a></td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td>爆米花网</td>
+<td><a href="http://www.baomihua.com/" target="_blank" rel="noopener">http://www.baomihua.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>bilibili哔哩哔哩</strong></td>
+<td><a href="http://www.bilibili.com/" target="_blank" rel="noopener">http://www.bilibili.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Dilidili</td>
+<td><a href="http://www.dilidili.com/" target="_blank" rel="noopener">http://www.dilidili.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>豆瓣</td>
+<td><a href="http://www.douban.com/" target="_blank" rel="noopener">http://www.douban.com/</a></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td>斗鱼</td>
+<td><a href="http://www.douyutv.com/" target="_blank" rel="noopener">http://www.douyutv.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>凤凰视频</td>
+<td><a href="http://v.ifeng.com/" target="_blank" rel="noopener">http://v.ifeng.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>风行网</td>
+<td><a href="http://www.fun.tv/" target="_blank" rel="noopener">http://www.fun.tv/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>iQIYI 爱奇艺</td>
+<td><a href="http://www.iqiyi.com/" target="_blank" rel="noopener">http://www.iqiyi.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>激动网</td>
+<td><a href="http://www.joy.cn/" target="_blank" rel="noopener">http://www.joy.cn/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>酷6网</td>
+<td><a href="http://www.ku6.com/" target="_blank" rel="noopener">http://www.ku6.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>酷狗音乐</td>
+<td><a href="http://www.kugou.com/" target="_blank" rel="noopener">http://www.kugou.com/</a></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td>酷我音乐</td>
+<td><a href="http://www.kuwo.cn/" target="_blank" rel="noopener">http://www.kuwo.cn/</a></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td>乐视网</td>
+<td><a href="http://www.letv.com/" target="_blank" rel="noopener">http://www.letv.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>荔枝FM</td>
+<td><a href="http://www.lizhi.fm/" target="_blank" rel="noopener">http://www.lizhi.fm/</a></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td>秒拍</td>
+<td><a href="http://www.miaopai.com/" target="_blank" rel="noopener">http://www.miaopai.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>MioMio弹幕网</td>
+<td><a href="http://www.miomio.tv/" target="_blank" rel="noopener">http://www.miomio.tv/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>痞客邦</td>
+<td><a href="https://www.pixnet.net/" target="_blank" rel="noopener">https://www.pixnet.net/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>PPTV聚力</td>
+<td><a href="http://www.pptv.com/" target="_blank" rel="noopener">http://www.pptv.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>齐鲁网</td>
+<td><a href="http://v.iqilu.com/" target="_blank" rel="noopener">http://v.iqilu.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>QQ 腾讯视频</td>
+<td><a href="http://v.qq.com/" target="_blank" rel="noopener">http://v.qq.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>阡陌视频</td>
+<td><a href="http://qianmo.com/" target="_blank" rel="noopener">http://qianmo.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Sina 新浪视频 微博秒拍视频</td>
+<td><a href="http://video.sina.com.cn/" target="_blank" rel="noopener">http://video.sina.com.cn/</a> <a href="http://video.weibo.com/" target="_blank" rel="noopener">http://video.weibo.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Sohu 搜狐视频</td>
+<td><a href="http://tv.sohu.com/" target="_blank" rel="noopener">http://tv.sohu.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>天天动听</td>
+<td><a href="http://www.dongting.com/" target="_blank" rel="noopener">http://www.dongting.com/</a></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td><strong>Tudou土豆</strong></td>
+<td><a href="http://www.tudou.com/" target="_blank" rel="noopener">http://www.tudou.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>虾米</td>
+<td><a href="http://www.xiami.com/" target="_blank" rel="noopener">http://www.xiami.com/</a></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td>阳光卫视</td>
+<td><a href="http://www.isuntv.com/" target="_blank" rel="noopener">http://www.isuntv.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>音悦Tai</strong></td>
+<td><a href="http://www.yinyuetai.com/" target="_blank" rel="noopener">http://www.yinyuetai.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Youku优酷</strong></td>
+<td><a href="http://www.youku.com/" target="_blank" rel="noopener">http://www.youku.com/</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>战旗TV</td>
+<td><a href="http://www.zhanqi.tv/lives" target="_blank" rel="noopener">http://www.zhanqi.tv/lives</a></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>央视网</td>
+<td><a href="http://www.cntv.cn/" target="_blank" rel="noopener">http://www.cntv.cn/</a></td>
+<td>✓</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#安装要求"><span class="toc-number">1.</span> <span class="toc-text">安装要求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#安装"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#简单使用教程"><span class="toc-number">3.</span> <span class="toc-text">简单使用教程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#下载其他内容"><span class="toc-number">4.</span> <span class="toc-text">下载其他内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#支持网站"><span class="toc-number">5.</span> <span class="toc-text">支持网站</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&text=批量下载视频工具 - youget"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&title=批量下载视频工具 - youget"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&is_video=false&description=批量下载视频工具 - youget"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=批量下载视频工具 - youget&body=Check out this article: https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&title=批量下载视频工具 - youget"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&title=批量下载视频工具 - youget"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&title=批量下载视频工具 - youget"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&title=批量下载视频工具 - youget"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&name=批量下载视频工具 - youget&description=&lt;p&gt;一个可以在命令行批量下载网页资源的小工具。项目地址：&lt;a href=&#34;https://github.com/soimort/you-get&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://github.com/soimort/you-get&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;中文介绍地址：&lt;a href=&#34;https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://github.com/soimort/you-get/wiki/%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E&lt;/a&gt;&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/10/08/批量下载视频工具 - youget/&t=批量下载视频工具 - youget"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

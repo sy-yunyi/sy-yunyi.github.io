@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="STP介绍对于二层以太网而言，两个局域网间只能有一条活动的通路，否则就会产生广播风暴。 但为了加强一个局域网的可靠性，又需要建立冗余链路，其中一些通路必须处于备份状态。">
+<meta name="keywords" content="计算机网络实验,生成树">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网实验之生成树协议">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="STP介绍对于二层以太网而言，两个局域网间只能有一条活动的通路，否则就会产生广播风暴。 但为了加强一个局域网的可靠性，又需要建立冗余链路，其中一些通路必须处于备份状态。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="c:/Users/sky_y/AppData/Roaming/Typora/typora-user-images/1555481604188.png">
+<meta property="og:image" content="c:/Users/sky_y/AppData/Roaming/Typora/typora-user-images/1555483717951.png">
+<meta property="og:image" content="c:/Users/sky_y/AppData/Roaming/Typora/typora-user-images/1555484539931.png">
+<meta property="og:updated_time" content="2019-12-05T14:10:35.237Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计网实验之生成树协议">
+<meta name="twitter:description" content="STP介绍对于二层以太网而言，两个局域网间只能有一条活动的通路，否则就会产生广播风暴。 但为了加强一个局域网的可靠性，又需要建立冗余链路，其中一些通路必须处于备份状态。">
+<meta name="twitter:image" content="c:/Users/sky_y/AppData/Roaming/Typora/typora-user-images/1555481604188.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>计网实验之生成树协议</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/04/17/计网实验之端口聚合/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/04/10/计网实验之VLAN技术/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&text=计网实验之生成树协议"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&title=计网实验之生成树协议"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&is_video=false&description=计网实验之生成树协议"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验之生成树协议&body=Check out this article: https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&title=计网实验之生成树协议"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&title=计网实验之生成树协议"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&title=计网实验之生成树协议"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&title=计网实验之生成树协议"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&name=计网实验之生成树协议&description=&lt;h3 id=&#34;STP介绍&#34;&gt;&lt;a href=&#34;#STP介绍&#34; class=&#34;headerlink&#34; title=&#34;STP介绍&#34;&gt;&lt;/a&gt;STP介绍&lt;/h3&gt;&lt;p&gt;对于二层以太网而言，两个局域网间只能有一条活动的通路，否则就会产生广播风暴。&lt;/p&gt;
+&lt;p&gt;但为了加强一个局域网的可靠性，又需要建立冗余链路，其中一些通路必须处于备份状态。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&t=计网实验之生成树协议"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#STP介绍"><span class="toc-number">1.</span> <span class="toc-text">STP介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#工作原理"><span class="toc-number">1.1.</span> <span class="toc-text">工作原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#相关术语"><span class="toc-number">1.2.</span> <span class="toc-text">相关术语</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作用"><span class="toc-number">1.3.</span> <span class="toc-text">作用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生成树形成过程"><span class="toc-number">2.</span> <span class="toc-text">生成树形成过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BPDU格式"><span class="toc-number">3.</span> <span class="toc-text">BPDU格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#端口状态学习"><span class="toc-number">4.</span> <span class="toc-text">端口状态学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#快速生成树协议"><span class="toc-number">5.</span> <span class="toc-text">快速生成树协议</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        计网实验之生成树协议
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-04-16T16:00:00.000Z" itemprop="datePublished">2019-04-17</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/手稿/">手稿</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/生成树/">生成树</a>, <a class="tag-link" href="/tags/计算机网络实验/">计算机网络实验</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="STP介绍"><a href="#STP介绍" class="headerlink" title="STP介绍"></a>STP介绍</h3><p>对于二层以太网而言，两个局域网间只能有一条活动的通路，否则就会产生广播风暴。</p>
+<p>但为了加强一个局域网的可靠性，又需要建立冗余链路，其中一些通路必须处于备份状态。</p>
+<a id="more"></a>
+<p><img src="C:\Users\sky_y\AppData\Roaming\Typora\typora-user-images\1555481604188.png" alt="1555481604188"></p>
+<p>若网络发生故障导致一条链路失效，相应的冗余链路就会提升至活动状态。</p>
+<p>生成树协议(Spanning Tree Protocol,STP)是为了解决冗余网络中的广播风暴问题而产生的，是一种网桥嵌套协议。</p>
+<h4 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h4><p>STP定义了网桥协议数据单元(Bridge Protocol Data Unit, BPDU), 网桥利用BPDU进行通信，并用BPDU的相关机制动态的选择根网桥和备份网桥。从而打破物理环路，建立一个无循环的逻辑拓扑。</p>
+<h4 id="相关术语"><a href="#相关术语" class="headerlink" title="相关术语"></a>相关术语</h4><p><strong>根端口</strong>：提供最短路径到根网桥的端口。每台非根交换机都必须选取一个根端口。</p>
+<p><strong>指派端口</strong>：每个网段通过该端口连接到根网桥。根网桥上的端口。</p>
+<p><strong>替换端口</strong>：根端口的替换端口，一旦根端口失效，该端口立刻成为根端口。</p>
+<p><strong>备份端口</strong>：指派端口的备份端口，但过一个网桥有两个端口都连在一个网段上时，优先级高的为指派端口，优先级低的为备份端口。</p>
+<p><strong>非活动端口</strong>：当前不处在活动状态的端口。</p>
+<p><strong>端口优先级</strong>：默认为根端口、指派端口、替换端口、备份端口。</p>
+<h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><ul>
+<li>STP避免了当网络中存在环路时产生广播风暴</li>
+<li>环路消失时，自动开启原来切断的端口，提高了网络可靠性</li>
+</ul>
+<h3 id="生成树形成过程"><a href="#生成树形成过程" class="headerlink" title="生成树形成过程"></a>生成树形成过程</h3><ol>
+<li>通过比较交换机优先级选取根交换机</li>
+<li>其余非根交换机只有一个通向根交换机的端口，称为根端口</li>
+<li>认定网段的指派交换机</li>
+<li>每个网段只有一个转发端口，根交换机所有端口均为转发端口</li>
+</ol>
+<blockquote>
+<p>给定广播域内只有一台根交换机</p>
+</blockquote>
+<p>生成树协议使用IEEE 802.1d 标准中的生成树算法(Spanning Tree Algorithm,STA)，在一个具有冗余的容错网络中计算出一个无环路路径。</p>
+<p>一部分端口处于转发状态，一部分处于阻塞状态，保证网络中任何一点到另一点的路径有且只有一条。</p>
+<p>除了根端口和指派端口外的端口都处于阻塞状态。所以在确定了根交换机、交换机的根端口以及每个网段的指派交换机和指派端口后，一个生成树的拓扑结构就确定了。</p>
+<p>当某台交换机发现拓扑发生变化后，向根交换机定时发送拓扑变化BPDU，在根交换机接收到消息后，根交换机发送给配置BPDU，重新进行生成树配置。</p>
+<h3 id="BPDU格式"><a href="#BPDU格式" class="headerlink" title="BPDU格式"></a>BPDU格式</h3><p><img src="C:\Users\sky_y\AppData\Roaming\Typora\typora-user-images\1555483717951.png" alt="1555483717951"></p>
+<p>DMA是目的MAC地址，配置消息的目的地址是一个固定的网桥组播地址（0x0180c2000000）；</p>
+<p>SMA是源MAC地址，即发送该配置消息的网桥的MAC地址；</p>
+<p>L/T是帧长；</p>
+<p>LLC Header 是配置消息固定的链路头；</p>
+<p>Playload是BPDU数据，具体字段为</p>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>字节</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>协议ID</td>
+<td>2</td>
+</tr>
+<tr>
+<td>版本号</td>
+<td>1</td>
+</tr>
+<tr>
+<td>报文类型</td>
+<td>1</td>
+</tr>
+<tr>
+<td>标记域</td>
+<td>1</td>
+</tr>
+<tr>
+<td>根网桥ID</td>
+<td>8</td>
+</tr>
+<tr>
+<td>根路径成本</td>
+<td>4</td>
+</tr>
+<tr>
+<td>发送网桥ID</td>
+<td>8</td>
+</tr>
+<tr>
+<td>端口ID</td>
+<td>2</td>
+</tr>
+<tr>
+<td>报文老化时间</td>
+<td>2</td>
+</tr>
+<tr>
+<td>最大老化时间</td>
+<td>2</td>
+</tr>
+<tr>
+<td>访问时间</td>
+<td>2</td>
+</tr>
+<tr>
+<td>转发延迟</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="端口状态学习"><a href="#端口状态学习" class="headerlink" title="端口状态学习"></a>端口状态学习</h3><p>生成树协议工作时，所有端口都要经过一个端口状态建立的过程。</p>
+<p><img src="C:\Users\sky_y\AppData\Roaming\Typora\typora-user-images\1555484539931.png" alt="1555484539931"></p>
+<p>生成树协议通过BPDU广播，确定各交换机及其端口的工作状态和角色。交换机上的端口状态分别有关闭、阻塞、侦听、学习和转发。</p>
+<ol>
+<li>关闭状态(Disable)：不收发任何报文，当端口空连接或人为关闭时的状态。</li>
+<li>阻塞状态(Blocking)：在机器刚启动时，端口处于阻塞状态，但可以接收BPDU信息。</li>
+<li>侦听状态(Listening)：不接受用户数据，收发BPDU，确定网桥及端口角色。</li>
+<li>学习状态(Learing)：不接受用户数据，收发BPDU，进行地址学习。</li>
+<li>转发状态(Forwarding)：收发用户数据。继续收发BPDU和进行地址学习，维护STP。</li>
+</ol>
+<p>端口由阻塞状态进入转发状态要经过一定时间的延迟，延迟时间至少是是配置消息传播到整个网络所需最大时间的两倍。</p>
+<h3 id="快速生成树协议"><a href="#快速生成树协议" class="headerlink" title="快速生成树协议"></a>快速生成树协议</h3><p>生成树协议虽然避免了广播风暴的发生，但是也存在一些不足。网络链路故障的恢复时间是两倍的转发时延，如果网络拓扑频繁变化，则会导致网络通信质量降低。</p>
+<p>快速生成树协议(Rapid Spanning Tree Protocol,RSTP)是从STP发展来的，在IEEE 802.1w中描述了其规范。</p>
+<p>RSTP主要是在网络拓扑发生变化时做了改进。</p>
+<ol>
+<li>若旧根端口处于阻塞状态，若其替换端口连接的对端交换机的指定端口处于转发状态，则替换端口立即转换为转发状态。</li>
+<li>指定端口可以通过于相连的网桥进行一次握手而快速进入转发状态。</li>
+<li>网络边缘的端口可以直接进入转发状态。</li>
+</ol>
+<p>RSTP与STP的主要区别在于：</p>
+<ul>
+<li>消息报文格式不同</li>
+<li>拓扑改变消息传播方式不同</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#STP介绍"><span class="toc-number">1.</span> <span class="toc-text">STP介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#工作原理"><span class="toc-number">1.1.</span> <span class="toc-text">工作原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#相关术语"><span class="toc-number">1.2.</span> <span class="toc-text">相关术语</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作用"><span class="toc-number">1.3.</span> <span class="toc-text">作用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生成树形成过程"><span class="toc-number">2.</span> <span class="toc-text">生成树形成过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BPDU格式"><span class="toc-number">3.</span> <span class="toc-text">BPDU格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#端口状态学习"><span class="toc-number">4.</span> <span class="toc-text">端口状态学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#快速生成树协议"><span class="toc-number">5.</span> <span class="toc-text">快速生成树协议</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&text=计网实验之生成树协议"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&title=计网实验之生成树协议"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&is_video=false&description=计网实验之生成树协议"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验之生成树协议&body=Check out this article: https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&title=计网实验之生成树协议"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&title=计网实验之生成树协议"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&title=计网实验之生成树协议"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&title=计网实验之生成树协议"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&name=计网实验之生成树协议&description=&lt;h3 id=&#34;STP介绍&#34;&gt;&lt;a href=&#34;#STP介绍&#34; class=&#34;headerlink&#34; title=&#34;STP介绍&#34;&gt;&lt;/a&gt;STP介绍&lt;/h3&gt;&lt;p&gt;对于二层以太网而言，两个局域网间只能有一条活动的通路，否则就会产生广播风暴。&lt;/p&gt;
+&lt;p&gt;但为了加强一个局域网的可靠性，又需要建立冗余链路，其中一些通路必须处于备份状态。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/04/17/计网实验之生成树协议/&t=计网实验之生成树协议"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

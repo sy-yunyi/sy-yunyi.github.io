@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="基本概念访问控制列表(Access Control Lists,ACL)利用包过滤技术,在路由器上读取第三层或者第四层包头中的信息，如源地址、目的地址、源端口、目的端口以及上层协议等，根据预先定义的规则决定哪些数据包可以接收、那些数据需要拒绝，从而达到访问控制的目的。">
+<meta name="keywords" content="计算机网络实验,ACL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网实验之访问控制列表">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="基本概念访问控制列表(Access Control Lists,ACL)利用包过滤技术,在路由器上读取第三层或者第四层包头中的信息，如源地址、目的地址、源端口、目的端口以及上层协议等，根据预先定义的规则决定哪些数据包可以接收、那些数据需要拒绝，从而达到访问控制的目的。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-05T14:10:52.340Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计网实验之访问控制列表">
+<meta name="twitter:description" content="基本概念访问控制列表(Access Control Lists,ACL)利用包过滤技术,在路由器上读取第三层或者第四层包头中的信息，如源地址、目的地址、源端口、目的端口以及上层协议等，根据预先定义的规则决定哪些数据包可以接收、那些数据需要拒绝，从而达到访问控制的目的。">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>计网实验之访问控制列表</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/09/12/BUUCFT writeup 记录/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/06/04/渗透技术基础之XSS原理分析/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&text=计网实验之访问控制列表"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&title=计网实验之访问控制列表"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&is_video=false&description=计网实验之访问控制列表"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验之访问控制列表&body=Check out this article: https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&title=计网实验之访问控制列表"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&title=计网实验之访问控制列表"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&title=计网实验之访问控制列表"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&title=计网实验之访问控制列表"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&name=计网实验之访问控制列表&description=&lt;h3 id=&#34;基本概念&#34;&gt;&lt;a href=&#34;#基本概念&#34; class=&#34;headerlink&#34; title=&#34;基本概念&#34;&gt;&lt;/a&gt;基本概念&lt;/h3&gt;&lt;p&gt;访问控制列表(Access Control Lists,ACL)利用包过滤技术,在路由器上读取第三层或者第四层包头中的信息，如源地址、目的地址、源端口、目的端口以及上层协议等，根据预先定义的规则决定哪些数据包可以接收、那些数据需要拒绝，从而达到访问控制的目的。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&t=计网实验之访问控制列表"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本概念"><span class="toc-number">1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ACL匹配过程"><span class="toc-number">2.</span> <span class="toc-text">ACL匹配过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置ACL的基本原则"><span class="toc-number">3.</span> <span class="toc-text">配置ACL的基本原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#不同ACL介绍"><span class="toc-number">4.</span> <span class="toc-text">不同ACL介绍</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        计网实验之访问控制列表
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-06-04T16:00:00.000Z" itemprop="datePublished">2019-06-05</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/手稿/">手稿</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/ACL/">ACL</a>, <a class="tag-link" href="/tags/计算机网络实验/">计算机网络实验</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>访问控制列表(Access Control Lists,ACL)利用包过滤技术,在路由器上读取第三层或者第四层包头中的信息，如源地址、目的地址、源端口、目的端口以及上层协议等，根据预先定义的规则决定哪些数据包可以接收、那些数据需要拒绝，从而达到访问控制的目的。</p>
+<a id="more"></a>
+<p>ACL是一组规则序列。在使用ACL时，一般时将预先定义好的ACL规则设置在路由器的接口上，对接口上进方向（in）或出方向（out）的数据包进行过滤。</p>
+<p>ACL只能过滤经过路由器的数据包，对路由器本身所产生的数据包不起作用。</p>
+<p>ACL的作用主要表现在两个方面：一方面保护资源节点，阻止非法用户对资源节点的访问；另一方面限制特定用户节点所能具备的访问权限。</p>
+<ul>
+<li>检查过滤数据包</li>
+<li>限制网络流量，提高网络性能</li>
+<li>限制或减少路由更新内容</li>
+<li>提供网络访问的基本安全级别</li>
+</ul>
+<p>初期ACL仅仅应用在路由器上，目前已经扩展到三层交换机。</p>
+<p>基本的访问控制列表又标准ACL，扩展ACL；</p>
+<p>其他种类的ACL包括MAC扩展ACL，基于时间的ACL。</p>
+<h3 id="ACL匹配过程"><a href="#ACL匹配过程" class="headerlink" title="ACL匹配过程"></a>ACL匹配过程</h3><p>ACL实际上是一系列判断语句的集合。当一个数据包进入路由器的某个端口时，路由器首先检查数据包是否可路由或可桥接，然后路由器检查是否在入站端口上应用ACL，如果没有应用，则将数据包送至目的端口。如果存在ACL，则会遍历ACL中的每一条规则，直到找到符合的规则或者遍历结束。所以ACL的顺序是非常重要的，可能会影响数据的转发效率。</p>
+<h3 id="配置ACL的基本原则"><a href="#配置ACL的基本原则" class="headerlink" title="配置ACL的基本原则"></a>配置ACL的基本原则</h3><p>配置ACL的基本原则</p>
+<ul>
+<li>最小特权原则。只给受控对象完成任务所必须的最小权限。</li>
+<li>最靠近受控对象原则。检查ACL时采用自上而下的逐条检测，发现符合立即处理，并停止检测。</li>
+</ul>
+<p>配置ACL需要注意的规则：</p>
+<ol>
+<li>所有访问控制列表最后都存在一个隐含的全部拒绝的条件，所以在ACL中至少包含一条允许的语句。</li>
+<li>ACL的语句顺序决定了对数据包的控制顺序。</li>
+<li>ACL应按照一定的顺序进行配置，从特殊到一般配置，先拒绝特定主机，然后执行一般条件的过滤操作。</li>
+<li>表中新的列表项总是加在ACL的最后。并且列表只能一次性删除，不能逐条删除。</li>
+<li>没有任何定义的ACL可以允许所有数据。</li>
+<li>配置ACL应先编辑好再加载至对应的进程上。</li>
+<li>把最有限制性的语句放在ACL的首行或者靠前的位置，而<code>全部允许</code>或<code>全部拒绝</code>放在最后。</li>
+<li>删除列表后默认的全部拒绝规则会阻断该接口的所有数据流量。</li>
+</ol>
+<h3 id="不同ACL介绍"><a href="#不同ACL介绍" class="headerlink" title="不同ACL介绍"></a>不同ACL介绍</h3><p>标准ACL只对源地址进行过滤，控制允许或者拒绝。</p>
+<p>扩展ACL比标准ACL更常用。扩展ACL即可检查分组的源地址和目的地址，也可以检查协议类型和TCP(UDP)的端口号，还可以拒绝或允许协议集中的某些协议。使用扩展ACL可以实现更加精确的流量控制。</p>
+<p>MAC扩展访问控制列表的工作过程与扩展ACL类似，只是其匹配MAC地址进行控制。MAC扩展ACL可根据数据包的源MAC地址、目的MAC地址、以太网协议类型设置过滤，进行控制。MAC扩展ACL可以利用编号或者名称进行标识，编号的取值范围是700~799。</p>
+<p>基于时间的ACL是在各种ACL规则的基础上增加时间段的应用规则，以实现基于时间段的访问控制。只有配置了时间段的规则才会在指定的时间段内生效，其他时间段的规则不受影响。</p>
+<p>基于时间的ACL由两部分组成</p>
+<ul>
+<li>定义时间段</li>
+<li>用于扩展ACL定义规则</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本概念"><span class="toc-number">1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ACL匹配过程"><span class="toc-number">2.</span> <span class="toc-text">ACL匹配过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置ACL的基本原则"><span class="toc-number">3.</span> <span class="toc-text">配置ACL的基本原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#不同ACL介绍"><span class="toc-number">4.</span> <span class="toc-text">不同ACL介绍</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&text=计网实验之访问控制列表"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&title=计网实验之访问控制列表"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&is_video=false&description=计网实验之访问控制列表"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验之访问控制列表&body=Check out this article: https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&title=计网实验之访问控制列表"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&title=计网实验之访问控制列表"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&title=计网实验之访问控制列表"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&title=计网实验之访问控制列表"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&name=计网实验之访问控制列表&description=&lt;h3 id=&#34;基本概念&#34;&gt;&lt;a href=&#34;#基本概念&#34; class=&#34;headerlink&#34; title=&#34;基本概念&#34;&gt;&lt;/a&gt;基本概念&lt;/h3&gt;&lt;p&gt;访问控制列表(Access Control Lists,ACL)利用包过滤技术,在路由器上读取第三层或者第四层包头中的信息，如源地址、目的地址、源端口、目的端口以及上层协议等，根据预先定义的规则决定哪些数据包可以接收、那些数据需要拒绝，从而达到访问控制的目的。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/06/05/计网实验之访问控制列表/&t=计网实验之访问控制列表"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="之前仅仅是将博客搭建完成了，只有一个比较简陋的框架，还有很多小的功能没有实现，今天来进行博客的个性化设置。">
+<meta name="keywords" content="Hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="博客个性化设置-Hexo">
+<meta property="og:url" content="https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="之前仅仅是将博客搭建完成了，只有一个比较简陋的框架，还有很多小的功能没有实现，今天来进行博客的个性化设置。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-05T14:14:32.510Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="博客个性化设置-Hexo">
+<meta name="twitter:description" content="之前仅仅是将博客搭建完成了，只有一个比较简陋的框架，还有很多小的功能没有实现，今天来进行博客的个性化设置。">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>博客个性化设置-Hexo</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/12/17/别瞎折腾，没什么用---《等风来》/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&text=博客个性化设置-Hexo"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&title=博客个性化设置-Hexo"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&is_video=false&description=博客个性化设置-Hexo"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=博客个性化设置-Hexo&body=Check out this article: https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&title=博客个性化设置-Hexo"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&title=博客个性化设置-Hexo"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&title=博客个性化设置-Hexo"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&title=博客个性化设置-Hexo"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&name=博客个性化设置-Hexo&description=&lt;p&gt;之前仅仅是将博客搭建完成了，只有一个比较简陋的框架，还有很多小的功能没有实现，今天来进行博客的个性化设置。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&t=博客个性化设置-Hexo"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#主题设置"><span class="toc-number">1.</span> <span class="toc-text">主题设置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#配置RSS"><span class="toc-number">1.1.</span> <span class="toc-text">配置RSS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#社交图标设置"><span class="toc-number">1.2.</span> <span class="toc-text">社交图标设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实现字数统计功能和阅读时长"><span class="toc-number">1.3.</span> <span class="toc-text">实现字数统计功能和阅读时长</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改文章底部标签图标"><span class="toc-number">1.4.</span> <span class="toc-text">修改文章底部标签图标</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三方服务"><span class="toc-number">2.</span> <span class="toc-text">第三方服务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#评论系统"><span class="toc-number">2.1.</span> <span class="toc-text">评论系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#内容分享服务"><span class="toc-number">2.2.</span> <span class="toc-text">内容分享服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#搜索服务"><span class="toc-number">2.3.</span> <span class="toc-text">搜索服务</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        博客个性化设置-Hexo
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2018-12-15T16:00:00.000Z" itemprop="datePublished">2018-12-16</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/杂项/">杂项</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Hexo/">Hexo</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>之前仅仅是将博客搭建完成了，只有一个比较简陋的框架，还有很多小的功能没有实现，今天来进行博客的个性化设置。</p>
+<a id="more"></a>
+<h3 id="主题设置"><a href="#主题设置" class="headerlink" title="主题设置"></a>主题设置</h3><h4 id="配置RSS"><a href="#配置RSS" class="headerlink" title="配置RSS"></a>配置RSS</h4><p>NexT 中 RSS 有三个设置选项，满足特定的使用场景。 更改主题配置文件，设定 <code>rss</code> 字段的值：</p>
+<blockquote>
+<ul>
+<li><p><code>false</code>:禁用 RSS，不在页面上显示RSS连接。</p>
+</li>
+<li><p>留空：使用 Hexo 生成的 Feed 链接。 需要安装 <code>hexo-generator-feed</code>插件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;   npm install hexo-generator-feed --save</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>具体的链接地址：适用于已经烧制过 Feed 的情形。</li>
+</ul>
+</blockquote>
+<h4 id="社交图标设置"><a href="#社交图标设置" class="headerlink" title="社交图标设置"></a>社交图标设置</h4><p>在Next中我们可以设置我们的社交链接，关于图标，next利用的是Awesome,可以去上面找自己喜欢的图标，将其对应的名字写在主题配置文件中就好了（不用带fa-前缀）。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Usage: `Key: permalink || icon`</span></span><br><span class="line"><span class="attr">social:</span></span><br><span class="line"><span class="attr">  GitHub:</span> <span class="attr">https://github.com/yuorname</span> <span class="string">||</span> <span class="string">github</span></span><br><span class="line"><span class="attr">  E-Mail:</span> <span class="attr">mailto:examples@hotmail.com</span> <span class="string">||</span> <span class="string">envelope</span></span><br><span class="line">  <span class="comment">#Google: https://plus.google.com/yourname || google</span></span><br><span class="line">  <span class="comment">#Twitter: https://twitter.com/yourname || twitter</span></span><br><span class="line">  <span class="comment">#FB Page: https://www.facebook.com/yourname || facebook</span></span><br><span class="line">  <span class="comment">#VK Group: https://vk.com/yourname || vk</span></span><br><span class="line">  <span class="comment">#StackOverflow: https://stackoverflow.com/yourname || stack-overflow</span></span><br><span class="line">  <span class="comment">#YouTube: https://youtube.com/yourname || youtube</span></span><br><span class="line">  <span class="comment">#Instagram: https://instagram.com/yourname || instagram</span></span><br><span class="line">  <span class="comment">#Skype: skype:yourname?call|chat || skype</span></span><br><span class="line"><span class="attr">social_icons:</span></span><br><span class="line"><span class="attr">  enable:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  icons_only:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">  transition:</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h4 id="实现字数统计功能和阅读时长"><a href="#实现字数统计功能和阅读时长" class="headerlink" title="实现字数统计功能和阅读时长"></a>实现字数统计功能和阅读时长</h4><p>在根目录下安装 hexo-wordcount，</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">npm</span> <span class="string">install</span> <span class="string">hexo-wordcount</span> <span class="bullet">--save</span></span><br></pre></td></tr></table></figure>
+<p>然后在主题的配置文件中，配置如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">post_wordcount:</span></span><br><span class="line"><span class="attr">  item_text:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  wordcount:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  min2read:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  totalcount:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">  separated_meta:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h4 id="修改文章底部标签图标"><a href="#修改文章底部标签图标" class="headerlink" title="修改文章底部标签图标"></a>修改文章底部标签图标</h4><p>NexT主题中所有图标来源于Font Awesome图标，因此和更改侧边栏社交链接图标同样。</p>
+<p>修改模板<code>/themes/next/layout/_macro/post.swig</code>，搜索 <code>rel=&quot;tag&quot;&gt;#</code>，将 # 换成<code>&lt;i class=&quot;fa fa-tag&quot;&gt;&lt;/i&gt;</code> 即可。</p>
+<h3 id="第三方服务"><a href="#第三方服务" class="headerlink" title="第三方服务"></a>第三方服务</h3><h4 id="评论系统"><a href="#评论系统" class="headerlink" title="评论系统"></a>评论系统</h4><p>NexT支持多款评论系统，官方给出了DISQUS，Facebook Comments ，HyperComments，网易云跟帖，来必力五个评论系统，除此之外还支持多说、畅言等评论系统。</p>
+<p>网易云跟帖相当好用，而且在国内，加载速度较快，但目前被官方关闭了。</p>
+<p>这里采用来必力进行设置。</p>
+<p>进入 <a href="https://livere.com/" target="_blank" rel="noopener">LiveRe</a>，注册账号。</p>
+<p>LiveRe 有两个版本：</p>
+<ol>
+<li>City 版：是一款适合所有人使用的免费版本；</li>
+<li>Premium 版：是一款能够帮助企业实现自动化管理的多功能收费版本。</li>
+</ol>
+<p>我们 选择City 版就可以。</p>
+<p>登陆成功后，进入到 <code>管理页面 -&gt; 代码管理 -&gt; 一般网站</code> 代码中，<code>data-uid</code> 即为所需 <code>uid</code>。</p>
+<p>之后编辑主题配置文件， 编辑 <code>livere_uid</code> 字段，设置如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">livere_uid:</span> <span class="comment">#your livere_uid</span></span><br></pre></td></tr></table></figure>
+<h4 id="内容分享服务"><a href="#内容分享服务" class="headerlink" title="内容分享服务"></a>内容分享服务</h4><p>JiaThis</p>
+<p>编辑 <code>主题配置</code>文件， 添加/修改字段 <code>jiathis</code>，值为 <code>true</code>。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># JiaThis 分享服务</span></span><br><span class="line"><span class="attr">jiathis:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>发现就这么设置后，效果不好，但是jiathis官网进不去，之后在进行优化。</p>
+<h4 id="搜索服务"><a href="#搜索服务" class="headerlink" title="搜索服务"></a>搜索服务</h4><p>安装 <code>hexo-generator-searchdb</code>，在站点的根目录下执行以下命令：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">npm</span> <span class="string">install</span> <span class="string">hexo-generator-searchdb</span> <span class="bullet">--save</span></span><br></pre></td></tr></table></figure>
+<p>编辑站点配置文件，新增以下内容到任意位置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">search:</span></span><br><span class="line"><span class="attr">  path:</span> <span class="string">search.xml</span></span><br><span class="line"><span class="attr">  field:</span> <span class="string">post</span></span><br><span class="line"><span class="attr">  format:</span> <span class="string">html</span></span><br><span class="line"><span class="attr">  limit:</span> <span class="number">10000</span></span><br></pre></td></tr></table></figure>
+<p>编辑主题配置文件，启用本地搜索功能：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Local search</span></span><br><span class="line"><span class="attr">local_search:</span></span><br><span class="line"><span class="attr">  enable:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>今天先设置这些，之后再逐步增加。</p>
+</blockquote>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#主题设置"><span class="toc-number">1.</span> <span class="toc-text">主题设置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#配置RSS"><span class="toc-number">1.1.</span> <span class="toc-text">配置RSS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#社交图标设置"><span class="toc-number">1.2.</span> <span class="toc-text">社交图标设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实现字数统计功能和阅读时长"><span class="toc-number">1.3.</span> <span class="toc-text">实现字数统计功能和阅读时长</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改文章底部标签图标"><span class="toc-number">1.4.</span> <span class="toc-text">修改文章底部标签图标</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三方服务"><span class="toc-number">2.</span> <span class="toc-text">第三方服务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#评论系统"><span class="toc-number">2.1.</span> <span class="toc-text">评论系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#内容分享服务"><span class="toc-number">2.2.</span> <span class="toc-text">内容分享服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#搜索服务"><span class="toc-number">2.3.</span> <span class="toc-text">搜索服务</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&text=博客个性化设置-Hexo"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&title=博客个性化设置-Hexo"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&is_video=false&description=博客个性化设置-Hexo"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=博客个性化设置-Hexo&body=Check out this article: https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&title=博客个性化设置-Hexo"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&title=博客个性化设置-Hexo"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&title=博客个性化设置-Hexo"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&title=博客个性化设置-Hexo"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&name=博客个性化设置-Hexo&description=&lt;p&gt;之前仅仅是将博客搭建完成了，只有一个比较简陋的框架，还有很多小的功能没有实现，今天来进行博客的个性化设置。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2018/12/16/博客个性化设置-Hexo/&t=博客个性化设置-Hexo"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

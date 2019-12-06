@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="网络(图)嵌入基于图，将节点或者边投影至低维向量空间中。 从node2vec角度来看，就是利用某种算法寻找能够表达图关系的一组序列，然后对序列利用现有的方法进行向量化。">
+<meta name="keywords" content="nlp,node2vec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="node2vec学习笔记">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="网络(图)嵌入基于图，将节点或者边投影至低维向量空间中。 从node2vec角度来看，就是利用某种算法寻找能够表达图关系的一组序列，然后对序列利用现有的方法进行向量化。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/5427142/2o99pu6agx.jpeg?imageView2/2/w/1620">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/5427142/r5doyp5502.png?imageView2/2/w/1620">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/5427142/grn8pviga.png?imageView2/2/w/1620">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/5427142/skj83s5dsw.jpeg?imageView2/2/w/1620">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/5427142/naamfg7x9f.jpeg?imageView2/2/w/1620">
+<meta property="og:image" content="https://ask.qcloudimg.com/http-save/5427142/l3z4hwdona.jpeg?imageView2/2/w/1620">
+<meta property="og:updated_time" content="2019-12-06T07:25:53.699Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="node2vec学习笔记">
+<meta name="twitter:description" content="网络(图)嵌入基于图，将节点或者边投影至低维向量空间中。 从node2vec角度来看，就是利用某种算法寻找能够表达图关系的一组序列，然后对序列利用现有的方法进行向量化。">
+<meta name="twitter:image" content="https://ask.qcloudimg.com/http-save/5427142/2o99pu6agx.jpeg?imageView2/2/w/1620">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>node2vec学习笔记</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/09/12/word2vec学习笔记/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/09/12/BUUCFT writeup 记录/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&text=node2vec学习笔记"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&title=node2vec学习笔记"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&is_video=false&description=node2vec学习笔记"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=node2vec学习笔记&body=Check out this article: https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&title=node2vec学习笔记"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&title=node2vec学习笔记"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&title=node2vec学习笔记"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&title=node2vec学习笔记"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&name=node2vec学习笔记&description=&lt;h4 id=&#34;网络-图-嵌入&#34;&gt;&lt;a href=&#34;#网络-图-嵌入&#34; class=&#34;headerlink&#34; title=&#34;网络(图)嵌入&#34;&gt;&lt;/a&gt;网络(图)嵌入&lt;/h4&gt;&lt;p&gt;基于图，将节点或者边投影至低维向量空间中。&lt;/p&gt;
+&lt;p&gt;从node2vec角度来看，就是利用某种算法寻找能够表达图关系的一组序列，然后对序列利用现有的方法进行向量化。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&t=node2vec学习笔记"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#网络-图-嵌入"><span class="toc-number">1.</span> <span class="toc-text">网络(图)嵌入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DeepWalk"><span class="toc-number">2.</span> <span class="toc-text">DeepWalk</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#node2vec"><span class="toc-number">3.</span> <span class="toc-text">node2vec</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        node2vec学习笔记
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-11T16:00:00.000Z" itemprop="datePublished">2019-09-12</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/算法/">算法</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/nlp/">nlp</a>, <a class="tag-link" href="/tags/node2vec/">node2vec</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h4 id="网络-图-嵌入"><a href="#网络-图-嵌入" class="headerlink" title="网络(图)嵌入"></a>网络(图)嵌入</h4><p>基于图，将节点或者边投影至低维向量空间中。</p>
+<p>从node2vec角度来看，就是利用某种算法寻找能够表达图关系的一组序列，然后对序列利用现有的方法进行向量化。</p>
+<a id="more"></a>
+<h4 id="DeepWalk"><a href="#DeepWalk" class="headerlink" title="DeepWalk"></a>DeepWalk</h4><blockquote>
+<p>Online Learning of Social Representations</p>
+</blockquote>
+<p>在图上利用随机游走，获得节点序列，然后对序列利用word2vec 方法，获得节点的向量表示。</p>
+<p><strong>特点</strong></p>
+<p>1.随机游走序列只依赖于局部信息，所以可适用于分布式和在线系统，而使用邻接矩阵就必须把所有信息存储于内存中处理，面临着较高的计算时间和空间消耗。</p>
+<p>2.对随机游走序列进行建模可以降低建模0-1二值邻接矩阵的方差和不确定性。</p>
+<h4 id="node2vec"><a href="#node2vec" class="headerlink" title="node2vec"></a>node2vec</h4><blockquote>
+<p>Scalable Feature Learning for Networks</p>
+</blockquote>
+<p>在Deepwalk的基础上，其定义了一个带参数的随机游走策略，采用BFS和DFS两种游走方式，获得节点序列，之后的操作与DeepWalk类似。</p>
+<p>随机游走的策略中通过设置参数p和q，达到保留不同信息的目的。当q和p为1时，等价于DeepWalk。</p>
+<p><img src="https://ask.qcloudimg.com/http-save/5427142/2o99pu6agx.jpeg?imageView2/2/w/1620" alt="node2vec"></p>
+<p>从t节点开始的随机游走，现在位于v处，如何选择下一步的节点？<br>存在两种策略，BFS和DFS。<br>如果采用BFS，则下一步到达x1;<br>如果采用DFS，则下一步到达x2或x3;</p>
+<p>作者设计了一个二阶转移概率算法</p>
+<p><img src="https://ask.qcloudimg.com/http-save/5427142/r5doyp5502.png?imageView2/2/w/1620" alt="two"></p>
+<p>w为边的权重，α为search bias。<br><img src="https://ask.qcloudimg.com/http-save/5427142/grn8pviga.png?imageView2/2/w/1620" alt="α"></p>
+<blockquote>
+<p>论文中介绍，一个节点的下一步取决于它的上一步和下一步的关系。</p>
+</blockquote>
+<p>假设v是当前节点，t是v的上一步节点，x为下一步的位置。<br>d(t,x)表示t和x之间的距离</p>
+<ul>
+<li>d = 0 时，即又回到原来的位置，此时的search bias = 1/p，即以1/p的概率返回原来的位置；</li>
+<li>d = 1 时，x为t的直接邻居，相当于BFS，此时， search bias = 1；</li>
+<li>d = 2 时，x是t的邻居的邻居，相当于DFS，此时，search bias = 1/q；</li>
+</ul>
+<p>作者将p称为<code>Return parameter</code>，其控制返回上一步的概率；q为<code>In-out parameter</code>，其控制BFS和DFS的关系。</p>
+<p><strong>算法框架</strong></p>
+<p><img src="https://ask.qcloudimg.com/http-save/5427142/skj83s5dsw.jpeg?imageView2/2/w/1620" alt="alg"></p>
+<p><strong>效果</strong>：</p>
+<p>人物关系网络上进行kmeans聚类。</p>
+<html><br><center>p = 1,q = 0.5</center><br></html>
+
+<p><img src="https://ask.qcloudimg.com/http-save/5427142/naamfg7x9f.jpeg?imageView2/2/w/1620" alt="eff"></p>
+<html><br><center>p = 1,q = 2</center><br></html>
+
+<p><img src="https://ask.qcloudimg.com/http-save/5427142/l3z4hwdona.jpeg?imageView2/2/w/1620" alt="eff2"></p>
+<p>Ref:</p>
+<p>[1] node2Vec学习笔记与总结 <a href="https://blog.csdn.net/qq_41747565/article/details/83619858" target="_blank" rel="noopener">https://blog.csdn.net/qq_41747565/article/details/83619858</a></p>
+<p>[2] PaperReading-图嵌入之node2vec <a href="https://cloud.tencent.com/developer/article/1437480" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1437480</a></p>
+<p>[3] DeepWalk及node2vec简单理解学习 <a href="https://www.jianshu.com/p/c631500d57dd" target="_blank" rel="noopener">https://www.jianshu.com/p/c631500d57dd</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#网络-图-嵌入"><span class="toc-number">1.</span> <span class="toc-text">网络(图)嵌入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DeepWalk"><span class="toc-number">2.</span> <span class="toc-text">DeepWalk</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#node2vec"><span class="toc-number">3.</span> <span class="toc-text">node2vec</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&text=node2vec学习笔记"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&title=node2vec学习笔记"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&is_video=false&description=node2vec学习笔记"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=node2vec学习笔记&body=Check out this article: https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&title=node2vec学习笔记"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&title=node2vec学习笔记"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&title=node2vec学习笔记"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&title=node2vec学习笔记"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&name=node2vec学习笔记&description=&lt;h4 id=&#34;网络-图-嵌入&#34;&gt;&lt;a href=&#34;#网络-图-嵌入&#34; class=&#34;headerlink&#34; title=&#34;网络(图)嵌入&#34;&gt;&lt;/a&gt;网络(图)嵌入&lt;/h4&gt;&lt;p&gt;基于图，将节点或者边投影至低维向量空间中。&lt;/p&gt;
+&lt;p&gt;从node2vec角度来看，就是利用某种算法寻找能够表达图关系的一组序列，然后对序列利用现有的方法进行向量化。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/09/12/node2vec学习笔记/&t=node2vec学习笔记"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="tracert/traceroute命令跟踪路由（tracert/traceroute）是路由跟踪实用程序，用于获得IP数据报访问目标时从本地计算机到目的主机的路径信息。 原理解析tracert/traceroute通过发送数据报到目的设备，根据应答报文（ICMP）得到路径和延迟信息（TTL）。 其通过向目的地发送具有不同IP生存时间（TTL）值的ICMP回送请求报文，来确定到达目的地的路由。所显">
+<meta name="keywords" content="计算机网络实验,网络命令,tracert,traceroute">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网实验基础之网络命令-tracert与traceroute">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="tracert/traceroute命令跟踪路由（tracert/traceroute）是路由跟踪实用程序，用于获得IP数据报访问目标时从本地计算机到目的主机的路径信息。 原理解析tracert/traceroute通过发送数据报到目的设备，根据应答报文（ICMP）得到路径和延迟信息（TTL）。 其通过向目的地发送具有不同IP生存时间（TTL）值的ICMP回送请求报文，来确定到达目的地的路由。所显">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/01/25/5c4b07ef92b62.png">
+<meta property="og:image" content="https://i.loli.net/2019/01/25/5c4b098544ffa.png">
+<meta property="og:image" content="https://i.loli.net/2019/01/25/5c4b0b9313cbc.png">
+<meta property="og:image" content="https://i.loli.net/2019/01/25/5c4b0c5751768.png">
+<meta property="og:updated_time" content="2019-12-05T14:11:27.458Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计网实验基础之网络命令-tracert与traceroute">
+<meta name="twitter:description" content="tracert/traceroute命令跟踪路由（tracert/traceroute）是路由跟踪实用程序，用于获得IP数据报访问目标时从本地计算机到目的主机的路径信息。 原理解析tracert/traceroute通过发送数据报到目的设备，根据应答报文（ICMP）得到路径和延迟信息（TTL）。 其通过向目的地发送具有不同IP生存时间（TTL）值的ICMP回送请求报文，来确定到达目的地的路由。所显">
+<meta name="twitter:image" content="https://i.loli.net/2019/01/25/5c4b07ef92b62.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>计网实验基础之网络命令-tracert与traceroute</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/01/26/计网实验基础之网络命令-arp/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/01/22/计网实验基础之网络命令-ping/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&text=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&title=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&is_video=false&description=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验基础之网络命令-tracert与traceroute&body=Check out this article: https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&title=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&title=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&title=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&title=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&name=计网实验基础之网络命令-tracert与traceroute&description=&lt;h3 id=&#34;tracert-traceroute命令&#34;&gt;&lt;a href=&#34;#tracert-traceroute命令&#34; class=&#34;headerlink&#34; title=&#34;tracert/traceroute命令&#34;&gt;&lt;/a&gt;tracert/traceroute命令&lt;/h3&gt;&lt;p&gt;跟踪路由（tracert/traceroute）是路由跟踪实用程序，用于获得IP数据报访问目标时从本地计算机到目的主机的路径信息。&lt;/p&gt;
+&lt;h4 id=&#34;原理解析&#34;&gt;&lt;a href=&#34;#原理解析&#34; class=&#34;headerlink&#34; title=&#34;原理解析&#34;&gt;&lt;/a&gt;原理解析&lt;/h4&gt;&lt;p&gt;tracert/traceroute通过发送数据报到目的设备，根据应答报文（ICMP）得到路径和延迟信息（TTL）。&lt;/p&gt;
+&lt;p&gt;其通过向目的地发送具有不同IP生存时间（TTL）值的ICMP回送请求报文，来确定到达目的地的路由。所显示的路径是源主机与目标主机间的路径的路由器的近侧路由器接口列表。近侧接口是距离路径中的发送主机最近的路由器接口。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&t=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#tracert-traceroute命令"><span class="toc-number">1.</span> <span class="toc-text">tracert/traceroute命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#原理解析"><span class="toc-number">1.1.</span> <span class="toc-text">原理解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#命令使用"><span class="toc-number">1.2.</span> <span class="toc-text">命令使用</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#win中tracert"><span class="toc-number">1.2.1.</span> <span class="toc-text">win中tracert</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#linux中traceroute"><span class="toc-number">1.2.2.</span> <span class="toc-text">linux中traceroute</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#使用详解"><span class="toc-number">1.2.3.</span> <span class="toc-text">使用详解</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#图形用户界面的追踪路由工具"><span class="toc-number">1.2.4.</span> <span class="toc-text">图形用户界面的追踪路由工具</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        计网实验基础之网络命令-tracert与traceroute
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-01-24T16:00:00.000Z" itemprop="datePublished">2019-01-25</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/手稿/">手稿</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/traceroute/">traceroute</a>, <a class="tag-link" href="/tags/tracert/">tracert</a>, <a class="tag-link" href="/tags/网络命令/">网络命令</a>, <a class="tag-link" href="/tags/计算机网络实验/">计算机网络实验</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="tracert-traceroute命令"><a href="#tracert-traceroute命令" class="headerlink" title="tracert/traceroute命令"></a>tracert/traceroute命令</h3><p>跟踪路由（tracert/traceroute）是路由跟踪实用程序，用于获得IP数据报访问目标时从本地计算机到目的主机的路径信息。</p>
+<h4 id="原理解析"><a href="#原理解析" class="headerlink" title="原理解析"></a>原理解析</h4><p>tracert/traceroute通过发送数据报到目的设备，根据应答报文（ICMP）得到路径和延迟信息（TTL）。</p>
+<p>其通过向目的地发送具有不同IP生存时间（TTL）值的ICMP回送请求报文，来确定到达目的地的路由。所显示的路径是源主机与目标主机间的路径的路由器的近侧路由器接口列表。近侧接口是距离路径中的发送主机最近的路由器接口。</p>
+<a id="more"></a>
+<p>先发送TTL为1的回应数据包，会收到目标路径上的第一个路由器的回应，「ICMP time exceeded」消息（包括发IP包的源地址，IP包的所有内容及路由器的IP地址）。随后在每次的发送过程中将TTL递增，直到目标响应或者TTL达到最大值，从而确定路由。</p>
+<p>在数据包的TTL值减为0时，路由器应该会回应超时消息，但是某些路由器会不回复TTL过期的数据包，在种情况下，在达到超时时间后，也会将TTL加1，进而测试整条路径是否连通，而没有回应的跳跃点就会显示一行星号（*）。</p>
+<p>当到达目的主机时，TTL没有超时，所以并不会有超时消息回应。所以为了获得到达的信息，在发送ICMP报文时选择的端口号是一个一般应用程序都不用的号码（30000以上）。所以目的主机会返回「ICMP port unreachable」的消息，就知道已经到达了目的主机。</p>
+<p>一条路径上的每个设别会测试3次，所以会有3个探测包的回应时间，一般网络稳定的情况下，3个时间相差不大，如果相差较大，则说明网络状况变化较大。</p>
+<h4 id="命令使用"><a href="#命令使用" class="headerlink" title="命令使用"></a>命令使用</h4><h5 id="win中tracert"><a href="#win中tracert" class="headerlink" title="win中tracert"></a><code>win</code>中tracert</h5><p>在win中，使用的命令是tracert。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">用法：</span><br><span class="line">tracert [-d] [-h maximum_hops] [-j host-list] [-w timeout]</span><br><span class="line">               [-R] [-S srcaddr] [-4] [-6] target_name</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">选项:</span><br><span class="line">    -d                 不将地址解析成主机名。</span><br><span class="line">    -h maximum_hops    搜索目标的最大跃点数。</span><br><span class="line">    -j host-list       与主机列表一起的松散源路由(仅适用于 IPv4)。</span><br><span class="line">    -w timeout         等待每个回复的超时时间(以毫秒为单位)。</span><br><span class="line">    -R                 跟踪往返行程路径(仅适用于 IPv6)。</span><br><span class="line">    -S srcaddr         要使用的源地址(仅适用于 IPv6)。</span><br><span class="line">    -4                 强制使用 IPv4。</span><br><span class="line">    -6                 强制使用 IPv6。</span><br></pre></td></tr></table></figure>
+<h5 id="linux中traceroute"><a href="#linux中traceroute" class="headerlink" title="linux中traceroute"></a><code>linux</code>中traceroute</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Usage:</span><br><span class="line">  traceroute [ -46dFITnreAUDV ] [ -f first_ttl ] [ -g gate,... ] [ -i device ] [ -m max_ttl ] [ -N squeries ] [ -p port ] [ -t tos ] [ -l flow_label ] [ -w MAX,HERE,NEAR ] [ -q nqueries ] [ -s src_addr ] [ -z sendwait ] [ --fwmark=num ] host [ packetlen ]</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">Options:</span><br><span class="line">  -4                          Use IPv4</span><br><span class="line">  -6                          Use IPv6</span><br><span class="line">  -d  --debug                 Enable socket level debugging</span><br><span class="line">  -F  --dont-fragment         Do not fragment packets</span><br><span class="line">  -f first_ttl  --first=first_ttl</span><br><span class="line">                              Start from the first_ttl hop (instead from 1)</span><br><span class="line">  -g gate,...  --gateway=gate,...</span><br><span class="line">                              Route packets through the specified gateway</span><br><span class="line">                              (maximum 8 for IPv4 and 127 for IPv6)</span><br><span class="line">  -I  --icmp                  Use ICMP ECHO for tracerouting</span><br><span class="line">  -T  --tcp                   Use TCP SYN for tracerouting (default port is 80)</span><br><span class="line">  -i device  --interface=device</span><br><span class="line">                              Specify a network interface to operate with</span><br><span class="line">  -m max_ttl  --max-hops=max_ttl</span><br><span class="line">                              Set the max number of hops (max TTL to be</span><br><span class="line">                              reached). Default is 30</span><br><span class="line">  -N squeries  --sim-queries=squeries</span><br><span class="line">                              Set the number of probes to be tried</span><br><span class="line">                              simultaneously (default is 16)</span><br><span class="line">  -n                          Do not resolve IP addresses to their domain names</span><br><span class="line">  -p port  --port=port        Set the destination port to use. It is either</span><br><span class="line">                              initial udp port value for "default" method</span><br><span class="line">                              (incremented by each probe, default is 33434), or</span><br><span class="line">                              initial seq for "icmp" (incremented as well,</span><br><span class="line">                              default from 1), or some constant destination</span><br><span class="line">                              port for other methods (with default of 80 for</span><br><span class="line">                              "tcp", 53 for "udp", etc.)</span><br><span class="line">  -t tos  --tos=tos           Set the TOS (IPv4 type of service) or TC (IPv6</span><br><span class="line">                              traffic class) value for outgoing packets</span><br><span class="line">  -l flow_label  --flowlabel=flow_label</span><br><span class="line">                              Use specified flow_label for IPv6 packets</span><br><span class="line">  -w MAX,HERE,NEAR  --wait=MAX,HERE,NEAR</span><br><span class="line">                              Wait for a probe no more than HERE (default 3)</span><br><span class="line">                              times longer than a response from the same hop,</span><br><span class="line">                              or no more than NEAR (default 10) times than some</span><br><span class="line">                              next hop, or MAX (default 5.0) seconds (float</span><br><span class="line">                              point values allowed too)</span><br><span class="line">  -q nqueries  --queries=nqueries</span><br><span class="line">                              Set the number of probes per each hop. Default is</span><br><span class="line">                              3</span><br><span class="line">  -r                          Bypass the normal routing and send directly to a</span><br><span class="line">                              host on an attached network</span><br><span class="line">  -s src_addr  --source=src_addr</span><br><span class="line">                              Use source src_addr for outgoing packets</span><br><span class="line">  -z sendwait  --sendwait=sendwait</span><br><span class="line">                              Minimal time interval between probes (default 0).</span><br><span class="line">                              If the value is more than 10, then it specifies a</span><br><span class="line">                              number in milliseconds, else it is a number of</span><br><span class="line">                              seconds (float point values allowed too)</span><br><span class="line">  -e  --extensions            Show ICMP extensions (if present), including MPLS</span><br><span class="line">  -A  --as-path-lookups       Perform AS path lookups in routing registries and</span><br><span class="line">                              print results directly after the corresponding</span><br><span class="line">                              addresses</span><br><span class="line">-M name  --module=name      Use specified module (either builtin or external)</span><br><span class="line">                              for traceroute operations. Most methods have</span><br><span class="line">                              their shortcuts (`-I' means `-M icmp' etc.)</span><br><span class="line">  -O OPTS,...  --options=OPTS,...</span><br><span class="line">                              Use module-specific option OPTS for the</span><br><span class="line">                              traceroute module. Several OPTS allowed,</span><br><span class="line">                              separated by comma. If OPTS is "help", print info</span><br><span class="line">                              about available options</span><br><span class="line">  --sport=num                 Use source port num for outgoing packets. Implies</span><br><span class="line">                              `-N 1'</span><br><span class="line">  --fwmark=num                Set firewall mark for outgoing packets</span><br><span class="line">  -U  --udp                   Use UDP to particular port for tracerouting</span><br><span class="line">                              (instead of increasing the port per each probe),</span><br><span class="line">                              default port is 53</span><br><span class="line">  -UL                         Use UDPLITE for tracerouting (default dest port</span><br><span class="line">                              is 53)</span><br><span class="line">  -D  --dccp                  Use DCCP Request for tracerouting (default port</span><br><span class="line">                              is 33434)</span><br><span class="line">  -P prot  --protocol=prot    Use raw packet of protocol prot for tracerouting</span><br><span class="line">  --mtu                       Discover MTU along the path being traced. Implies</span><br><span class="line">                              `-F -N 1'</span><br><span class="line">  --back                      Guess the number of hops in the backward path and</span><br><span class="line">                              print if it differs</span><br><span class="line">  -V  --version               Print version info and exit</span><br><span class="line">  --help                      Read this help and exit</span><br></pre></td></tr></table></figure>
+<p> 如果安装的发行版本的Linux并没有traceroute，可以自己进行安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install tracertoute </span><br><span class="line"><span class="meta">#</span> ubuntu</span><br></pre></td></tr></table></figure>
+<p>如果没有安装成功，可以先更新一下软件源</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<p>如果仍然不成功，可以自己下载源码包，编译安装。</p>
+<h5 id="使用详解"><a href="#使用详解" class="headerlink" title="使用详解"></a>使用详解</h5><ol>
+<li><p>跟踪至baidu.com的路由</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tracert baidu.com</span><br></pre></td></tr></table></figure>
+<center><img src="https://i.loli.net/2019/01/25/5c4b07ef92b62.png" alt="tracert_win_test.png"></center>
+
+<center>图1</center>
+
+<p>如图1中所示，最大跳跃点为30。第一行的星号说明，第一个设备并没有回应超时报文，但从后面的结果来看，整条链路仍然是连通的。</p>
+</li>
+<li><p>设定最大跳跃点数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tracert -h 5 baidu.com</span><br></pre></td></tr></table></figure>
+<center><img src="https://i.loli.net/2019/01/25/5c4b098544ffa.png" alt="tracert_win_h5.png"></center>
+
+<center>图2</center>
+</li>
+<li><p>不解析地址为主机名</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tracert -d baidu.com</span><br></pre></td></tr></table></figure>
+<center><img src="https://i.loli.net/2019/01/25/5c4b0b9313cbc.png" alt="tracert_win_d.png"></center>
+
+<center>图3</center>
+</li>
+<li><p>指定每个应答的时间。</p>
+<p>默认值为 3000 毫秒（3 秒）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tracert -w 100 baidu.com</span><br></pre></td></tr></table></figure>
+<center><img src="https://i.loli.net/2019/01/25/5c4b0c5751768.png" alt="tracert_win_w.png"></center>
+
+<center>图4</center>
+
+
+</li>
+</ol>
+<h5 id="图形用户界面的追踪路由工具"><a href="#图形用户界面的追踪路由工具" class="headerlink" title="图形用户界面的追踪路由工具"></a>图形用户界面的追踪路由工具</h5><ul>
+<li><p>NeoTracePro</p>
+<blockquote>
+<p>一款不错的追踪路由工具，拥有图形用户界面并且可以绘制除通往目的地的地址的路径图</p>
+</blockquote>
+</li>
+<li><p>ViusalRoute</p>
+<blockquote>
+<p>具有图形用户界面的绘制路径图工具</p>
+</blockquote>
+</li>
+<li><p>Hping</p>
+<blockquote>
+<p>Hping向目的主机的一个端口发送TCP数据包并返回结果。Hping能检查返回的数据包进而判断发出的数据包是被接收还是拒收或丢弃了。通过不停的探测，Hping可以判断目标主机哪个端口是开放的，是否开启了防火墙，数据包是否可以通过这个防火墙。</p>
+<p>GitHub链接：<a href="https://github.com/antirez/hping" target="_blank" rel="noopener">https://github.com/antirez/hping</a></p>
+</blockquote>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#tracert-traceroute命令"><span class="toc-number">1.</span> <span class="toc-text">tracert/traceroute命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#原理解析"><span class="toc-number">1.1.</span> <span class="toc-text">原理解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#命令使用"><span class="toc-number">1.2.</span> <span class="toc-text">命令使用</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#win中tracert"><span class="toc-number">1.2.1.</span> <span class="toc-text">win中tracert</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#linux中traceroute"><span class="toc-number">1.2.2.</span> <span class="toc-text">linux中traceroute</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#使用详解"><span class="toc-number">1.2.3.</span> <span class="toc-text">使用详解</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#图形用户界面的追踪路由工具"><span class="toc-number">1.2.4.</span> <span class="toc-text">图形用户界面的追踪路由工具</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&text=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&title=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&is_video=false&description=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验基础之网络命令-tracert与traceroute&body=Check out this article: https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&title=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&title=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&title=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&title=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&name=计网实验基础之网络命令-tracert与traceroute&description=&lt;h3 id=&#34;tracert-traceroute命令&#34;&gt;&lt;a href=&#34;#tracert-traceroute命令&#34; class=&#34;headerlink&#34; title=&#34;tracert/traceroute命令&#34;&gt;&lt;/a&gt;tracert/traceroute命令&lt;/h3&gt;&lt;p&gt;跟踪路由（tracert/traceroute）是路由跟踪实用程序，用于获得IP数据报访问目标时从本地计算机到目的主机的路径信息。&lt;/p&gt;
+&lt;h4 id=&#34;原理解析&#34;&gt;&lt;a href=&#34;#原理解析&#34; class=&#34;headerlink&#34; title=&#34;原理解析&#34;&gt;&lt;/a&gt;原理解析&lt;/h4&gt;&lt;p&gt;tracert/traceroute通过发送数据报到目的设备，根据应答报文（ICMP）得到路径和延迟信息（TTL）。&lt;/p&gt;
+&lt;p&gt;其通过向目的地发送具有不同IP生存时间（TTL）值的ICMP回送请求报文，来确定到达目的地的路由。所显示的路径是源主机与目标主机间的路径的路由器的近侧路由器接口列表。近侧接口是距离路径中的发送主机最近的路由器接口。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/01/25/计网实验基础之网络命令-tracert与traceroute/&t=计网实验基础之网络命令-tracert与traceroute"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

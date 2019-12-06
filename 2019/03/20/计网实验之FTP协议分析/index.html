@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="FTP协议介绍文件传输协议FTP(File Transfer Protocol)是TCP/IP协议组种的应用层协议之一，是因特网中使用最广泛的文件传输协议。该协议旨在提高文件的共享性，透明、可靠的和高效的传送远程用户数据。其没有针对某种具体的操作系统或文件类型而设计，通过一些规程，利用网络低层的服务，屏蔽了计算机系统的细节，所以可以在异构网中传送文件。 主要功能用于实现用户间文件分发共享，以及网络">
+<meta name="keywords" content="计算机网络实验,FTP协议">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网实验之FTP协议分析">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="FTP协议介绍文件传输协议FTP(File Transfer Protocol)是TCP/IP协议组种的应用层协议之一，是因特网中使用最广泛的文件传输协议。该协议旨在提高文件的共享性，透明、可靠的和高效的传送远程用户数据。其没有针对某种具体的操作系统或文件类型而设计，通过一些规程，利用网络低层的服务，屏蔽了计算机系统的细节，所以可以在异构网中传送文件。 主要功能用于实现用户间文件分发共享，以及网络">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/03/06/5c7fb1c79bfa7.png">
+<meta property="og:updated_time" content="2019-12-05T14:10:15.382Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计网实验之FTP协议分析">
+<meta name="twitter:description" content="FTP协议介绍文件传输协议FTP(File Transfer Protocol)是TCP/IP协议组种的应用层协议之一，是因特网中使用最广泛的文件传输协议。该协议旨在提高文件的共享性，透明、可靠的和高效的传送远程用户数据。其没有针对某种具体的操作系统或文件类型而设计，通过一些规程，利用网络低层的服务，屏蔽了计算机系统的细节，所以可以在异构网中传送文件。 主要功能用于实现用户间文件分发共享，以及网络">
+<meta name="twitter:image" content="https://i.loli.net/2019/03/06/5c7fb1c79bfa7.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>计网实验之FTP协议分析</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/03/24/编译器一些闲话-gcc、clang、llvm/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/03/20/计网实验之网络包分析工具-Wireshark/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&text=计网实验之FTP协议分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&title=计网实验之FTP协议分析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&is_video=false&description=计网实验之FTP协议分析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验之FTP协议分析&body=Check out this article: https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&title=计网实验之FTP协议分析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&title=计网实验之FTP协议分析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&title=计网实验之FTP协议分析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&title=计网实验之FTP协议分析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&name=计网实验之FTP协议分析&description=&lt;h3 id=&#34;FTP协议介绍&#34;&gt;&lt;a href=&#34;#FTP协议介绍&#34; class=&#34;headerlink&#34; title=&#34;FTP协议介绍&#34;&gt;&lt;/a&gt;FTP协议介绍&lt;/h3&gt;&lt;p&gt;文件传输协议FTP(File Transfer Protocol)是TCP/IP协议组种的应用层协议之一，是因特网中使用最广泛的文件传输协议。该协议旨在提高文件的共享性，透明、可靠的和高效的传送远程用户数据。其没有针对某种具体的操作系统或文件类型而设计，通过一些规程，利用网络低层的服务，屏蔽了计算机系统的细节，所以可以在异构网中传送文件。&lt;/p&gt;
+&lt;p&gt;主要功能用于实现用户间文件分发共享，以及网络管理者在进行设备版本升级、日志下载和配置保存等业务操作时，均会使用到FTP功能。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&t=计网实验之FTP协议分析"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#FTP协议介绍"><span class="toc-number">1.</span> <span class="toc-text">FTP协议介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP连接"><span class="toc-number">1.1.</span> <span class="toc-text">TCP连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#FTP客户-服务器"><span class="toc-number">1.2.</span> <span class="toc-text">FTP客户/服务器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据连接的两种模式"><span class="toc-number">1.3.</span> <span class="toc-text">数据连接的两种模式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#主动模式"><span class="toc-number">1.3.1.</span> <span class="toc-text">主动模式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#被动模式"><span class="toc-number">1.3.2.</span> <span class="toc-text">被动模式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#两种模式优缺点"><span class="toc-number">1.3.3.</span> <span class="toc-text">两种模式优缺点</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#FTP模式的选择"><span class="toc-number">1.3.4.</span> <span class="toc-text">FTP模式的选择</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#FTP传输"><span class="toc-number">1.4.</span> <span class="toc-text">FTP传输</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        计网实验之FTP协议分析
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-03-19T16:00:00.000Z" itemprop="datePublished">2019-03-20</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/手稿/">手稿</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/FTP协议/">FTP协议</a>, <a class="tag-link" href="/tags/计算机网络实验/">计算机网络实验</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="FTP协议介绍"><a href="#FTP协议介绍" class="headerlink" title="FTP协议介绍"></a>FTP协议介绍</h3><p>文件传输协议FTP(File Transfer Protocol)是TCP/IP协议组种的应用层协议之一，是因特网中使用最广泛的文件传输协议。该协议旨在提高文件的共享性，透明、可靠的和高效的传送远程用户数据。其没有针对某种具体的操作系统或文件类型而设计，通过一些规程，利用网络低层的服务，屏蔽了计算机系统的细节，所以可以在异构网中传送文件。</p>
+<p>主要功能用于实现用户间文件分发共享，以及网络管理者在进行设备版本升级、日志下载和配置保存等业务操作时，均会使用到FTP功能。</p>
+<a id="more"></a>
+<h4 id="TCP连接"><a href="#TCP连接" class="headerlink" title="TCP连接"></a>TCP连接</h4><p>FTP的有两种TCP连接控制连接和数据连接。</p>
+<p>在TCP/IP协议中，FTP协议标准命令TCP端口为21，port方式数据端口为20。</p>
+<p>控制连接（TCP 21端口）主要用于实现FTP协议控制信令传送，服务器端打开TCP 21端口被动等待客户端发起连接命令；客户端则以主动方式打开随机端口，发起连接的建立请求。</p>
+<blockquote>
+<p>在控制连接种使用的是ftp命令，其并不真正与FTP服务器交互，而是通过用户协议解释器翻译成真正的FTP命令，再与服务器交互。</p>
+</blockquote>
+<p>数据连接（TCP 20端口）主要用于实现应用数据传送，服务器的数据连接端使用端口20。服务器执行主动打开数据连接，通常也执行主动关闭数据连接 。</p>
+<blockquote>
+<p>数据连接只在传输文件时存在。</p>
+</blockquote>
+<p>控制连接再整个会话期间一直保持连接状态数据连接则时临时建立，在文件传输结束后被关闭。</p>
+<h4 id="FTP客户-服务器"><a href="#FTP客户-服务器" class="headerlink" title="FTP客户/服务器"></a>FTP客户/服务器</h4><p>FTP是一个客户/服务器系统。客户端和服务器端通过数据连接和控制连接进行通信。</p>
+<p><img src="https://i.loli.net/2019/03/06/5c7fb1c79bfa7.png" alt="FTP.png"></p>
+<h4 id="数据连接的两种模式"><a href="#数据连接的两种模式" class="headerlink" title="数据连接的两种模式"></a>数据连接的两种模式</h4><p>FTP的数据连接支持两种模式：主动模式和被动模式。两者的主要区别在于数据连接是由谁发起的。</p>
+<h5 id="主动模式"><a href="#主动模式" class="headerlink" title="主动模式"></a>主动模式</h5><p>即Port方式，FTP协议最初定义的数据传输连接方式。收到数据传送请求后，服务器主动与客户端建立连接。</p>
+<p>FTP客户端通过向FTP服务器发送PORT命令<code>PORT n1,n2,n3,n4,n5,n6</code>，其中前四位表示客户端的IP地址<code>n1,n2,n3,n4</code>,后两位确定临时端口号为<code>n5 × 256 + n6</code>。当需要传送数据时，服务器通过TCP端口号20与客户端的临时端口建立数据传输通道，完成数据传输。在建立数据连接的过程中，由服务器主动发起连接，因此被称为主动方式。</p>
+<h5 id="被动模式"><a href="#被动模式" class="headerlink" title="被动模式"></a>被动模式</h5><p>即Pasv模式。</p>
+<p>FTP客户端通过向FTP服务器发送<code>PASV</code>命令。服务器收到<code>PASV</code>命令后，随机打开一个高端端口，并告知客户端。当需要传送数据时，客户端主动与服务器的临时端口号建立数据传输通道，完成数据传输。在整个过程中，由于服务器总是被动接收客户端的数据连接，因此被称为被动方式。</p>
+<h5 id="两种模式优缺点"><a href="#两种模式优缺点" class="headerlink" title="两种模式优缺点"></a>两种模式优缺点</h5><p>主动FTP对FTP服务器的管理有利，但对客户端的管理不利。因为FTP服务器企图与客户端的高位随机端口建立连接，而这个端口很有可能被客户端的防火墙阻塞掉。</p>
+<p>被动FTP对FTP客户端的管理有利，但对服务器端的管理不利。因为客户端要与服务器端建立两个连接，其中一个连到一个高位随机端口，而这个端口很有可能被服务器端的防火墙阻塞掉。</p>
+<h5 id="FTP模式的选择"><a href="#FTP模式的选择" class="headerlink" title="FTP模式的选择"></a>FTP模式的选择</h5><p>当FTP服务器与FTP客户端均处于同一局域网内，即两者之间互访不存在防火墙或其他安全设备时，主动方式、被动方式均可实现FTP文件分发共享。</p>
+<p>如果FTP服务器处于路由器，防火墙或其他NAT设备之后，建议使用被动模式（passive mode）。因为在主动模式下传输数据时，由FTP发起的数据传输一般会被客户端网关的防火墙阻断。</p>
+<h4 id="FTP传输"><a href="#FTP传输" class="headerlink" title="FTP传输"></a>FTP传输</h4><p>FTP的一个突出的问题是它以明文的方式发送用户名和口令。所以导致任何人通过对网络进行嗅探就可以捕获用户名和密码。FTP发送的数据也是明文的，通过对FTP连接的监控和数据收集就可以收集和重现FTP的数据传输并实现协议连接回放。目前可以将FTP与SSL相结合，对数据包进行加密，来保护数据不被攻击者轻易得到。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#FTP协议介绍"><span class="toc-number">1.</span> <span class="toc-text">FTP协议介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#TCP连接"><span class="toc-number">1.1.</span> <span class="toc-text">TCP连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#FTP客户-服务器"><span class="toc-number">1.2.</span> <span class="toc-text">FTP客户/服务器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据连接的两种模式"><span class="toc-number">1.3.</span> <span class="toc-text">数据连接的两种模式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#主动模式"><span class="toc-number">1.3.1.</span> <span class="toc-text">主动模式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#被动模式"><span class="toc-number">1.3.2.</span> <span class="toc-text">被动模式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#两种模式优缺点"><span class="toc-number">1.3.3.</span> <span class="toc-text">两种模式优缺点</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#FTP模式的选择"><span class="toc-number">1.3.4.</span> <span class="toc-text">FTP模式的选择</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#FTP传输"><span class="toc-number">1.4.</span> <span class="toc-text">FTP传输</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&text=计网实验之FTP协议分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&title=计网实验之FTP协议分析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&is_video=false&description=计网实验之FTP协议分析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计网实验之FTP协议分析&body=Check out this article: https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&title=计网实验之FTP协议分析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&title=计网实验之FTP协议分析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&title=计网实验之FTP协议分析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&title=计网实验之FTP协议分析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&name=计网实验之FTP协议分析&description=&lt;h3 id=&#34;FTP协议介绍&#34;&gt;&lt;a href=&#34;#FTP协议介绍&#34; class=&#34;headerlink&#34; title=&#34;FTP协议介绍&#34;&gt;&lt;/a&gt;FTP协议介绍&lt;/h3&gt;&lt;p&gt;文件传输协议FTP(File Transfer Protocol)是TCP/IP协议组种的应用层协议之一，是因特网中使用最广泛的文件传输协议。该协议旨在提高文件的共享性，透明、可靠的和高效的传送远程用户数据。其没有针对某种具体的操作系统或文件类型而设计，通过一些规程，利用网络低层的服务，屏蔽了计算机系统的细节，所以可以在异构网中传送文件。&lt;/p&gt;
+&lt;p&gt;主要功能用于实现用户间文件分发共享，以及网络管理者在进行设备版本升级、日志下载和配置保存等业务操作时，均会使用到FTP功能。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/03/20/计网实验之FTP协议分析/&t=计网实验之FTP协议分析"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
