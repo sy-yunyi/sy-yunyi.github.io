@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="原文地址：https://blog.ripstech.com/2019/sql-injection-big-tree/  BigTree CMS是一个小众的内容管理系统，其不依赖于任何框架，并且用户使用方便，开发便捷。在本文中，我们将会介绍一些我们在BigTree的代码中发现的漏洞。 我们对最新版本的BigTree CMS 4.4.6进行审计，发现了多个漏洞。其中包括一个SQL注入漏洞和一个Ph">
+<meta name="keywords" content="安全,SQL注入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="翻译|BigTree CMS 4.4.6中的后端SQL注入">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="原文地址：https://blog.ripstech.com/2019/sql-injection-big-tree/  BigTree CMS是一个小众的内容管理系统，其不依赖于任何框架，并且用户使用方便，开发便捷。在本文中，我们将会介绍一些我们在BigTree的代码中发现的漏洞。 我们对最新版本的BigTree CMS 4.4.6进行审计，发现了多个漏洞。其中包括一个SQL注入漏洞和一个Ph">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/11/30/geKdqGkF5oJu8BI.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/30/EtKrhAG876vuQLq.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/30/qF9IBksUurQGzEX.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/30/jR6p8Gg17ysXD93.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/30/xkq5U4YnaJ7oFdQ.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/30/t6jcZ3MTWqONeAh.png">
+<meta property="og:updated_time" content="2019-12-12T03:48:09.357Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="翻译|BigTree CMS 4.4.6中的后端SQL注入">
+<meta name="twitter:description" content="原文地址：https://blog.ripstech.com/2019/sql-injection-big-tree/  BigTree CMS是一个小众的内容管理系统，其不依赖于任何框架，并且用户使用方便，开发便捷。在本文中，我们将会介绍一些我们在BigTree的代码中发现的漏洞。 我们对最新版本的BigTree CMS 4.4.6进行审计，发现了多个漏洞。其中包括一个SQL注入漏洞和一个Ph">
+<meta name="twitter:image" content="https://i.loli.net/2019/11/30/geKdqGkF5oJu8BI.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>翻译|BigTree CMS 4.4.6中的后端SQL注入</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/12/12/翻译-CVE-2019-9512 Windows HTTP2 ping泛洪拒绝服务/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/12/07/宿命-从《哪吒》看教育/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&text=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&title=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&is_video=false&description=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=翻译|BigTree CMS 4.4.6中的后端SQL注入&body=Check out this article: https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&title=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&title=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&title=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&title=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&name=翻译|BigTree CMS 4.4.6中的后端SQL注入&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&t=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#链式SQL注入和XSS"><span class="toc-number">1.</span> <span class="toc-text">链式SQL注入和XSS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#通过CURL包装器进行phar反序列化"><span class="toc-number">2.</span> <span class="toc-text">通过CURL包装器进行phar反序列化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#时间线"><span class="toc-number">4.</span> <span class="toc-text">时间线</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        翻译|BigTree CMS 4.4.6中的后端SQL注入
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-12-11T16:00:00.000Z" itemprop="datePublished">2019-12-12</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/翻译/">翻译</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/SQL注入/">SQL注入</a>, <a class="tag-link" href="/tags/安全/">安全</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p>原文地址：<a href="https://blog.ripstech.com/2019/sql-injection-big-tree/" target="_blank" rel="noopener">https://blog.ripstech.com/2019/sql-injection-big-tree/</a></p>
+</blockquote>
+<p>BigTree CMS是一个小众的内容管理系统，其不依赖于任何框架，并且用户使用方便，开发便捷。在本文中，我们将会介绍一些我们在BigTree的代码中发现的漏洞。</p>
+<p>我们对最新版本的<code>BigTree CMS 4.4.6</code>进行审计，发现了多个漏洞。其中包括一个SQL注入漏洞和一个Phar反序列化漏洞，可以导致Web应用程序中的远程代码执行。</p>
+<p>部分分析结果可以在我们的RIPS 演示应用看到。请注意，我们将分析结果限制为本文所述的问题，以确保已经修复，<a href="https://demo.ripstech.com/projects/bigtree_4.4.6" target="_blank" rel="noopener">RIPS 演示应用</a>。</p>
+<h4 id="链式SQL注入和XSS"><a href="#链式SQL注入和XSS" class="headerlink" title="链式SQL注入和XSS"></a>链式SQL注入和XSS</h4><p>BigTree CMS存在普通的SQL注入，可在仪表板中利用它。未经过处理的参数允许覆盖<code>Table</code>属性，从而允许对SQL语法进行操作，而导致从数据库中提取任意敏感信息。然后，Web应用程序继续打印通过SQL查询检索到的所有数据，并将其返回给经过身份验证的管理员。</p>
+<p>由于BigTree此处未使用任何<code>CSRF</code>令牌，因此可以通过<code>CSRF</code>利用此漏洞。然后，可以使用二次跨站点脚本漏洞将数据外带到外部服务器。下面是该漏洞的入口点：</p>
+<p><img src="https://i.loli.net/2019/11/30/geKdqGkF5oJu8BI.png" alt="UTOOLS1575095176921.png"></p>
+<p>在第6行，通过<code>form</code>参数接收用户输入并将其存储在<code>$form</code>变量中。然后，将其值分配给<code>BigTreeModule</code>实例的<code>$m-&gt;Table</code>属性。最后，第10行中，该对象上调用执行SQL查询的<code>get()</code>方法。此方法安全地嵌入<code>$item</code>变量的用户输入，但不安全地嵌入受污染的<code>Table</code>属性。</p>
+<p><img src="https://i.loli.net/2019/11/30/EtKrhAG876vuQLq.png" alt="UTOOLS1575095465672.png"></p>
+<p>然后，可以利用跨站点脚本漏洞将数据外带。为了实现数据外带，攻击者必须控制SQL查询返回的<code>$item</code>数组的值是以字符串<code>http</code>开头。这将导致控制流图的分支走向链接自动处理，如下图中19行。</p>
+<p><img src="https://i.loli.net/2019/11/30/qF9IBksUurQGzEX.png" alt="UTOOLS1575095685063.png"></p>
+<p>对于每个潜在的链接，程序将通过<code>urlExists（）</code>方法发送一个Web请求。如果请求失败，则将数据添加到第22行的错误数组<code>$integrity_errors</code>中。该数组的值未经过滤就在30行的<code>foreach</code>中进行输出，这就导致SQL注入的输出直接在我们的跨站点脚本有效负载旁边，从而将数据提取到外部服务器。尽管如<a href="https://blog.ripstech.com/2017/sugarcrm-security-diet-multiple-vulnerabilities/#blind-sql-injection-exploitation-via-csrf" target="_blank" rel="noopener">此处所示</a>，通过CSRF利用SQL注入通常很棘手，但在这种情况下，我们可以利用跨站点脚本漏洞利用<code>AJAX</code>请求轻松外带数据。</p>
+<h4 id="通过CURL包装器进行phar反序列化"><a href="#通过CURL包装器进行phar反序列化" class="headerlink" title="通过CURL包装器进行phar反序列化"></a>通过CURL包装器进行phar反序列化</h4><p><code>Curl</code>命令行的文件功能允许通过在文件名前添加<code>@</code>符号实现从文件系统上传文件。在<code>curl</code> 命令行中添加<code>-d param=@/path/to/filename</code>选项可以轻松地将指定文件名的内容上传到目标服务器。BigTree开发了自己的<code>curl</code>包装函数<code>BigTree::cURL（）</code>来实现此功能。</p>
+<p><img src="https://i.loli.net/2019/11/30/jR6p8Gg17ysXD93.png" alt="UTOOLS1575097023360.png"></p>
+<p>该方法接收要在HTTP正文中发送的数据，作为静态方法的第二个参数<code>$post</code>。第268行遍历数组并检查是否存在<code>@</code>字符，该字符后可能带有文件名。在将文件内容添加到<code>curl</code>请求之前，第270行<code>file_exists（）</code>检查此文件是否存在，如果我们可以控制<code>$post</code>数组的值，则会导致<code>phar</code>反序列化漏洞。通过URL<code>http://&lt;host&gt;/bigtree446/site/index.php/admin/developer/services/instagram/return/?code=@phar://myphar.phar</code>可以证明我们的猜想是正确的，它将经过身份验证的后端用户直接路由到以下入口点：</p>
+<p><img src="https://i.loli.net/2019/11/30/xkq5U4YnaJ7oFdQ.png" alt="UTOOLS1575097411580.png"></p>
+<p>存储在<code>code</code>参数中的用户输入作为<code>$code</code>参数传递给<code>oAuthSetToken（）</code>方法。这会将值从上面直接转发到<code>BigTree::cURL()</code>包装器中，从而导致phar反序列化漏洞。</p>
+<p><img src="https://i.loli.net/2019/11/30/t6jcZ3MTWqONeAh.png" alt="UTOOLS1575097514713.png"></p>
+<p>要利用此漏洞，必须上传文件。这只能通过正确传递CSRF令牌来实现。但是，可以通过上方利用<code>Cross-Site Scripting</code>漏洞来窃取令牌。这就可以实现phar反序列化过程中使用的文件上传。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>在此博客文章中，我们看到手工清理每个参数是保护应用程序安全的繁琐而危险的方法。精明的攻击者可以链接多个漏洞，以成功发动具有针对性的攻击。建议花一些时间来开发和使用集中式安全模块，该模块将清理和数据库准备捆绑在一起。追溯实施安全功能时，自动化的安全测试可以帮助检测遗留代码遗留的漏洞。</p>
+<h4 id="时间线"><a href="#时间线" class="headerlink" title="时间线"></a>时间线</h4><table>
+<thead>
+<tr>
+<th>日期</th>
+<th>事件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10/15/19</td>
+<td>向BigTree报告漏洞细节</td>
+</tr>
+<tr>
+<td>10/15/19</td>
+<td>供应商确认问题</td>
+</tr>
+<tr>
+<td>10/15/19</td>
+<td>供应商发布BigTree 4.4.7补丁程序</td>
+</tr>
+</tbody>
+</table>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#链式SQL注入和XSS"><span class="toc-number">1.</span> <span class="toc-text">链式SQL注入和XSS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#通过CURL包装器进行phar反序列化"><span class="toc-number">2.</span> <span class="toc-text">通过CURL包装器进行phar反序列化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#时间线"><span class="toc-number">4.</span> <span class="toc-text">时间线</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&text=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&title=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&is_video=false&description=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=翻译|BigTree CMS 4.4.6中的后端SQL注入&body=Check out this article: https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&title=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&title=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&title=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&title=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&name=翻译|BigTree CMS 4.4.6中的后端SQL注入&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/12/12/翻译-BigTree CMS 4.4.6中的后端SQL注入/&t=翻译|BigTree CMS 4.4.6中的后端SQL注入"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

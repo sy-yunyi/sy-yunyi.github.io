@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="原文地址：https://www.trustwave.com/en-us/resources/blogs/spiderlabs-blog/fake-windows-update-spam-leads-to-cyborg-ransomware-and-its-builder/  最近，发现了关于假的微软Windows更新的垃圾邮件，其主题为：  现在安装最新的Windows更新！ Install">
+<meta name="keywords" content="安全,勒索软件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="翻译|使用虚假Windows更新垃圾邮件的勒索软件分析">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="原文地址：https://www.trustwave.com/en-us/resources/blogs/spiderlabs-blog/fake-windows-update-spam-leads-to-cyborg-ransomware-and-its-builder/  最近，发现了关于假的微软Windows更新的垃圾邮件，其主题为：  现在安装最新的Windows更新！ Install">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a49e08d3200c-900wi">
+<meta property="og:image" content="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a4ebf981200b-500wi">
+<meta property="og:image" content="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a49e0903200c-900wi">
+<meta property="og:image" content="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a49e0e9a200c-500wi">
+<meta property="og:image" content="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a49e0ef9200c-800wi">
+<meta property="og:image" content="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a4ebff1b200b-640wi">
+<meta property="og:image" content="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a4c743ba200d-900wi">
+<meta property="og:image" content="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a4c743ce200d-400wi">
+<meta property="og:image" content="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a4ebff69200b-500wi">
+<meta property="og:image" content="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a4c74452200d-900wi">
+<meta property="og:image" content="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a49e100f200c-500wi">
+<meta property="og:image" content="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a4c74480200d-800wi">
+<meta property="og:updated_time" content="2019-12-12T01:40:28.779Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="翻译|使用虚假Windows更新垃圾邮件的勒索软件分析">
+<meta name="twitter:description" content="原文地址：https://www.trustwave.com/en-us/resources/blogs/spiderlabs-blog/fake-windows-update-spam-leads-to-cyborg-ransomware-and-its-builder/  最近，发现了关于假的微软Windows更新的垃圾邮件，其主题为：  现在安装最新的Windows更新！ Install">
+<meta name="twitter:image" content="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a49e08d3200c-900wi">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>翻译|使用虚假Windows更新垃圾邮件的勒索软件分析</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/12/12/翻译-测量DNS Flag Day的影响/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/12/12/翻译-CVE-2019-9512 Windows HTTP2 ping泛洪拒绝服务/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&text=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&title=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&is_video=false&description=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析&body=Check out this article: https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&title=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&title=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&title=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&title=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&name=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&t=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#附件"><span class="toc-number">1.</span> <span class="toc-text">附件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#勒索软件"><span class="toc-number">2.</span> <span class="toc-text">勒索软件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#电子勒索软件的制作者"><span class="toc-number">3.</span> <span class="toc-text">电子勒索软件的制作者</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        翻译|使用虚假Windows更新垃圾邮件的勒索软件分析
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-12-11T16:00:00.000Z" itemprop="datePublished">2019-12-12</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/翻译/">翻译</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/勒索软件/">勒索软件</a>, <a class="tag-link" href="/tags/安全/">安全</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p>原文地址：<a href="https://www.trustwave.com/en-us/resources/blogs/spiderlabs-blog/fake-windows-update-spam-leads-to-cyborg-ransomware-and-its-builder/" target="_blank" rel="noopener">https://www.trustwave.com/en-us/resources/blogs/spiderlabs-blog/fake-windows-update-spam-leads-to-cyborg-ransomware-and-its-builder/</a></p>
+</blockquote>
+<p>最近，发现了关于假的微软Windows更新的垃圾邮件，其主题为：</p>
+<ul>
+<li>现在安装最新的Windows更新！ <em>Install Latest Microsoft Windows Update now!</em></li>
+<li>关键的Windows更新！  <em>Critical Microsoft Windows Update!</em></li>
+</ul>
+<p><img src="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a49e08d3200c-900wi" alt="fake"></p>
+<p>图1 Trustwave安全电子邮件网关(<em>Trustwave Security Email Gateway</em>, SEG)展示的虚假Windows更新垃圾邮件</p>
+<p>这封自称来自微软的电子邮件，邮件正文只有一句话，开头的字母使用大写。它将收件人的注意力引导到附件的“最新的关键更新<code>latest critical update</code>”。</p>
+<h4 id="附件"><a href="#附件" class="headerlink" title="附件"></a>附件</h4><p>这个假的更新附件虽然扩展名为<code>.jpg</code>，但却是一个可执行文件。它的文件名是随机的，文件大小约为28KB。这个可执行文件是一个恶意的<code>.NET</code>下载程序，它会在感染的系统下载另一个恶意软件。</p>
+<p>图1中所示的附件<code>b1jbl53 .jpg</code>中有一个<code>#Strings</code>部分，通过查看这里的内容，可以了解可执行文件的行为。值得注意的是，这个假的微软更新将从一个软件开发平台<code>Github</code>上下载另一个可执行文件。</p>
+<p><img src="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a4ebf981200b-500wi" alt="down"></p>
+<p>图2  图1所示的<code>.NET</code>附件的<code>#Strings</code>部分</p>
+<h4 id="勒索软件"><a href="#勒索软件" class="headerlink" title="勒索软件"></a>勒索软件</h4><p>Github账户<code>misterbtc2020</code>下的文件<code>bitcoingenerator.exe</code>将会被下载执行。该账号在我们调查期间还存活了几天，但现在被删除了。目标文件包含在账户的<code>btcgenerator</code>仓库中。与附件类似，这是使用<code>.NET</code>编写的电子勒索软件。</p>
+<p><img src="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a49e0903200c-900wi" alt="github"></p>
+<p>图3  勒索软件<code>bitcoingenerator.exe</code>的下载账号<code>misterbtc2020</code>的Github的介绍。</p>
+<p>勒索软件<code>bitcoingenerator.exe</code>将加密受感染用户的文件，并在他们的文件名后附加自己的文件扩展名，在本例中为777。</p>
+<p><img src="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a49e0e9a200c-500wi" alt="memory"></p>
+<p>图4 文件<code>bitcoingenerator.exe</code>的内存转储，显示了其针对的文件扩展名</p>
+<p><img src="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a49e0ef9200c-800wi" alt="777"></p>
+<p>图5  777被添加到加密后的文件后缀</p>
+<p>然后，一封勒索信<code>Cyborg_DECRYPT.txt</code>将留在感染的电脑桌面上。此<code>txt</code>文件中提供的信息可以在勒索软件<code>bitcoingenerator.exe</code>的覆盖层(overlay)上找到。</p>
+<p><img src="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a4ebff1b200b-640wi" alt="overlay"></p>
+<p>图6 <code>Cyborg_DECRYPT.txt</code>中的一些信息可以在恶意软件<code>bitcoingenerator.exe</code>中发现</p>
+<p>最后，它会留下自己的一个副本作为<code>bot.exe</code>隐藏在受感染驱动器的根目录下。</p>
+<p><img src="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a4c743ba200d-900wi" alt="bot"></p>
+<p>图7 进程监控工具显示<code>bitcoingenerator.exe</code>复制了自己</p>
+<h4 id="电子勒索软件的制作者"><a href="#电子勒索软件的制作者" class="headerlink" title="电子勒索软件的制作者"></a>电子勒索软件的制作者</h4><p>为了收集更多这种勒索软件的变种，我们在VirusTotal (VT)中搜寻我们获得的恶意软件的原始文件名<code>syborg1finf.exe</code>。我们能够得到这个勒索软件的其他3个样本。</p>
+<p><img src="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a4c743ce200d-400wi" alt="file"></p>
+<p>图8 电子勒索软件<code>bitcoingenerator.exe</code>的文件属性</p>
+<p>在VT上发现的这些恶意软件的样本会使用不同的加密文件后缀。这意味着这个勒索软件创作者的存在。我们在网络上进行搜索，发现了一个youtube的视频<code>Cyborg Builder Ransomware V1.0[预览免费版2019]</code>，它包含托管在GitHub上的Cyborg勒索软件生成器(Cyborg ransomware builder )的链接。</p>
+<p><img src="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a4ebff69200b-500wi" alt="youtobe"></p>
+<p>图9 关于Cyborg勒索软件生成器的YouTube视频</p>
+<p>Github账户<code>Cyborg-Ransomware</code>也是一个新账号。该账号有两个仓库，Cyborg勒索软件生成器<em>Cyborg-Builder-Ransomware</em>和俄国版本Cyborg勒索软件<em>Cyborg-russian-version</em>。第一个仓库包含勒索软件构建器的二进制文件，而第二个仓库包含指向托管在另一个网站上的该构建器俄罗斯版本的链接。</p>
+<p><img src="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a4c74452200d-900wi" alt="account"></p>
+<p>图10 Github账户<code>Cyborg-Ransomware</code>托管了一个Cyborg勒索软件生成器</p>
+<p><code>Cyborg build Ransomware</code>仓库的7Zip文件<code>Cyborg Builder Ransomware V 1.0.7z</code>比Github账户<code>misterbtc2020</code>托管的<code>Cyborg 勒索软件可执行文件</code>的提前两天上传。它包含勒索软件生成器<em>Cyborg Builder Ransomware V 1.0.exe</em>。我们将上述生成器(Ransom.exe)生成的例子与垃圾邮件中的样本进行比较，它们是相似的！只有展示界面不同，因为它包含的数据是由勒索软件创建者指定的。</p>
+<p><img src="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a49e100f200c-500wi" alt="diff"></p>
+<p>图11 从GitHub账号<code>Cyborg-Ransomware</code>获得的勒索软件生成器</p>
+<p><img src="https://npercoco.typepad.com/.a/6a0133f264aa62970b0240a4c74480200d-800wi" alt="cyborg"></p>
+<p>图12 勒索软件样本：从左到右为从创建者的<code>Ransom.exe</code>生成的，VT的3个样本，垃圾邮件中获得的<code>bitcoingenerator.exe</code></p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>这个电子勒索软件可以被任何人创建和传播。它可以使用其他主题的垃圾邮件和附加在不同的附件上，来逃避电子邮件网关。并且攻击者可以使用一个已知的勒索软件文件扩展名创建这个勒索软件，来误导受感染的用户确定该勒索软件的类别。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#附件"><span class="toc-number">1.</span> <span class="toc-text">附件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#勒索软件"><span class="toc-number">2.</span> <span class="toc-text">勒索软件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#电子勒索软件的制作者"><span class="toc-number">3.</span> <span class="toc-text">电子勒索软件的制作者</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&text=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&title=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&is_video=false&description=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析&body=Check out this article: https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&title=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&title=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&title=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&title=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&name=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/12/12/翻译-使用虚假Windows更新垃圾邮件的勒索软件分析/&t=翻译|使用虚假Windows更新垃圾邮件的勒索软件分析"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

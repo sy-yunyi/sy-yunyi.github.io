@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="来源Nagunwa T, Naqvi S, Fouad S, et al. A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites[C]//International Joint Conference: 12th International Conference on C">
+<meta name="keywords" content="钓鱼检测,机器学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="来源Nagunwa T, Naqvi S, Fouad S, et al. A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites[C]//International Joint Conference: 12th International Conference on C">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/12/13/QRLjMyG1Wwga2nD.png">
+<meta property="og:image" content="g:/papers/notes/1576217741438.png">
+<meta property="og:image" content="https://i.loli.net/2019/12/13/JtbihAvU32fw6MC.png">
+<meta property="og:image" content="g:/papers/notes/1576218399243.png">
+<meta property="og:image" content="https://i.loli.net/2019/12/13/kS4IrbzGaP1qL9Y.png">
+<meta property="og:image" content="https://i.loli.net/2019/12/13/fynNalwTjivBksX.png">
+<meta property="og:updated_time" content="2019-12-13T06:43:18.247Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites">
+<meta name="twitter:description" content="来源Nagunwa T, Naqvi S, Fouad S, et al. A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites[C]//International Joint Conference: 12th International Conference on C">
+<meta name="twitter:image" content="https://i.loli.net/2019/12/13/QRLjMyG1Wwga2nD.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/12/12/翻译-测量DNS Flag Day的影响/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&text=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&title=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&is_video=false&description=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites&body=Check out this article: https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&title=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&title=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&title=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&title=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&name=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&t=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#来源"><span class="toc-number">1.</span> <span class="toc-text">来源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#介绍"><span class="toc-number">2.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#相关工作"><span class="toc-number">3.</span> <span class="toc-text">相关工作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#框架设计"><span class="toc-number">4.</span> <span class="toc-text">框架设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#预测特征"><span class="toc-number">5.</span> <span class="toc-text">预测特征</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实验"><span class="toc-number">6.</span> <span class="toc-text">实验</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#相关工作比较"><span class="toc-number">6.1.</span> <span class="toc-text">相关工作比较</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-12-12T16:00:00.000Z" itemprop="datePublished">2019-12-13</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/论文笔记/">论文笔记</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/机器学习/">机器学习</a>, <a class="tag-link" href="/tags/钓鱼检测/">钓鱼检测</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h4 id="来源"><a href="#来源" class="headerlink" title="来源"></a>来源</h4><p><em>Nagunwa T, Naqvi S, Fouad S, et al. A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites[C]//International Joint Conference: 12th International Conference on Computational Intelligence in Security for Information Systems (CISIS 2019) and 10th International Conference on EUropean Transnational Education (ICEUTE 2019). Springer, Cham, 2019: 36-46.</em></p>
+<h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>针对现有的钓鱼检测方法，钓鱼攻击者学习其特征，采用精心设计的方法来绕过检测。本文提出了一个通过引入混合特征的零时（Zero Hour）钓鱼站点检测框架。其指出域名注册信息和页面信誉值在检测过程中占有非常重要的地位。每个页面的预测时间为7.63s 。应用了5种类型31个特征，并且对8种机器学习算法进行了测试。</p>
+<blockquote>
+<p>Zero hour 未知的新的钓鱼站点</p>
+<p>根据Webroot的最新数据，平均每月有140万个独特的钓鱼网站被创建——每天有46000个新的钓鱼网站被创建——它们平均只活跃4-8个小时。<a href="https://www.webroot.com/us/en/business/threat-intelligence/internet/real-time-anti-phishing" target="_blank" rel="noopener">https://www.webroot.com/us/en/business/threat-intelligence/internet/real-time-anti-phishing</a></p>
+</blockquote>
+<h4 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h4><ul>
+<li>Machine learning based phishing detection from URLs [2019]：提取了1701个单词和40个基于自然语言的特征，应用随机森林算法，准确率97.98</li>
+<li>New hybrid features for phish website prediction [2016]：设计了58个预测特征，包括页面结构和URL相关的特征，应用SVM算法，FP1.17，FN0.03</li>
+<li>A stacking model using URL and HTML features for phishing webpage detection [2019]：设计了20个特征，应用XGBoost和LightGBM算法，准确率97.3，错误率4.46，FN1.61</li>
+<li>Towards detection of phishing websites on client-side using machine learning based approach [2018]：与第三个相比没有采用第三方的特征，</li>
+<li>Predicting phishing websites based on selfstructuring neural network[2014]：采用了三种混合特征，5个页面结构特征，9个URL信息特征和3个域名注册信息特征，应用深度神经网络，准确率92.18</li>
+<li>A comprehensive and efficacious architecture for detecting phishing webpages [2014]：采用了页面结构、URL、域名注册和页面信誉值相关的30个特征，应用深度神经网络，正确率97.71</li>
+</ul>
+<h4 id="框架设计"><a href="#框架设计" class="headerlink" title="框架设计"></a>框架设计</h4><p><img src="https://i.loli.net/2019/12/13/QRLjMyG1Wwga2nD.png" alt="UTOOLS1576217234664.png"></p>
+<ul>
+<li>个人信息页面过滤：过滤不包含个人信息的页面，这种页面不是钓鱼页面。</li>
+<li>钓鱼黑名单检查</li>
+<li>URL重定向检查<ul>
+<li>客户端重定向</li>
+<li>服务端重定向</li>
+<li>短链接</li>
+</ul>
+</li>
+<li>特征提取</li>
+<li>训练分类器</li>
+<li>预测分析</li>
+</ul>
+<h4 id="预测特征"><a href="#预测特征" class="headerlink" title="预测特征"></a>预测特征</h4><p><img src="G:\papers\notes\1576217741438.png" alt="1576217741438"></p>
+<ul>
+<li>页面结构和内容</li>
+<li>URL结构</li>
+<li>域名注册信息</li>
+<li>SSL证书信息</li>
+<li>页面信誉度</li>
+</ul>
+<p><img src="https://i.loli.net/2019/12/13/JtbihAvU32fw6MC.png" alt="UTOOLS1576218342200.png"></p>
+<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p><img src="G:\papers\notes\1576218399243.png" alt="1576218399243"></p>
+<p>从实验结果来看，随机森林的效果最好。</p>
+<p><img src="https://i.loli.net/2019/12/13/kS4IrbzGaP1qL9Y.png" alt="UTOOLS1576218447609.png"></p>
+<p>上图为每组特征单独训练随机森林的正确率，可以看出，仅仅使用域名注册信息特征就可以达到99的正确率。但是从上面的每个特征重要的程度来看，域名注册信息的重要程度并没有页面信誉度的重要程度高，这里猜测可能和数据集相关。</p>
+<h5 id="相关工作比较"><a href="#相关工作比较" class="headerlink" title="相关工作比较"></a>相关工作比较</h5><p><img src="https://i.loli.net/2019/12/13/fynNalwTjivBksX.png" alt="UTOOLS1576218815721.png"></p>
+<ol>
+<li><p>Lakshmi, V.S., Vijaya, M.: Efficient prediction of phishing websites using supervised learning algorithms. Procedia Eng. 30, 798–805 (2012)</p>
+</li>
+<li><p>Sahingoz, O.K., Buber, E., Demir, O., Diri, B.: Machine learning based phishing detection from URLs. Expert Syst. Appl. 117, 345–357 (2019)</p>
+</li>
+<li>Zuhair, H., Selamat, A., Salleh, M.: New hybrid features for phish website prediction. Int.J. Adv. Soft Comput. Appl. 8, 28–43 (2016)</li>
+<li>Li, Y., Yang, Z., Chen, X., Yuan, H., Liu, W.: A stacking model using URL and HTML features for phishing webpage detection. Future Gener. Comput. Syst. 94, 27–39 (2019)</li>
+<li>Jain, A.K., Gupta, B.B.: Towards detection of phishing websites on client-side using machine learning based approach. Telecommun. Syst. 68, 687–700 (2018)</li>
+<li>Mohammad, R.M., Thabtah, F., McCluskey, L.: Predicting phishing websites based on selfstructuring neural network. Neural Comput. Appl. 25, 443–458 (2014)</li>
+<li>Gowtham, R., Krishnamurthi, I.: A comprehensive and efficacious architecture for detecting phishing webpages. Comput. Secur. 40, 23–37 (2014)</li>
+<li>Feng, F., Zhou, Q., Shen, Z., Yang, X., Han, L., Wang, J.: The application of a novel neural network in the detection of phishing websites. J. Ambient Intell. Human. Comput. 1–15 (2018)</li>
+<li>Rao, R.S., Pais, A.R.: Detection of phishing websites using an efficient feature-based machine learning framework. Neural Comput. Appl. (2018)</li>
+<li>Xiang, G., Hong, J., Rose, C.P., Cranor, L.: Cantina+ : a feature-rich machine learning framework for detecting phishing web sites. ACM Trans. Inf. Syst. Secur. (TISSEC) 14, 21 (2011)</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#来源"><span class="toc-number">1.</span> <span class="toc-text">来源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#介绍"><span class="toc-number">2.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#相关工作"><span class="toc-number">3.</span> <span class="toc-text">相关工作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#框架设计"><span class="toc-number">4.</span> <span class="toc-text">框架设计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#预测特征"><span class="toc-number">5.</span> <span class="toc-text">预测特征</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实验"><span class="toc-number">6.</span> <span class="toc-text">实验</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#相关工作比较"><span class="toc-number">6.1.</span> <span class="toc-text">相关工作比较</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&text=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&title=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&is_video=false&description=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites&body=Check out this article: https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&title=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&title=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&title=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&title=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&name=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/&t=笔记|A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
