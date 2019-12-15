@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="问题描述给定两个字符串s1和s2，判定s2是否能够被通过s1作循环移位得到字符串包含。 例子给定 s1=AABCD，s2=CDAA，则返回 true 。 给定 s1=ABCD，s2=ACBD，则返回 false 。 分析解法1最简单的方法是对s1进行循环移位，然后判断s2是否在其中，遍历所有移位的可能性。 1234567891011121314bool rotate(char* src,char*">
+<meta name="keywords" content="编程之美,字符串">
+<meta property="og:type" content="article">
+<meta property="og:title" content="字符串移位包含问题">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="问题描述给定两个字符串s1和s2，判定s2是否能够被通过s1作循环移位得到字符串包含。 例子给定 s1=AABCD，s2=CDAA，则返回 true 。 给定 s1=ABCD，s2=ACBD，则返回 false 。 分析解法1最简单的方法是对s1进行循环移位，然后判断s2是否在其中，遍历所有移位的可能性。 1234567891011121314bool rotate(char* src,char*">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-15T13:45:19.273Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="字符串移位包含问题">
+<meta name="twitter:description" content="问题描述给定两个字符串s1和s2，判定s2是否能够被通过s1作循环移位得到字符串包含。 例子给定 s1=AABCD，s2=CDAA，则返回 true 。 给定 s1=ABCD，s2=ACBD，则返回 false 。 分析解法1最简单的方法是对s1进行循环移位，然后判断s2是否在其中，遍历所有移位的可能性。 1234567891011121314bool rotate(char* src,char*">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>字符串移位包含问题</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/12/13/A Framework of New Hybrid Features for Intelligent Detection of Zero Hour Phishing Websites/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&text=字符串移位包含问题"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&title=字符串移位包含问题"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&is_video=false&description=字符串移位包含问题"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=字符串移位包含问题&body=Check out this article: https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&title=字符串移位包含问题"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&title=字符串移位包含问题"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&title=字符串移位包含问题"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&title=字符串移位包含问题"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&name=字符串移位包含问题&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&t=字符串移位包含问题"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题描述"><span class="toc-number">1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-number">2.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">3.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#解法1"><span class="toc-number">3.1.</span> <span class="toc-text">解法1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#解法2"><span class="toc-number">3.2.</span> <span class="toc-text">解法2</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        字符串移位包含问题
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-12-14T16:00:00.000Z" itemprop="datePublished">2019-12-15</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/算法/">算法</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/字符串/">字符串</a>, <a class="tag-link" href="/tags/编程之美/">编程之美</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>给定两个字符串s1和s2，判定s2是否能够被通过s1作循环移位得到字符串包含。</p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>给定 s1=AABCD，s2=CDAA，则返回 <code>true</code> 。</p>
+<p>给定 s1=ABCD，s2=ACBD，则返回 <code>false</code> 。</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><h4 id="解法1"><a href="#解法1" class="headerlink" title="解法1"></a>解法1</h4><p>最简单的方法是对s1进行循环移位，然后判断s2是否在其中，遍历所有移位的可能性。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">rotate</span><span class="params">(<span class="keyword">char</span>* src,<span class="keyword">char</span>* des)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> len = <span class="built_in">strlen</span>(src);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">        <span class="keyword">char</span> tem = src[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;len<span class="number">-1</span>;j++)&#123;</span><br><span class="line">            src[j]=src[j+<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        src[len<span class="number">-1</span>]=tem;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">strstr</span>(src,des)!=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>书中代码这里有问题，条件判断写错了。</p>
+<p>strstr() 函数声明</p>
+<ul>
+<li>char <em>strstr(const char </em>haystack, const char *needle);</li>
+<li>该函数返回在 haystack 中第一次出现 needle 字符串的位置，如果未找到则返回 null。</li>
+<li>头文件 ：#include &lt;string.h&gt;</li>
+<li>note：如果没有找到则返回的是 <code>NULL</code> ，这里用 <code>0</code> 进行比较，也可以用 <code>bool</code> 类型的数据接收返回值，如果找到则为 <code>true</code> ，否则为 <code>false</code> 。原本函数的返回值为 <code>char *</code> 类型，这里作了隐式的转换。</li>
+</ul>
+</blockquote>
+<p>python实现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">rotate</span><span class="params">(src,des)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(src)):</span><br><span class="line">        src=src[<span class="number">1</span>:]+src[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> des <span class="keyword">in</span> src:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<p>但利用穷举法作移位，如果字符串长度很长，则效率很低。</p>
+<h4 id="解法2"><a href="#解法2" class="headerlink" title="解法2"></a>解法2</h4><p>空间换时间 </p>
+<p>再来看题目。题目要求是判断s2是否存在于s1移位后的字符串中，那么我们来看一下，移位会对s1有什么影响。</p>
+<p>假定s1为：ABCD</p>
+<blockquote>
+<p>ABCD -&gt; BCDA -&gt;CDAB -&gt; DABC -&gt; ABCD</p>
+</blockquote>
+<p>如果我们将前面移走的数据保留下来，则有</p>
+<blockquote>
+<p>ABCD -&gt; ABCDA -&gt; ABCDAB -&gt; ABCDABC -&gt; ABCDABCD</p>
+</blockquote>
+<p>所以，s1移位得到的字符串都是s1s1的字串，那么如果s2在s1s1上，则s2肯定在s1移位的字符串上。</p>
+<p>所以题目可以转换为：s2是否在字符串s1s1上。这样就不用作循环移位了。</p>
+<p>C/C++实现</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">rotate</span><span class="params">(<span class="keyword">char</span>* src,<span class="keyword">char</span>* des)</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span>* s = (<span class="keyword">char</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">char</span>)*<span class="built_in">strlen</span>(src));</span><br><span class="line">    <span class="built_in">strcpy</span>(s,src);</span><br><span class="line">    <span class="built_in">strcat</span>(s,src);</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">strstr</span>(s,des)!=<span class="number">0</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>malloc() </p>
+<p>函数原型：void *malloc(unsigned int num_bytes);</p>
+<p>参数：num_bytes 是<a href="https://www.baidu.com/s?wd=%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B4%E5%9E%8B&amp;tn=44039180_cpr&amp;fenlei=mv6quAkxTZn0IZRqIHckPjm4nH00T1Y3nhmsm103mHbLm1Fbnh7W0ZwV5Hcvrjm3rH6sPfKWUMw85HfYnjn4nH6sgvPsT6KdThsqpZwYTjCEQLGCpyw9Uz4Bmy-bIi4WUvYETgN-TLwGUv3En1c1Pj0LnjT1" target="_blank" rel="noopener">无符号整型</a>，用于表示分配的字节数。</p>
+<p>返回值：如果分配成功则返回指向被<a href="https://www.baidu.com/s?wd=%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98&amp;tn=44039180_cpr&amp;fenlei=mv6quAkxTZn0IZRqIHckPjm4nH00T1Y3nhmsm103mHbLm1Fbnh7W0ZwV5Hcvrjm3rH6sPfKWUMw85HfYnjn4nH6sgvPsT6KdThsqpZwYTjCEQLGCpyw9Uz4Bmy-bIi4WUvYETgN-TLwGUv3En1c1Pj0LnjT1" target="_blank" rel="noopener">分配内存</a>的指针(此存储区中的初始值不确定)，否则返回空指针NULL。</p>
+<p>功能：分配长度为num_bytes字节的内存块</p>
+<p>头文件：# include&lt;malloc.h&gt;</p>
+<p>strcpy() </p>
+<p>函数原型：char<em> strcpy (char</em> dest, const char* src);</p>
+<p>参数：des为目标字符串，source为原字符串。</p>
+<p>返回值：目标串的地址。</p>
+<p>头文件：#include &lt;string.h&gt;</p>
+<p>功能：把从src地址开始且含有 <code>\0</code> 结束符的字符串复制到以dest开始的地址空间，返回值的类型为char*。</p>
+<p>strcat() </p>
+<p>函数原型：char <em> strcat(char </em>dest, const char *src);</p>
+<p>头文件：#include &lt;string.h&gt;</p>
+<p>返回值：dest 字符串起始地址。</p>
+<p>功能：</p>
+<p>1、dest 为目的字符串指针，src 为源字符串指针。strcat() 会将参数 src 字符串复制到参数 dest 所指的字符串尾部；</p>
+<p>2、dest 最后的结束字符 NULL 会被覆盖掉，并在连接后的字符串的尾部再增加一个 NULL。</p>
+</blockquote>
+<p>python实现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">rotate</span><span class="params">(src,des)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> (des <span class="keyword">in</span> src.join(src)):</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题描述"><span class="toc-number">1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-number">2.</span> <span class="toc-text">例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">3.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#解法1"><span class="toc-number">3.1.</span> <span class="toc-text">解法1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#解法2"><span class="toc-number">3.2.</span> <span class="toc-text">解法2</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&text=字符串移位包含问题"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&title=字符串移位包含问题"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&is_video=false&description=字符串移位包含问题"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=字符串移位包含问题&body=Check out this article: https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&title=字符串移位包含问题"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&title=字符串移位包含问题"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&title=字符串移位包含问题"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&title=字符串移位包含问题"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&name=字符串移位包含问题&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/12/15/字符串移位包含问题/&t=字符串移位包含问题"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
