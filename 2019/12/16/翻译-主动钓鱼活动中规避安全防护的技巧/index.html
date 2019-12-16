@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="原文地址：https://info.phishlabs.com/blog/phishing-campaign-unique-countermeasures-avoid-security-tools-office365  PhishLabs的邮件事件应急（Email Incident Response）专家最近发现在攻击者和安全团队之间较量中，一场利用新策略的钓鱼活动正在上演。除了在流行的诱饵主题">
+<meta name="keywords" content="安全,钓鱼活动">
+<meta property="og:type" content="article">
+<meta property="og:title" content="翻译|主动钓鱼活动中规避安全防护的技巧">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="原文地址：https://info.phishlabs.com/blog/phishing-campaign-unique-countermeasures-avoid-security-tools-office365  PhishLabs的邮件事件应急（Email Incident Response）专家最近发现在攻击者和安全团队之间较量中，一场利用新策略的钓鱼活动正在上演。除了在流行的诱饵主题">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://info.phishlabs.com/hs-fs/hubfs/image%20based%20phishing%20lure.png?width=499&name=image%20based%20phishing%20lure.png">
+<meta property="og:image" content="https://info.phishlabs.com/hs-fs/hubfs/mime%20information%20from%20phishing%20lure.png?width=512&name=mime%20information%20from%20phishing%20lure.png">
+<meta property="og:updated_time" content="2019-12-16T10:58:48.807Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="翻译|主动钓鱼活动中规避安全防护的技巧">
+<meta name="twitter:description" content="原文地址：https://info.phishlabs.com/blog/phishing-campaign-unique-countermeasures-avoid-security-tools-office365  PhishLabs的邮件事件应急（Email Incident Response）专家最近发现在攻击者和安全团队之间较量中，一场利用新策略的钓鱼活动正在上演。除了在流行的诱饵主题">
+<meta name="twitter:image" content="https://info.phishlabs.com/hs-fs/hubfs/image%20based%20phishing%20lure.png?width=499&name=image%20based%20phishing%20lure.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>翻译|主动钓鱼活动中规避安全防护的技巧</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&text=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&title=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&is_video=false&description=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=翻译|主动钓鱼活动中规避安全防护的技巧&body=Check out this article: https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&title=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&title=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&title=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&title=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&name=翻译|主动钓鱼活动中规避安全防护的技巧&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&t=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#诱饵主题和社会工程战术"><span class="toc-number">1.</span> <span class="toc-text">诱饵主题和社会工程战术</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基于图像的邮件正文"><span class="toc-number">2.</span> <span class="toc-text">基于图像的邮件正文</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基于附件的载荷"><span class="toc-number">3.</span> <span class="toc-text">基于附件的载荷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#钓鱼活动的自动化和定制化"><span class="toc-number">4.</span> <span class="toc-text">钓鱼活动的自动化和定制化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#行业及目标"><span class="toc-number">5.</span> <span class="toc-text">行业及目标</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#观察到的标识"><span class="toc-number">6.</span> <span class="toc-text">观察到的标识</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#威胁处理"><span class="toc-number">7.</span> <span class="toc-text">威胁处理</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        翻译|主动钓鱼活动中规避安全防护的技巧
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-12-15T16:00:00.000Z" itemprop="datePublished">2019-12-16</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/翻译/">翻译</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/安全/">安全</a>, <a class="tag-link" href="/tags/钓鱼活动/">钓鱼活动</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p>原文地址：<a href="https://info.phishlabs.com/blog/phishing-campaign-unique-countermeasures-avoid-security-tools-office365" target="_blank" rel="noopener">https://info.phishlabs.com/blog/phishing-campaign-unique-countermeasures-avoid-security-tools-office365</a></p>
+</blockquote>
+<p><code>PhishLabs</code>的邮件事件应急（Email Incident Response）专家最近发现在攻击者和安全团队之间较量中，一场利用新策略的钓鱼活动正在上演。除了在流行的诱饵主题上存在不同之外，该活动还利用巧妙的策略组合试图绕过电子邮件安全防护策略，目前来看取得了不错的效果。</p>
+<p><code>PhishLabs</code>的观察中到这个活动绕过了当今市场上最著名的电子邮件安全网关。</p>
+<h4 id="诱饵主题和社会工程战术"><a href="#诱饵主题和社会工程战术" class="headerlink" title="诱饵主题和社会工程战术"></a>诱饵主题和社会工程战术</h4><p>该活动使用的诱饵是，受害者有一个通过Office 365发来的新的语音邮件。虽然这个主题最近在攻击中比较流行，但是该活动展示了一种新的利用方式。它并不是简单地宣称有语音邮件可供下载，而是通过显示语音邮件的文本抄本，模仿微软新的语音邮件文本功能。</p>
+<p><img src="https://info.phishlabs.com/hs-fs/hubfs/image%20based%20phishing%20lure.png?width=499&amp;name=image%20based%20phishing%20lure.png" alt="vioce"></p>
+<p>如上面的截图中看到的，邮件中只有第一句话是可见的，其余的都被打上了马赛克。受害者可见的句子以“非常遗憾的通知”开头是非常不吉利的。因此，恐惧和好奇心的结合产生了强大诱惑力，诱使受害者打开附件来接收剩下的信息。</p>
+<h4 id="基于图像的邮件正文"><a href="#基于图像的邮件正文" class="headerlink" title="基于图像的邮件正文"></a>基于图像的邮件正文</h4><p>这里使用的主要策略用图像代替邮件正文，邮件的整个正文实际上是一个按顺序插入到电子邮件正文中的图像。通过这种方式，攻击者可以防止电子邮件网关和垃圾邮件过滤器扫描可疑字符串或进行自然语言处理。此外，为了绕过对空邮件的过滤防护，攻击者利用<code>MIME multipart/alternative</code>子类型向任何不解析图像的程序呈现一段看似正常的句子。下图是利用了这一技巧的电子邮件的部分截图。</p>
+<p><img src="https://info.phishlabs.com/hs-fs/hubfs/mime%20information%20from%20phishing%20lure.png?width=512&amp;name=mime%20information%20from%20phishing%20lure.png" alt="empty"></p>
+<p>上面的截图展示了电子邮件客户端呈现的内容。红线上面的内容是图片正常加载时展示的内容，红线下面时在图片不能正常加载时邮件客户端展示的填充内容。</p>
+<h4 id="基于附件的载荷"><a href="#基于附件的载荷" class="headerlink" title="基于附件的载荷"></a>基于附件的载荷</h4><p>攻击者还会将钓鱼URL放在附件中而不是放在电子邮件正文中，来绕过对正文的检测。附件本身是一个简单的<code>html</code>文件，它使用元刷新(meta-refresh)技术在打开文档时将受害者重定向到钓鱼页面。这种技术的组合将绕过任何不能有效地处理附加文件而仅仅对正文中URL进行处理的扫描技术。</p>
+<p>通过将攻击载荷作为附件，它还可以作为一种模糊方法来防止URL悬停，并绕过只扫描电子邮件正文而不扫描附件的电子邮件过滤技术。</p>
+<h4 id="钓鱼活动的自动化和定制化"><a href="#钓鱼活动的自动化和定制化" class="headerlink" title="钓鱼活动的自动化和定制化"></a>钓鱼活动的自动化和定制化</h4><p>这项活动的一个有趣的特点是，在整个诱饵中含有很多定制化的基本元素。虽然这种情况以前在基于文本的策略中出现过，但图像本身的定制化是新奇的(受害者的电子邮件用户名出现在图像中)。此外，钓鱼URL本身包含对URL路径中的电子邮件用户名的引用。</p>
+<p>这些因素加在一起表明，这个活动背后的攻击者使用了大量的自动化工具来生成这些动态诱饵和登陆页面。这突出了钓鱼活动一段时间以来的一个趋势：攻击者不断努力进一步模糊非针对性网络钓鱼和针对性鱼叉式网络钓鱼之间的传统界限。这些“半定向”的活动可以提高攻击粗心用户的成功率，同时大大降低了传统定向攻击所需的工作量。</p>
+<p>尽管在钓鱼诱饵的主体内我们可以观察一些标识，但电子邮件安全技术通常无法从图片中提取信息。因此，列出的电话号码、提示信息和其他信息都不能有效地检测到诱饵。同时，附件散列和文件名也是动态的，进一步的妨碍检测效果。</p>
+<p>有趣的是，在几个观察到的邮件主题行中，其包含一个与电子邮件的发送时间相同的时间戳，突出提醒这是一个新的语音邮件消息。</p>
+<h4 id="行业及目标"><a href="#行业及目标" class="headerlink" title="行业及目标"></a>行业及目标</h4><p>该威胁行动的目标是不同规模、不同行业的组织。虽然诱饵的定制化需要实时的制作，但它的内容比较固定，很容易通过自动化完成。因此，这一活动似乎并不针对特定的组织或部门。</p>
+<h4 id="观察到的标识"><a href="#观察到的标识" class="headerlink" title="观察到的标识"></a>观察到的标识</h4><p>我们在分析活动中确定了以下标识：</p>
+<ul>
+<li><p>主题行</p>
+<p>该活动中使用了各种各样的主题。</p>
+<p>观察到的格式包括：</p>
+<ul>
+<li>New email Received on: <hour>:<minute> &lt;AM/PM&gt;, <day> <month> <year></year></month></day></minute></hour></li>
+<li>New mail on: <hour>:<minute> &lt;AM/PM&gt;, <day> <month> <year></year></month></day></minute></hour></li>
+<li>New email from: &lt;Victim’s organization website/name&gt;</li>
+</ul>
+</li>
+<li><p>附件</p>
+<p>钓鱼诱饵包含的附件确实地反映了当前的活动。观察到的附件会将受害者重定向到一个假冒的Microsoft Office 365登录页面，试图窃取他们的凭证。使用元刷新(meta refresh)技术让受害者跳转到钓鱼页面。这个策略已经被发现了很多年，但它们仍然是绕过阻止URL重定向的常见方法。</p>
+</li>
+<li><p>钓鱼站点</p>
+<p>多个受被盗的域名被用来托管恶意网络钓鱼URL，但所有恶意URL使用类似的结构。目标URL在URL中还设置了一个定制化的部分，如下面这个</p>
+<p>hXXps://mobilesoftint{dot}com/accounts/<strong>&lt;email_username&gt;</strong>/NNQXE2JONRQXE43FNZAGQ2LMNQWXE33NFZRW63I</p>
+<p>这样做有几个原因：</p>
+<ol>
+<li>如果每个受害者都收到一个唯一的url，那么它被拦截到的可能就会很大。虽然这个问题可以通过更一般的拦截策略来解决，但是应用需要谨慎，因为过度的拦截可能会干扰组织的正常业务操作。</li>
+<li>攻击者可能正在监视哪些url在进行交互，以实现情报收集。如果受害者触发了诱饵，他们可能被视为更容易受到攻击，并被添加到未来攻击的目标列表。</li>
+</ol>
+<p>动态生成url还有其他的原因，但是它们的特性在这次活动中没有出现。</p>
+</li>
+<li><p>发件人域名</p>
+<p>观察到的诱饵来自多个电子邮件帐户。根据这些发送帐户的命名格式，我们猜测它们很可能是被攻破的实际用户帐户。这些电子邮件帐户很可能是先前网络钓鱼诈骗的受害者。所有观察到的发送地址具有一个共同点，它们都属于一个日本组织，顶级域为<code>.co.jp</code> 。</p>
+</li>
+</ul>
+<h4 id="威胁处理"><a href="#威胁处理" class="headerlink" title="威胁处理"></a>威胁处理</h4><p>由于这种钓鱼式网络钓鱼的诱饵利用了图像而不是文本，目前的电子邮件安全技术将不足以拦截该活动。并且，发件人来自被盗取用户，个人电子邮件帐户和钓鱼网站都托管被攻破的域名上。出于这些原因，安全意识培训和电子邮件事件响应之类的解决方案对于保护您的组织都是至关重要的。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#诱饵主题和社会工程战术"><span class="toc-number">1.</span> <span class="toc-text">诱饵主题和社会工程战术</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基于图像的邮件正文"><span class="toc-number">2.</span> <span class="toc-text">基于图像的邮件正文</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基于附件的载荷"><span class="toc-number">3.</span> <span class="toc-text">基于附件的载荷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#钓鱼活动的自动化和定制化"><span class="toc-number">4.</span> <span class="toc-text">钓鱼活动的自动化和定制化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#行业及目标"><span class="toc-number">5.</span> <span class="toc-text">行业及目标</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#观察到的标识"><span class="toc-number">6.</span> <span class="toc-text">观察到的标识</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#威胁处理"><span class="toc-number">7.</span> <span class="toc-text">威胁处理</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&text=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&title=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&is_video=false&description=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=翻译|主动钓鱼活动中规避安全防护的技巧&body=Check out this article: https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&title=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&title=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&title=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&title=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&name=翻译|主动钓鱼活动中规避安全防护的技巧&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/&t=翻译|主动钓鱼活动中规避安全防护的技巧"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

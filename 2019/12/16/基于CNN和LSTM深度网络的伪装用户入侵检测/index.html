@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="王毅, 冯小年, 钱铁云, 等. 基于 CNN 和 LSTM 深度网络的伪装用户入侵检测[J]. 计算机科学与探索, 2018, 12(4): 575-585.  现有的用户伪装入侵检测技术存在难以准确建模用户行为模式的缺陷。  引文从攻击来源，入侵分为外部入侵和内部用户伪装入侵。内部用户伪装入侵指未授权用户通过伪装成内部合法用户进入系统，访问、修改关键数据或者执行某些非法操作的行为。 就目前研究">
+<meta name="keywords" content="安全,anomaly detection">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于CNN和LSTM深度网络的伪装用户入侵检测">
+<meta property="og:url" content="https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/index.html">
+<meta property="og:site_name" content="Six&#39;s Blog">
+<meta property="og:description" content="王毅, 冯小年, 钱铁云, 等. 基于 CNN 和 LSTM 深度网络的伪装用户入侵检测[J]. 计算机科学与探索, 2018, 12(4): 575-585.  现有的用户伪装入侵检测技术存在难以准确建模用户行为模式的缺陷。  引文从攻击来源，入侵分为外部入侵和内部用户伪装入侵。内部用户伪装入侵指未授权用户通过伪装成内部合法用户进入系统，访问、修改关键数据或者执行某些非法操作的行为。 就目前研究">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/12/16/Ewb2VsfIGTx6Jou.png">
+<meta property="og:image" content="c:/Users/sky_y/AppData/Roaming/Typora/typora-user-images/1576500249904.png">
+<meta property="og:updated_time" content="2019-12-16T12:53:25.097Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于CNN和LSTM深度网络的伪装用户入侵检测">
+<meta name="twitter:description" content="王毅, 冯小年, 钱铁云, 等. 基于 CNN 和 LSTM 深度网络的伪装用户入侵检测[J]. 计算机科学与探索, 2018, 12(4): 575-585.  现有的用户伪装入侵检测技术存在难以准确建模用户行为模式的缺陷。  引文从攻击来源，入侵分为外部入侵和内部用户伪装入侵。内部用户伪装入侵指未授权用户通过伪装成内部合法用户进入系统，访问、修改关键数据或者执行某些非法操作的行为。 就目前研究">
+<meta name="twitter:image" content="https://i.loli.net/2019/12/16/Ewb2VsfIGTx6Jou.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>基于CNN和LSTM深度网络的伪装用户入侵检测</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/12/16/翻译-主动钓鱼活动中规避安全防护的技巧/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/12/15/字符串移位包含问题/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&text=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&title=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&is_video=false&description=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=基于CNN和LSTM深度网络的伪装用户入侵检测&body=Check out this article: https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&title=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&title=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&title=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&title=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&name=基于CNN和LSTM深度网络的伪装用户入侵检测&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&t=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#引文"><span class="toc-number">1.</span> <span class="toc-text">引文</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#模型介绍"><span class="toc-number">2.</span> <span class="toc-text">模型介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#问题特征"><span class="toc-number">2.1.</span> <span class="toc-text">问题特征</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#基于序列表征的负样本采集方法"><span class="toc-number">2.2.</span> <span class="toc-text">基于序列表征的负样本采集方法</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实验"><span class="toc-number">3.</span> <span class="toc-text">实验</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#实验分析"><span class="toc-number">3.1.</span> <span class="toc-text">实验分析</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#未来展望"><span class="toc-number">4.</span> <span class="toc-text">未来展望</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#引文-1"><span class="toc-number">5.</span> <span class="toc-text">引文</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        基于CNN和LSTM深度网络的伪装用户入侵检测
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Six's Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-12-15T16:00:00.000Z" itemprop="datePublished">2019-12-16</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/论文笔记/">论文笔记</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/anomaly-detection/">anomaly detection</a>, <a class="tag-link" href="/tags/安全/">安全</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><em>王毅, 冯小年, 钱铁云, 等. 基于 CNN 和 LSTM 深度网络的伪装用户入侵检测[J]. 计算机科学与探索, 2018, 12(4): 575-585.</em></p>
+<blockquote>
+<p>现有的用户伪装入侵检测技术存在难以准确建模用户行为模式的缺陷。</p>
+</blockquote>
+<h4 id="引文"><a href="#引文" class="headerlink" title="引文"></a>引文</h4><p>从攻击来源，入侵分为外部入侵和内部用户伪装入侵。内部用户伪装入侵指未授权用户通过伪装成内部合法用户进入系统，访问、修改关键数据或者执行某些非法操作的行为。</p>
+<p>就目前研究来看，对用户信息的主要侧重在于频率信息、相关信息、转义信息，根据不同的侧重点，目前的伪装入侵检测技术分为：</p>
+<ul>
+<li>基于用户行为频率信息的</li>
+<li>基于用户行为相关信息的，可以较好的捕获行为序列中的局部强相关性和行为的长程依赖性，但不能准确的捕获行为序列的时序性</li>
+<li>基于用户行为转移信息，较好的捕获行为序列的时序信息，但在行为的长程依赖性上效果不好</li>
+</ul>
+<p>目前存在问题</p>
+<ul>
+<li>海量网络数据</li>
+<li>复杂的高维入侵行为特征</li>
+</ul>
+<p>本文提出了一种结合卷积和长短时记忆的统一网络框架。</p>
+<h4 id="模型介绍"><a href="#模型介绍" class="headerlink" title="模型介绍"></a>模型介绍</h4><h5 id="问题特征"><a href="#问题特征" class="headerlink" title="问题特征"></a>问题特征</h5><p>用户行为流具有局部强关联性、长程依赖性及时序性。</p>
+<ul>
+<li>局部强关联性，<code>cd ls cat</code></li>
+<li>长程依赖性，<code>login, ..., logout</code></li>
+<li>时序性，体现用户行为</li>
+</ul>
+<p>本文采用CNN的原理在于其适合处理具有统计平稳性和局部关联性的数据，并且对平移、缩放、倾斜具有不变性。</p>
+<p><img src="https://i.loli.net/2019/12/16/Ewb2VsfIGTx6Jou.png" alt="UTOOLS1576498986232.png"></p>
+<p>首先是对shell进行卷积处理，然后进行最大池化，然后输入LSTM层，最终使用sigmod激活函数。</p>
+<h5 id="基于序列表征的负样本采集方法"><a href="#基于序列表征的负样本采集方法" class="headerlink" title="基于序列表征的负样本采集方法"></a>基于序列表征的负样本采集方法</h5><p>负样本的采集较为困难，传统方法是直接采集其他用户所有命令序列或者随机采集一定数据量的命令序列。但这里存在用户自身特性的影响。</p>
+<p>本文认为若一个用户的历史行为较单一，那么未来行为可能具有较大的相似性。若用户行为历史具有具有较大的变化性，那么未来行为可能和历史行为相距甚远。</p>
+<p>本文提出一种基于序列表征的负样本采集算法。利用用户的历史命令序列表征，计算用户历史数据的散布程度。</p>
+<blockquote>
+<p>这里对负样本的概念有点问题？负样本是伪装入侵的命令序列，如果直接采集用户的历史命令，怎么确定是入侵呢？</p>
+</blockquote>
+<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><p>本文采用伪装入侵检测领域标准数据集的SEA数据集（<a href="http://www.schonlau.net/）" target="_blank" rel="noopener">http://www.schonlau.net/）</a></p>
+<p>SEA中包含50个用户命令文件和一个标记文件。</p>
+<h5 id="实验分析"><a href="#实验分析" class="headerlink" title="实验分析"></a>实验分析</h5><ul>
+<li>shell命令嵌入表示维度的影响</li>
+<li>卷积核长度的影响</li>
+</ul>
+<p>与其他检测方法的比较</p>
+<ul>
+<li><p>未有其他研究应用深度神经网络到伪装入侵检测，所以本文实现了常见的网络与本文方法进行了比较</p>
+</li>
+<li><p>其他伪装入侵检测方法</p>
+<ul>
+<li>Compression [1]</li>
+<li>Sequence Matching [1]</li>
+<li>IPAM（incremental probabilistic action modeling） [1]</li>
+<li>Uniqueness [1]</li>
+<li>Hybrid multistep Markov [1]</li>
+<li>Bayes one- step Markov [1]</li>
+<li>SVM（support vector machine） [4]</li>
+<li>Two-class NB [3]</li>
+<li>IWNB （instance- weighted Naive Bayes） [13]</li>
+<li>PHMM（profile hidden Markov model） [14]</li>
+<li>ECM（eigen co- occurrence matrix） [7]</li>
+</ul>
+<p><img src="C:\Users\sky_y\AppData\Roaming\Typora\typora-user-images\1576500249904.png" alt="1576500249904"></p>
+<h4 id="未来展望"><a href="#未来展望" class="headerlink" title="未来展望"></a>未来展望</h4><ol>
+<li>集成不同的检测方法，CNN、LSTM、SVM、NB</li>
+<li>对用户序列进行自动编码或者LSTM的seq2seq，比对原始输入与重构输入之间的差距进行判断</li>
+<li>生成对抗网络</li>
+</ol>
+<h4 id="引文-1"><a href="#引文-1" class="headerlink" title="引文"></a>引文</h4><p>[1]  Schonlau M, Dumouchel W, Ju Wenhua, et al. Computer intrusion: detecting masquerades[J]. Statistical Science, 2001, 16(1): 58-74.</p>
+<p>[3] Maxion R A, Townsend T N. Masquerade detection using truncated command lines[C]//Proceedings of the 2002 International Conference on Dependable Systems and Networks, Bethesda, Jun 23- 26, 2002. Washington: IEEE Computer Society, 2002: 219-228.</p>
+<p>[4] Kim H S, Cha S D. Empirical evaluation of SVM- based masquerade detection using UNIX commands[J]. Computers &amp; Security, 2005, 24(2): 160-168.</p>
+<p>[7] Oka M, Oyama Y, Abe H, et al. Anomaly detection using layered networks based on eigen co-occurrence matrix[C]// LNCS 3224: Proceedings of the 7th International Symposium on Recent Advances in Intrusion Detection, Sophia Antipolis, Sep 15-17, 2004. Berlin, Heidelberg: Springer, 2004: 223-237.</p>
+<p>[13] Sen S. Using instance-weighted Naive Bayes for adapting concept drift in masquerade detection[J]. International Journal of Information Security, 2014, 13(6): 583-590. </p>
+<p>[14] Huang Lin, Stamp M. Masquerade detection using profile hidden Markov models[J]. Computers &amp; Security, 2011, 30 (8): 732-747.</p>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#引文"><span class="toc-number">1.</span> <span class="toc-text">引文</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#模型介绍"><span class="toc-number">2.</span> <span class="toc-text">模型介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#问题特征"><span class="toc-number">2.1.</span> <span class="toc-text">问题特征</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#基于序列表征的负样本采集方法"><span class="toc-number">2.2.</span> <span class="toc-text">基于序列表征的负样本采集方法</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实验"><span class="toc-number">3.</span> <span class="toc-text">实验</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#实验分析"><span class="toc-number">3.1.</span> <span class="toc-text">实验分析</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#未来展望"><span class="toc-number">4.</span> <span class="toc-text">未来展望</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#引文-1"><span class="toc-number">5.</span> <span class="toc-text">引文</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&text=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&title=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&is_video=false&description=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=基于CNN和LSTM深度网络的伪装用户入侵检测&body=Check out this article: https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&title=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&title=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&title=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&title=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&name=基于CNN和LSTM深度网络的伪装用户入侵检测&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=https://sy-yunyi.github.io/2019/12/16/基于CNN和LSTM深度网络的伪装用户入侵检测/&t=基于CNN和LSTM深度网络的伪装用户入侵检测"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Six
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="https://www.yuque.com/u447199">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight .code pre").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      target: function(trigger) {
+        return trigger.nextElementSibling;
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
