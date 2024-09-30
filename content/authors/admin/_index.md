@@ -1,9 +1,9 @@
 ---
 # Display name
-title: 张允义
+title: Yunyi Zhang
 
 # Name pronunciation (optional)
-name_pronunciation: Yunyi Zhang
+name_pronunciation: 张允义
 
 # Full name (for SEO)
 first_name: Yun yi
