@@ -6,14 +6,15 @@ title: 'Into the Dark: Unveiling Internal Site Search Abused for Black Hat SEO'
 # and it will be replaced with their full name and linked to their profile.
 authors:
   - admin
-  - Mingming Zhang
+  - Mingxuan Liu
   - Baojun Liu
-  - Zhan Liu
+  - Yiming Zhang
   - Jia Zhang
   - Haixin Duan
   - Min Zhang
+  - Hui Jiang
+  - Yanzhe Li
   - Fan Shi
-  - Chengxi Xu
 
 # Author notes (optional)
 # author_notes:
