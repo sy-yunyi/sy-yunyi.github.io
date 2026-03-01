@@ -7,5 +7,6 @@ pdf: "assets/pdfs/glue-sec-24.pdf"
 slides: "assets/slides/slides.pdf"
 presentation: true
 presentation_type: "Presentation"
-presentation_event: "DNS OARC 43, ICANN DNS Symposium 2024"
+presentation_venue: "DNS OARC 43, ICANN DNS Symposium 2024"
+# presentation_venue: "DNS OARC"
 ---

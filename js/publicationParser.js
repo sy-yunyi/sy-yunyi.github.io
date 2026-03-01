@@ -122,10 +122,11 @@ function parsePublicationMarkdown(markdownContent, filename) {
             { key: 'slides', regex: /slides:\s*"([^"]+)"/ },
             { key: 'github', regex: /github:\s*"([^"]+)"/ },
             { key: 'video', regex: /video:\s*"([^"]+)"/ },
-            { key: 'presentation', regex: /presentation:\s*(true|false)/ },
+            { key: 'presentation', regex: /presentation:\s*"([^"]+)"/ },
             { key: 'presentation_type', regex: /presentation_type:\s*"([^"]+)"/ },
             { key: 'presentation_event', regex: /presentation_event:\s*"([^"]+)"/ },
-            { key: 'award', regex: /award:\s*"([^"]*)"/ }
+            { key: 'award', regex: /award:\s*"([^"]+)"/ },
+            { key: 'presentation_venue', regex: /presentation_venue:\s*"([^"]+)"/ }
         ];
         
         fields.forEach(field => {
@@ -261,7 +262,12 @@ function renderPublications(filter = 'all') {
         card.appendChild(linksContainer);
         
         // 添加演示信息和奖项（如果存在）
-        if (pub.presentation && pub.presentation_type) {
+        if (pub.presentation_venue) {
+            const presentationElement = document.createElement('div');
+            presentationElement.className = 'pub-presentation';
+            presentationElement.innerHTML = `<i class="fas fa-chalkboard-teacher"></i> Presented at ${pub.presentation_venue}`;
+            card.appendChild(presentationElement);
+        } else if (pub.presentation && pub.presentation_type) {
             const presentationElement = document.createElement('div');
             presentationElement.className = 'pub-presentation';
             presentationElement.innerHTML = `<i class="fas fa-award"></i> ${pub.presentation_type} at ${pub.presentation_event || pub.venue}`;

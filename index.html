@@ -9,151 +9,147 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand">Yunyi Zhang | 张允义</div>
-            <ul class="nav-menu">
-                <li><a href="#home" class="nav-link">Home</a></li>
-                <li><a href="#news" class="nav-link">News</a></li>
-                <li><a href="#publications" class="nav-link">Publications</a></li>
-                <!-- <li><a href="#projects" class="nav-link">Projects</a></li> -->
-                <li><a href="#contact" class="nav-link">Contact</a></li>
-            </ul>
-            <div class="mobile-menu-toggle">
-                <i class="fas fa-bars"></i>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Home Section -->
-    <section id="home" class="section home-section">
-        <div class="container">
-            <div class="home-content">
+    <div class="page-wrapper">
+        <!-- Left Sidebar (Fixed on Desktop) -->
+        <aside class="sidebar">
+            <div class="profile-container">
                 <div class="profile-image">
-                    <img src="images/profile.jpg" alt="Your Name">
+                    <img src="images/profile.jpg" alt="Yunyi Zhang">
                 </div>
-                <div class="bio">
-                    <h1>Yunyi Zhang</h1>
-                    <p class="title">Postdoctoral Researcher</p>
-                    <p class="affiliation">
-                        Network and Information Security Laboratory<br>
-                        Tsinghua University<br>
-                        Beijing, China
-                    </p>
-                    <p class="description">
-                        Yunyi Zhang is a postdoctoral researcher working under the supervision of Associate Professor Baojun Liu.
-                        His research interests include network security, internet measurement, emerging cyberspace security threats and LLM Privacy and Security. 
-                        He has published papers at top academic venues, including USENIX Security, ACM CCS, ACM IMC, ISOC NDSS, IEEE TDSC and IEEE TIFS. 
-                        His academic research results have achieved real-world impact by receiving bonus from several vendors, including Baidu, Tencent, Microsoft, Yahoo, Alibaba and Amazon, etc.
-                    </p>
-                    <div class="interests">
-                        <h3>Research Interests</h3>
-                        <ul>
-                            <li>Network Security</li>
-                            <li>DNS Security</li>
-                            <li>Detection and Countermeasures of Cybercrime</li>
-                            <li>LLM Privacy and Security</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="social-links">
-                        <a href="mailto:yunyizhang@mail.tsinghua.edu.cn" title="Email">
-                            <i class="fas fa-envelope"></i>
-                        </a>
-                        <a href="https://scholar.google.com/citations?user=pkfbmwoAAAAJ&hl=en" target="_blank" title="Google Scholar">
-                            <i class="fas fa-graduation-cap"></i>
-                        </a>
-                        <a href="https://github.com/sy-yunyi" target="_blank" title="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <!-- <a href="https://linkedin.com/in/yourprofile" target="_blank" title="LinkedIn">
-                            <i class="fab fa-linkedin"></i> -->
-                        <!-- </a>
-                        <a href="https://twitter.com/yourhandle" target="_blank" title="Twitter">
-                            <i class="fab fa-twitter"></i>
-                        </a> -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- News Section -->
-    <section id="news" class="section news-section">
-        <div class="container">
-            <h2 class="section-title">
-                <i class="fas fa-newspaper"></i> Recent News
-            </h2>
-            <div class="news-list" id="newsList">
-                <!-- News items will be loaded dynamically -->
-            </div>
-            <button id="showMoreNews" class="btn-show-more">
-                <i class="fas fa-chevron-down"></i> Show More News
-            </button>
-        </div>
-    </section>
-
-    <!-- Publications Section -->
-    <section id="publications" class="section publications-section">
-        <div class="container">
-            <h2 class="section-title">
-                <i class="fas fa-book"></i> Publications
-            </h2>
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-year="all">All</button>
-                <button class="filter-btn" data-year="2026">2026</button>
-                <button class="filter-btn" data-year="2025">2025</button>
-                <button class="filter-btn" data-year="2024">2024</button>
-                <button class="filter-btn" data-year="2023">2023</button>
-                <!-- More years can be added dynamically based on publications -->
-            </div>
-            <div class="publications-list" id="publicationsList">
-                <!-- Publications will be loaded dynamically -->
-            </div>
-        </div>
-    </section>
-
-    <!-- More sections like Projects, Teaching, etc. can be added here -->
-
-    <!-- Contact Section -->
-    <section id="contact" class="section contact-section">
-        <div class="container">
-            <h2 class="section-title">
-                <i class="fas fa-envelope-open"></i> Contact
-            </h2>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <div class="contact-item">
+                <h1 class="name">Yunyi Zhang<br><span class="chinese-name">张允义</span></h1>
+                <p class="title">Postdoctoral Researcher</p>
+                <p class="affiliation">
+                    Network and Information Security Laboratory<br>
+                    Tsinghua University<br>
+                    Beijing, China
+                </p>
+                
+                <div class="social-links">
+                    <a href="mailto:yunyizhang@mail.tsinghua.edu.cn" title="Email">
                         <i class="fas fa-envelope"></i>
-                        <div>
-                            <h3>Email</h3>
-                            <p><a href="mailto:yunyizhang@mail.tsinghua.edu.cn">yunyizhang@mail.tsinghua.edu.cn</a></p>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i> 
-                        <div>
-                            <h3>Office</h3>
-                            <p>
-                                Room 3-213, FIT<br>
-                                Tsinghua University<br>
-                                Beijing, China
-                            </p>
+                    </a>
+                    <a href="https://scholar.google.com/citations?user=pkfbmwoAAAAJ&hl=en" target="_blank" title="Google Scholar">
+                        <i class="fas fa-graduation-cap"></i>
+                    </a>
+                    <a href="https://github.com/sy-yunyi" target="_blank" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Bar inside sidebar -->
+            <nav class="navbar">
+                <ul class="nav-menu">
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#news" class="nav-link">News</a></li>
+                    <li><a href="#publications" class="nav-link">Publications</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+                <div class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- About Section -->
+            <section id="about" class="section about-section">
+                <div class="container">
+                    <h2 class="section-title">
+                        <i class="fas fa-user"></i> About Me
+                    </h2>
+                    <div class="bio">
+                        <p class="description">
+                            Yunyi Zhang is a postdoctoral researcher working under the supervision of Associate Professor Baojun Liu.
+                            His research interests include network security, internet measurement, emerging cyberspace security threats and LLM Privacy and Security. 
+                            He has published papers at top academic venues, including USENIX Security, ACM CCS, ACM IMC, ISOC NDSS, IEEE TDSC and IEEE TIFS. 
+                            His academic research results have achieved real-world impact by receiving bonus from several vendors, including Baidu, Tencent, Microsoft, Yahoo, Alibaba and Amazon, etc.
+                        </p>
+                        <div class="interests">
+                            <h3>Research Interests</h3>
+                            <ul>
+                                <li>Network Security</li>
+                                <li>DNS Security</li>
+                                <li>Detection and Countermeasures of Cybercrime</li>
+                                <li>LLM Privacy and Security</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
+            </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Yunyi Zhang. All rights reserved.</p>
-        </div>
-    </footer>
+            <!-- News Section -->
+            <section id="news" class="section news-section">
+                <div class="container">
+                    <h2 class="section-title">
+                        <i class="fas fa-newspaper"></i> Recent News
+                    </h2>
+                    <div class="news-list" id="newsList">
+                        <!-- News items will be loaded dynamically -->
+                    </div>
+                    <button id="showMoreNews" class="btn-show-more">
+                        <i class="fas fa-chevron-down"></i> Show More News
+                    </button>
+                </div>
+            </section>
+
+            <!-- Publications Section -->
+            <section id="publications" class="section publications-section">
+                <div class="container">
+                    <h2 class="section-title">
+                        <i class="fas fa-book"></i> Publications
+                    </h2>
+                    <div class="filter-buttons" id="yearFilters">
+                        <button class="filter-btn active" data-year="all">All</button>
+                        <!-- More years will be added dynamically based on publications -->
+                    </div>
+                    <div class="publications-list" id="publicationsList">
+                        <!-- Publications will be loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact" class="section contact-section">
+                <div class="container">
+                    <h2 class="section-title">
+                        <i class="fas fa-envelope-open"></i> Contact
+                    </h2>
+                    <div class="contact-content">
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <h3>Email</h3>
+                                    <p><a href="mailto:yunyizhang@mail.tsinghua.edu.cn">yunyizhang@mail.tsinghua.edu.cn</a></p>
+                                </div>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i> 
+                                <div>
+                                    <h3>Office</h3>
+                                    <p>
+                                        Room 3-213, FIT<br>
+                                        Tsinghua University<br>
+                                        Beijing, China
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="container">
+                    <p>&copy; 2026 Yunyi Zhang. All rights reserved.</p>
+                </div>
+            </footer>
+        </main>
+    </div>
 
     <!-- JavaScript Files -->
     <script src="js/publicationParser.js"></script>
