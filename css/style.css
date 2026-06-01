@@ -1,14 +1,14 @@
 /* Base Styles & Academic Theme Variables */
 :root {
-    --primary-color: #1a202c; /* Deep slate for headings */
-    --secondary-color: #0366d6; /* Academic blue for links */
+    --primary-color: #1a1a1a; /* Headings */
+    --secondary-color: #1772d0; /* Academic blue for links (matches reference) */
     --accent-color: #d73a49; /* Deep red for awards */
     --bg-color: #ffffff;
-    --bg-light: #f6f8fa; /* Very subtle grey for sidebar/backgrounds */
-    --text-color: #24292e; /* Main body text */
+    --bg-light: #f6f8fa; /* Very subtle grey for backgrounds */
+    --text-color: #333333; /* Main body text */
     --text-light: #586069; /* Secondary text */
     --border-color: #eaecef;
-    --sidebar-width: 320px;
+    --content-width: 800px;
 }
 
 * {
@@ -18,222 +18,240 @@
 }
 
 body {
-    /* Clean, modern sans-serif for high readability, classic in academic pages */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    line-height: 1.7;
+    /* Lato matches the reference layout's typography */
+    font-family: 'Lato', Verdana, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
     color: var(--text-color);
-    background-color: var(--bg-color);
-    font-size: 16px;
+    background-color: var(--bg-light);
+    font-size: 15px;
+    padding: 0 16px;
     -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    /* Serif font for headings gives an authoritative, academic feel */
-    font-family: Georgia, "Times New Roman", Times, serif;
+    font-family: 'Lato', Verdana, Helvetica, Arial, sans-serif;
     color: var(--primary-color);
-    font-weight: normal;
+    font-weight: 700;
 }
 
-.page-wrapper {
-    display: flex;
-    min-height: 100vh;
+a {
+    color: var(--secondary-color);
+    text-decoration: none;
 }
 
-/* Sidebar Layout */
-.sidebar {
-    width: var(--sidebar-width);
-    background-color: var(--bg-light);
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    padding: 50px 30px;
-    border-right: 1px solid var(--border-color);
+a:hover {
+    text-decoration: underline;
+}
+
+/* Centered single-column container (top-bottom layout) */
+.page-table--narrow {
+    max-width: var(--content-width);
+    margin: 28px auto 52px;
+    background: var(--bg-color);
+    border-radius: 8px;
+    box-shadow: 0 1px 16px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+/* Header (Top) */
+.header-container {
     display: flex;
-    flex-direction: column;
+    gap: 36px;
     align-items: center;
-    overflow-y: auto;
-    z-index: 100;
+    padding: 48px 44px 28px;
 }
 
-.main-content {
-    margin-left: var(--sidebar-width);
-    flex: 1;
-    padding: 50px 60px;
-    max-width: 1000px; /* Optimal reading width */
+.header-image {
+    flex-shrink: 0;
+    width: 150px;
+    height: 150px;
 }
 
-/* Sidebar Elements */
-.profile-container {
-    text-align: center;
-    margin-bottom: 40px;
-    width: 100%;
-}
-
-.profile-image {
-    width: 160px;
-    height: 160px;
-    margin: 0 auto 20px;
-}
-
-.profile-image img {
+.header-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Softer shadow */
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.14);
 }
 
-.sidebar .name {
-    font-size: 2rem;
-    margin-bottom: 5px;
-    line-height: 1.3;
+.header-info {
+    flex: 1;
 }
 
-.sidebar .chinese-name {
-    font-size: 1.5rem;
-    font-weight: normal;
-    color: var(--text-light);
-}
-
-.sidebar .title {
-    font-size: 1.05rem;
+.header-info .name {
+    margin: 0 0 8px;
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
     color: var(--primary-color);
-    margin-bottom: 12px;
-    font-weight: 500;
 }
 
-.sidebar .affiliation {
-    font-size: 0.95rem;
+.header-info .chinese-name {
+    font-size: 26px;
+    font-weight: 400;
     color: var(--text-light);
-    margin-bottom: 25px;
-    line-height: 1.5;
 }
 
-.social-links {
-    display: flex;
-    justify-content: center;
-    gap: 18px;
-    font-size: 1.4rem;
-    margin-bottom: 35px;
+.header-info .title {
+    margin: 4px 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary-color);
 }
 
-.social-links a {
+.header-info .affiliation {
+    margin: 4px 0;
+    font-size: 15px;
+    color: var(--text-color);
+}
+
+.header-links {
+    margin: 12px 0 0;
+    font-size: 15px;
     color: var(--text-light);
-    transition: color 0.2s;
-    text-decoration: none;
 }
 
-.social-links a:hover {
+.header-links a {
     color: var(--secondary-color);
 }
 
-/* Sidebar Navigation */
+/* Horizontal Navigation Bar */
 .navbar {
-    width: 100%;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 44px;
+    background: var(--bg-light);
 }
 
 .nav-menu {
     list-style: none;
-    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
     padding: 0;
+    margin: 0;
 }
 
 .nav-menu li {
-    margin-bottom: 8px;
-    text-align: center;
+    margin: 0;
 }
 
 .nav-link {
     display: block;
     color: var(--text-color);
-    font-size: 1.05rem;
-    padding: 8px 15px;
-    border-radius: 4px;
+    padding: 12px 14px;
     transition: all 0.2s;
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 0.82rem;
+    font-weight: 700;
 }
 
 .nav-link:hover, .nav-link.active {
-    background-color: rgba(3, 102, 214, 0.08);
     color: var(--secondary-color);
+    text-decoration: none;
 }
 
 .mobile-menu-toggle {
     display: none;
     cursor: pointer;
-    font-size: 1.5rem;
-    text-align: center;
+    font-size: 1.4rem;
 }
 
 /* Main Content Styles */
+.main-content {
+    padding: 36px 44px 8px;
+}
+
 .container {
     width: 100%;
 }
 
 .section {
-    margin-bottom: 70px;
+    margin-bottom: 48px;
 }
 
 .section-title {
-    font-size: 2.2rem;
-    margin-bottom: 25px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--border-color);
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .section-title i {
     color: var(--text-light);
-    font-size: 1.8rem;
+    font-size: 1.3rem;
 }
 
-/* About Section */
+/* About / Welcome Section */
+.about-section {
+    margin-bottom: 50px;
+}
+
 .bio .description {
-    margin-bottom: 30px;
+    margin-bottom: 18px;
     font-size: 1.1rem;
     text-align: justify;
 }
 
-.interests h3 {
-    font-size: 1.4rem;
-    margin-bottom: 15px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+.bio .description strong {
     font-weight: 600;
     color: var(--primary-color);
 }
 
-.interests ul {
+.bio .description a {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+.bio .description a:hover {
+    text-decoration: underline;
+}
+
+/* Themed research directions (inspired by reference layout) */
+.research-directions {
+    margin-top: 28px;
     display: flex;
     flex-direction: column;
-    list-style: none;
-    gap: 8px;
-    padding: 0;
+    gap: 22px;
 }
 
-.interests li {
-    font-size: 1.05rem;
-    color: var(--text-color);
+.research-item h3 {
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 600;
+    color: var(--primary-color);
     display: flex;
     align-items: center;
+    gap: 10px;
 }
 
-.interests li::before {
-    content: "•";
-    color: var(--secondary-color);
-    font-weight: bold;
-    display: inline-block; 
-    width: 1em;
-    margin-left: -1em;
+.research-emoji {
+    font-size: 1.25rem;
+    line-height: 1;
 }
-.interests ul {
-    padding-left: 1em; /* Indent for bullets */
+
+.research-item p {
+    font-size: 1.02rem;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.research-item a {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+.research-item a:hover {
+    text-decoration: underline;
 }
 
 /* News Section */
@@ -423,6 +441,61 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--secondary-color);
 }
 
+/* Awards & Honors Section */
+.awards-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.awards-list li {
+    font-size: 1.05rem;
+    color: var(--text-color);
+    padding-left: 1.2em;
+    position: relative;
+}
+
+.awards-list li::before {
+    content: "\f559"; /* award icon */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: var(--text-light);
+    position: absolute;
+    left: 0;
+    font-size: 0.85rem;
+    top: 0.25em;
+}
+
+.award-name {
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.award-meta {
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+/* Service Section */
+.service-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.service-row {
+    font-size: 1.05rem;
+    color: var(--text-color);
+}
+
+.service-label {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-right: 6px;
+}
+
 /* Contact Section */
 .contact-info {
     display: flex;
@@ -475,43 +548,61 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Responsive Design */
-@media (max-width: 850px) {
-    .page-wrapper {
+@media (max-width: 768px) {
+    body {
+        padding: 0 10px;
+    }
+
+    .page-table--narrow {
+        margin: 14px auto 28px;
+    }
+
+    /* Header stacks vertically and centers on mobile */
+    .header-container {
         flex-direction: column;
+        text-align: center;
+        gap: 18px;
+        padding: 32px 24px 22px;
     }
 
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        padding: 30px 20px;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-        z-index: 1000;
+    .header-info .name {
+        font-size: 30px;
     }
 
-    .profile-container {
-        margin-bottom: 20px;
+    .header-links {
+        margin-top: 8px;
+    }
+
+    .navbar {
+        padding: 0 24px;
     }
 
     .main-content {
-        margin-left: 0;
-        padding: 30px 20px;
+        padding: 28px 24px 4px;
     }
 
+    /* Collapsible nav on mobile */
     .nav-menu {
         display: none;
         flex-direction: column;
-        margin-top: 20px;
+        gap: 0;
+        width: 100%;
+        padding: 8px 0;
     }
 
     .nav-menu.active {
         display: flex;
     }
 
+    .nav-link {
+        text-align: center;
+        padding: 10px;
+    }
+
     .mobile-menu-toggle {
         display: block;
-        margin-top: 15px;
+        padding: 12px 0;
+        text-align: center;
         color: var(--primary-color);
     }
 }

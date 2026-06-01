@@ -5,75 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Academic homepage of Yunyi Zhang - Research in Network Security">
     <title>Yunyi Zhang (张允义)</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&display=swap">
+    <link rel="stylesheet" href="css/style.css?v=20260601">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="page-wrapper">
-        <!-- Left Sidebar (Fixed on Desktop) -->
-        <aside class="sidebar">
-            <div class="profile-container">
-                <div class="profile-image">
-                    <img src="images/profile.jpg" alt="Yunyi Zhang">
-                </div>
-                <h1 class="name">Yunyi Zhang<br><span class="chinese-name">张允义</span></h1>
+    <div class="page-table--narrow">
+        <!-- Header (Top) -->
+        <header class="header-container">
+            <div class="header-image">
+                <img src="images/profile.jpg" alt="Yunyi Zhang">
+            </div>
+            <div class="header-info">
+                <h1 class="name">Yunyi Zhang <span class="chinese-name">张允义</span></h1>
                 <p class="title">Postdoctoral Researcher</p>
                 <p class="affiliation">
-                    Network and Information Security Laboratory<br>
-                    Tsinghua University<br>
-                    Beijing, China
+                    Network and Information Security Laboratory,
+                    Tsinghua University, Beijing, China
                 </p>
-                
-                <div class="social-links">
-                    <a href="mailto:yunyizhang@mail.tsinghua.edu.cn" title="Email">
-                        <i class="fas fa-envelope"></i>
-                    </a>
-                    <a href="https://scholar.google.com/citations?user=pkfbmwoAAAAJ&hl=en" target="_blank" title="Google Scholar">
-                        <i class="fas fa-graduation-cap"></i>
-                    </a>
-                    <a href="https://github.com/sy-yunyi" target="_blank" title="GitHub">
-                        <i class="fab fa-github"></i>
-                    </a>
-                </div>
+                <p class="header-links">
+                    <a href="mailto:yunyizhang@mail.tsinghua.edu.cn"><i class="fas fa-envelope"></i></a> /
+                    <a href="https://scholar.google.com/citations?user=pkfbmwoAAAAJ&hl=en" target="_blank"><i class="fas fa-graduation-cap"></i></a> /
+                    <a href="https://github.com/sy-yunyi" target="_blank"><i class="fab fa-github"></i></a>
+                </p>
             </div>
+        </header>
 
-            <!-- Navigation Bar inside sidebar -->
-            <nav class="navbar">
-                <ul class="nav-menu">
-                    <li><a href="#about" class="nav-link">About</a></li>
-                    <li><a href="#news" class="nav-link">News</a></li>
-                    <li><a href="#publications" class="nav-link">Publications</a></li>
-                    <li><a href="#contact" class="nav-link">Contact</a></li>
-                </ul>
-                <div class="mobile-menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </nav>
-        </aside>
+        <!-- Horizontal Navigation Bar -->
+        <nav class="navbar">
+            <ul class="nav-menu">
+                <li><a href="#about" class="nav-link">Home</a></li>
+                <li><a href="#news" class="nav-link">News</a></li>
+                <li><a href="#publications" class="nav-link">Publications</a></li>
+                <li><a href="#awards" class="nav-link">Awards</a></li>
+                <li><a href="#service" class="nav-link">Service</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- About Section -->
+            <!-- About / Welcome Section -->
             <section id="about" class="section about-section">
                 <div class="container">
-                    <h2 class="section-title">
-                        <i class="fas fa-user"></i> About Me
-                    </h2>
                     <div class="bio">
                         <p class="description">
-                            Yunyi Zhang is a postdoctoral researcher working under the supervision of Associate Professor Baojun Liu.
-                            His research interests include network security, internet measurement, emerging cyberspace security threats and LLM Privacy and Security. 
-                            He has published papers at top academic venues, including USENIX Security, ACM CCS, ACM IMC, ISOC NDSS, IEEE TDSC and IEEE TIFS. 
-                            His academic research results have achieved real-world impact by receiving bonus from several vendors, including Baidu, Tencent, Microsoft, Yahoo, Alibaba and Amazon, etc.
+                            Welcome! I'm Yunyi Zhang, a postdoctoral researcher at the Network and Information Security
+                            Laboratory of <strong>Tsinghua University</strong>, working under the supervision of
+                            Associate Professor Baojun Liu. My research focuses on <strong>network security</strong>,
+                            <strong>internet measurement</strong>, emerging cyberspace security threats, and
+                            <strong>LLM privacy and security</strong>.
                         </p>
-                        <div class="interests">
-                            <h3>Research Interests</h3>
-                            <ul>
-                                <li>Network Security</li>
-                                <li>DNS Security</li>
-                                <li>Detection and Countermeasures of Cybercrime</li>
-                                <li>LLM Privacy and Security</li>
-                            </ul>
+                        <p class="description">
+                            I have published papers at top academic venues, including <em>USENIX Security, ACM CCS,
+                            ACM IMC, ISOC NDSS, IEEE TDSC, and IEEE TIFS</em>. My research has achieved real-world
+                            impact, receiving bug-bounty rewards from several leading vendors such as Baidu, Tencent,
+                            Microsoft, Yahoo, Alibaba, and Amazon.
+                        </p>
+
+                        <span class="service-label">I am on the job market! </span> I am looking for faculty positions of the 2027 academic year.
+
+                        <div class="research-directions">
+                            <div class="research-item">
+                                <h3><span class="research-emoji">🌐</span> Network &amp; DNS Security</h3>
+                                <p>
+                                    Discovering and mitigating real-world vulnerabilities across the internet
+                                    infrastructure, with a focus on the DNS ecosystem &mdash; from
+                                    <a href="https://yunyizhang.com/assets/pdfs/glue-sec-24.pdf">glue records</a> and <a href="https://www.ndss-symposium.org/wp-content/uploads/2026-f330-paper.pdf">bailiwick rules </a> to delegation
+                                    integrity.
+                                </p>
+                            </div>
+                            <div class="research-item">
+                                <h3><span class="research-emoji">🔍</span> Cybercrime Detection &amp; Countermeasures</h3>
+                                <p>
+                                    Measuring emerging cyberspace threats at scale and building detection and
+                                    defense techniques against abuse such as <a href="https://yunyizhang.com/assets/pdfs/isap-sec-24.pdf">black-hat SEO</a> and <a href="https://yunyizhang.com/assets/pdfs/nokescam-sec-25.pdf">large-scale scams</a>.
+                                </p>
+                            </div>
+                            <div class="research-item">
+                                <h3><span class="research-emoji">🛡️</span> LLM Privacy &amp; Security</h3>
+                                <p>
+                                    Investigating the security and privacy risks of large language models and
+                                    LLM-powered applications, and designing safeguards for the next generation of
+                                    AI-driven systems.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -110,6 +131,62 @@
                 </div>
             </section>
 
+            <!-- Awards & Honors Section -->
+            <section id="awards" class="section awards-section">
+                <div class="container">
+                    <h2 class="section-title">
+                        <i class="fas fa-award"></i> Selected Awards &amp; Honors
+                    </h2>
+                    <ul class="awards-list">
+                        <li>
+                            <!-- <span class="award-name">Distinguished Paper Award</span>, NDSS 2026 -->
+                            <span class="service-label">NDSS Distinguished Paper Award </span>
+                        </li>
+                        <li>
+                            <!-- <span class="award-name">Distinguished Paper Award</span>, NDSS 2026 -->
+                            <!-- <span class="award-meta">Shuimu Tsinghua Scholar</span> -->
+                            <span class="service-label">Shuimu Tsinghua Scholar</span>
+                        </li>
+                        <li>
+                            <!-- <span class="award-name">Distinguished Paper Award</span>, NDSS 2026 -->
+                            <span class="service-label">Outstanding Doctoral Dissertation of National University of Defense Technology</span>
+                        </li>
+                        <li>
+                            <!-- <span class="award-name">Distinguished Paper Award</span>, NDSS 2026 -->
+                            <span class="service-label">National University of Defense Technology: Innovative Research Group</span>
+                        </li>
+                        <li>
+                            <!-- <span class="award-name">Distinguished Paper Award</span>, NDSS 2026 -->
+                            <span class="service-label">China National Scholarship for Graduate Students</span>
+                        </li>
+                        
+                        <!-- <li>
+                            <span class="award-name">Bug-Bounty Rewards</span> from Baidu, Tencent, Microsoft,
+                            Yahoo, Alibaba, and Amazon
+                        </li> -->
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Service Section -->
+            <section id="service" class="section service-section">
+                <div class="container">
+                    <h2 class="section-title">
+                        <i class="fas fa-users"></i> Service
+                    </h2>
+                    <div class="service-content">
+                        <p class="service-row">
+                            <span class="service-label">Program Committee:</span>
+                            RAID (2026), WWW (2026)
+                        </p>
+                        <p class="service-row">
+                            <span class="service-label">Invited Talk:</span>
+                            InForSec (2025)
+                        </p>
+                    </div>
+                </div>
+            </section>
+
             <!-- Contact Section -->
             <section id="contact" class="section contact-section">
                 <div class="container">
@@ -131,7 +208,7 @@
                                 <div>
                                     <h3>Office</h3>
                                     <p>
-                                        Room 3-213, FIT<br>
+                                        Room 1-213, FIT<br>
                                         Tsinghua University<br>
                                         Beijing, China
                                     </p>
