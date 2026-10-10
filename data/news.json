@@ -1,8 +1,21 @@
 [
   {
+    "date": "2026-10",
+    "content": "Our research on DNS resolver DDoS defense accepted by IEEE S&P 2027. Congratulations to Kehong!"
+  },
+  {
+    "date": "2026-09",
+    "content": "One paper accepted by NDSS 2027. Congratulations to Ruixuan!"
+  },
+  {
+    "date": "2026-08",
+    "content": "One paper accepted by Computer Network. Congratulations to Quming!"
+  },
+  {
     "date": "2026-05",
     "content": "One paper accepted by USENIX Security 2026. Congratulations to Ruixuan!"
-  },{
+  },
+  {
     "date": "2026-04", 
     "content": "Two papers accepted by ACM CCS 2026. Congratulations to Shiming!"
   },
